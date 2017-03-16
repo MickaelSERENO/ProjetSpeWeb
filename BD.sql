@@ -1,7 +1,7 @@
 /*Utilisateur*/
 CREATE TABLE Eleve(
 id CHAR(50),
-id password CHAR(128),
+password CHAR(128),
 PRIMARY KEY(id)
 );
 
@@ -13,28 +13,23 @@ PRIMARY KEY(mail)
 );
 
 CREATE TABLE EleveClasse(
-idEleve : CHAR(50),
-mailClasse : CHAR(150),
+idEleve CHAR(50),
+mailClasse CHAR(150),
 FOREIGN KEY(idEleve) REFERENCES Eleve(id),
 FOREIGN KEY(mailClasse) REFERENCES Classe(mail)
 );
 
 /*Phrases*/
-CREATE TABLE GroupeMots(
-id SERIAL,
-texte CHAR(256),
-PRIMARY KEY(id)
-);
-
 CREATE TABLE Phrase(
 id SERIAL,
 PRIMARY KEY(id)
 );
 
-CREATE TABLE GroupeMotsPhrase(
-idMot integer,
+CREATE TABLE GroupeMots(
+id SERIAL,
 idPhrase integer,
-FOREIGN KEY(idMot) REFERENCES GroupeMots(id),
+texte CHAR(256),
+PRIMARY KEY(id),
 FOREIGN KEY(idPhrase) REFERENCES Phrase(id)
 );
 
@@ -47,7 +42,7 @@ FOREIGN KEY(idPhrase1) REFERENCES Phrase(id),
 FOREIGN KEY(idPhrase2) REFERENCES Phrase(id)
 );
 
-CREATE TYPE OP AS ENUM ('synonyme', 'antonyme', 'relOrdre');
+CREATE TYPE OP AS ENUM ('synonyme', 'antonyme', 'specialisation', 'generalisation');
 
 CREATE TABLE AssociationMots(
 idGroupeMots1 integer,
@@ -59,8 +54,8 @@ FOREIGN KEY(idGroupeMots2) REFERENCES GroupeMots(id)
 
 CREATE TABLE PackPaires(
 id SERIAL,
-nom CHAR[50],
-mailClasse CHAR[150],
+nom CHAR(50),
+mailClasse CHAR(150),
 note integer,
 telechargement integer,
 PRIMARY KEY(id),
@@ -71,7 +66,7 @@ CREATE TABLE PackPairesPairePhrases(
 idPaire integer,
 idPack integer,
 FOREIGN KEY(idPaire) REFERENCES PairePhrases(idPaire),
-FOREIGN KEY(idPack) REFERENCES PairePhrases(id)
+FOREIGN KEY(idPack)  REFERENCES PackPaires(id)
 );
 
 /*Statistiques */
