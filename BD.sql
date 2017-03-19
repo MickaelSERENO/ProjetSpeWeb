@@ -77,3 +77,15 @@ reussite boolean,
 FOREIGN KEY (idEleve) REFERENCES Eleve(id),
 FOREIGN KEY (idPhrase) REFERENCES Phrase(id)
 );
+
+CREATE TABLE PhraseInventee(
+id SERIAL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE PhrasePhraseInventee(
+idPhrase integer,
+idPhraseInventee,
+FOREIGN KEY(idPhrase) REFERENCES Phrase(id),
+FOREIGN KEY(idPhraseInventee) REFERENCES PhraseInventee(id)
+);
