@@ -27,9 +27,12 @@ switch($idPrompt)
 		$idPack   = $_POST["idPack"];
 		$idSent   = $_POST["idSent"];
 		$prompter = new PSQLDatabase();
-		$sent     = prompter.getFromPackSentences($idPack, $idSent);
-		$sent     = $prompter->getFromPackSentences(2, 1);
-        echo $serializer->serialize($sent, 'json');
+		$sent     = $prompter->getFromPackSentences($idPack, $idSent);
+
+		if($sent == -1)
+			echo -1;
+		else
+			echo $serializer->serialize($sent, 'json');
 		break;
 }
 ?>

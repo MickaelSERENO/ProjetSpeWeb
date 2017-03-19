@@ -18,7 +18,7 @@ class PSQLDatabase
 		$resultScript = pg_query($this->_conn, $script);
 
 		//We want the pairsentences number $idSents
-		$paires       = pg_fetch_row($resultScript, $idSents);
+		$paires       = pg_fetch_row($resultScript);
 		if($paires)
 		{
 			$idPaire     = $paires[0];
@@ -38,17 +38,17 @@ class PSQLDatabase
 			$mapping       = array();
 
 			while($row = pg_fetch_row($sent1Result))
-				array_push($sent1, new WordGroup($row[0], $row[1]));
+				array_push($sent1, new WordGroup($row[0], trim($row[1])));
 
 			while($row = pg_fetch_row($sent2Result))
-				array_push($sent2, new WordGroup($row[0], $row[1]));
+				array_push($sent2, new WordGroup($row[0], trim($row[1])));
 
             while($row = pg_fetch_row($mappingResult))
 				array_push($mapping, new Mapping($row[0], $row[1]));
 
 			return new PairSentences(new Sentence($sent1), new Sentence($sent2), new WordGroupMapping($mapping));
 		}
-		return 1;
+		return "-1";
 	}
 }
 
