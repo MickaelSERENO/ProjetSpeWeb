@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="bower_components/angular/angular.min.js"></script>
+		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
+		<script src="script/jeu1.js"></script>
+	</head>
+	<body ng-app="AppGame1">
+		<div ng-controller="CanvasCtrl">
+			<canvas ng-mousedown="onClickCanvas($event)" ng-mouseup="onMouseUpCanvas($event)", id="canvasJeu1" width="1000px" height="400px">
+				Juste au cas ou.
+			</canvas>
+		</div>
+
+		<div ng-controller="form">
+			<form>
+				<div ng-repeat="v in operations">
+					<input type="radio" ng-value="v.value" ng-model="$parent.radio" 
+					ng-change="changeRadio(v.value)"/>
+					<label>{{v.text}}</label>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>
