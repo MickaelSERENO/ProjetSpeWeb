@@ -22,7 +22,7 @@ class PSQLDatabase
 		if($paires)
 		{
 			if(!array_key_exists($idSents, $paires))
-				return -1;
+				return null;
 
 			$idPaire     = $paires[$idSents];
 			//Scripts
@@ -50,7 +50,13 @@ class PSQLDatabase
 
 			return new PairSentences(new Sentence($sent1), new Sentence($sent2), new WordGroupMapping($mapping));
 		}
-		return -1;
+		return null;
+	}
+
+	function commitGame1Results($idPack, $idSents, $results)
+	{
+		$sent = $this->getFromPackSentences($idPack, $idSents);
+		//TODO use results
 	}
 }
 

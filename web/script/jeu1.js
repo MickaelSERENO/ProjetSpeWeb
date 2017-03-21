@@ -103,6 +103,11 @@ function Sentence(sent1, sent2)
 	this._endY   = 0;
 }
 
+Sentence.prototype.getResults     = function()
+{
+	return this._links;
+}
+
 Sentence.prototype.draw           = function()
 {
 	clearCanvas();
@@ -274,9 +279,9 @@ function promptSentences(idPackSentence, idSentence, callback, data=null)
 	currentSentenceID = idSentence;
 }
 
-function getSentencesFromServer(ctx, data)
+function getSentencesFromServer(data, response)
 {
-	console.log(data);
+	console.log(response);
 	if(data === "-1")
 	{
 		console.log("finish");
@@ -286,7 +291,7 @@ function getSentencesFromServer(ctx, data)
 	else
 	{
 
-		var jsonData = JSON.parse(data);
+		var jsonData = JSON.parse(response);
 		sentences = new Sentence(jsonData.sent1, jsonData.sent2);
 		sentences.draw();
 	}
@@ -345,8 +350,20 @@ myApp.controller("form", function($scope)
 
 	$scope.submit = function()
 	{
+		var results = JSON.stringify(sentences.getResults());
+		var httpCtx = new XMLHttpRequest();
+
+		httpCtx.onreadystatechange = function()
+		{
+			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+			{
+				getSentencesFromServer(httpCtx.responseText);
+			}
+		}
+		httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
+		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpCtx.send("idPrompt=2&idPack="+2+"&idSent="+currentSentenceID+"&results="+results);
 		currentSentenceID++;
-		promptSentences(2, currentSentenceID, getSentencesFromServer, ctx);
 	};
 });
 
@@ -355,5 +372,5 @@ window.onload = function()
 {
 	canvas   = document.getElementById('canvasJeu1');
 	ctx      = canvas.getContext('2d');
-	promptSentences(2, 0, getSentencesFromServer, ctx);
+	promptSentences(2, 0, getSentencesFromServer);
 }

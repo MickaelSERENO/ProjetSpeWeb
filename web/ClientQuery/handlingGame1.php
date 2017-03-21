@@ -29,7 +29,22 @@ switch($idPrompt)
 		$prompter = new PSQLDatabase();
 		$sent     = $prompter->getFromPackSentences($idPack, $idSent);
 
-		if($sent == -1)
+		if(!$sent)
+			echo -1;
+		else
+			echo $serializer->serialize($sent, 'json');
+		break;
+
+	//Give results from idPack, idSent and ask next pair of sentences
+	case 2:
+		$idPack = $_POST["idPack"];
+		$currentIDSent = $_POST["idSent"];
+		$results = json_decode($_POST["results"]);
+
+		$prompter = new PSQLDatabase();
+		$prompter->commitGame1Results($idPack, $currentIDSent, $results);
+		$sent = $prompter->getFromPackSentences($idPack, $currentIDSent+1);
+		if(!$sent)
 			echo -1;
 		else
 			echo $serializer->serialize($sent, 'json');
