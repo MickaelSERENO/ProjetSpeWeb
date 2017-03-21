@@ -36,11 +36,13 @@ function drawArrow(fromx, fromy, tox, toy)
 {
     var headlen = 10;
     var angle = Math.atan2(toy-fromy,tox-fromx);
+	ctx.beginPath();
     ctx.moveTo(fromx, fromy);
     ctx.lineTo(tox, toy);
     ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
     ctx.moveTo(tox, toy);
     ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
+	ctx.stroke();
 }
 
 function getWordLinkRect(words)
@@ -92,9 +94,6 @@ function Sentence(sent1, sent2)
 	this._endY   = 0;
 }
 
-Sentence.prototype.getCurrentType = function(){return this._currentType;}
-Sentence.prototype.setCurrentType = function(value){this._currentType = value;}
-
 Sentence.prototype.draw           = function()
 {
 
@@ -133,6 +132,7 @@ Sentence.prototype._drawLinks     = function()
 					ctx.beginPath();
 					ctx.moveTo(rect1[0] + rect1[2]/2.0, rect1[1]+rect1[3]);
 					ctx.lineTo(rect2[0] + rect2[2]/2.0, rect2[1]);
+					ctx.stroke();
 					break;
 				case Type.PRECISE:
 					ctx.strokeStyle = "Blue";
@@ -237,7 +237,7 @@ Sentence.prototype.commitPoint    = function(x, y)
 					this._links[i][1] = null;
 
 			this._links[idWordStart][1] = idWordEnd;
-			this._links[idWordStart][2] = Type.SAME; //TODO
+			this._links[idWordStart][2] = currentType;
 		}
 		else
 		{
@@ -246,7 +246,7 @@ Sentence.prototype.commitPoint    = function(x, y)
 					this._links[i][1] = null;
 
 			this._links[idWordEnd][1] = idWordStart;
-			this._links[idWordEnd][2] = Type.SAME; //TODO
+			this._links[idWordEnd][2] = currentType;
 		}
 	}
 
@@ -275,13 +275,6 @@ function getSentencesFromServer(ctx, jsonData)
 	sentences.draw();
 }
 
-function linkTypeCtrl($scope)
-{
-	currentType = Type.SAME;
-	$scope.$watch('type', function(value){
-	});
-}
-
 function onClickCanvas($event)
 {
 	sentences.setStartPoint($event.offsetX, $event.offsetY);
@@ -297,6 +290,40 @@ myApp.controller("CanvasCtrl", function($scope)
 {
 	$scope.onClickCanvas   = onClickCanvas;
 	$scope.onMouseUpCanvas = onMouseUpCanvas;
+});
+
+myApp.controller("form", function($scope)
+{
+	$scope.operations =
+	[ 
+		{
+			"text"  : "Similitude",
+			"value" : Type.SAME
+		},
+
+		{
+			"text"  : "Contraire",
+			"value" : Type.CONTRARY
+		},
+
+		{
+			"text"  : "Specification",
+			"value" : Type.PRECISE
+		},
+
+		{
+			"text"  : "Generalisation",
+			"value" : Type.GENERAL
+		}
+	];
+
+	$scope.changeRadio = function(value)
+	{
+		currentType = value;
+		console.log(value);
+	};
+
+	$scope.radio = currentType = Type.SAME;
 });
 
 //The main
