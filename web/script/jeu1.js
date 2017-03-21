@@ -2,6 +2,7 @@ const SENT1Y      = 100;
 const SENT2Y      = 300;
 const FONT_HEIGHT = 35;
 
+var currentSentenceID;
 var currentType;
 var sentences;
 var canvas;
@@ -13,6 +14,14 @@ const Type =
 	CONTRARY: 2,
 	PRECISE: 3,
 	GENERAL: 4,	
+}
+
+function clearCanvas()
+{
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.restore();
 }
 
 function drawSentence(ctx, sentence, px, py)
@@ -96,11 +105,7 @@ function Sentence(sent1, sent2)
 
 Sentence.prototype.draw           = function()
 {
-
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.restore();
+	clearCanvas();
 
 	this._drawSentences();
 	this._drawLinks();
@@ -260,29 +265,43 @@ function promptSentences(idPackSentence, idSentence, callback, data=null)
 	{
 		if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
 		{
-			var receive = JSON.parse(httpCtx.responseText);
-			callback(data, receive);
+			callback(data, httpCtx.responseText);
 		}
 	}
 	httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
 	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	httpCtx.send("idPrompt=1&idPack="+idPackSentence+"&idSent="+idSentence);
+	currentSentenceID = idSentence;
 }
 
-function getSentencesFromServer(ctx, jsonData)
+function getSentencesFromServer(ctx, data)
 {
-	sentences = new Sentence(jsonData.sent1, jsonData.sent2);
-	sentences.draw();
+	console.log(data);
+	if(data === "-1")
+	{
+		console.log("finish");
+		sentences = null;
+		clearCanvas();
+	}
+	else
+	{
+
+		var jsonData = JSON.parse(data);
+		sentences = new Sentence(jsonData.sent1, jsonData.sent2);
+		sentences.draw();
+	}
 }
 
 function onClickCanvas($event)
 {
-	sentences.setStartPoint($event.offsetX, $event.offsetY);
+	if(sentences)
+		sentences.setStartPoint($event.offsetX, $event.offsetY);
 }
 
 function onMouseUpCanvas($event)
 {
-	sentences.commitPoint($event.offsetX, $event.offsetY);
+	if(sentences)
+		sentences.commitPoint($event.offsetX, $event.offsetY);
 }
 
 var myApp = angular.module("AppGame1", []);
@@ -320,10 +339,15 @@ myApp.controller("form", function($scope)
 	$scope.changeRadio = function(value)
 	{
 		currentType = value;
-		console.log(value);
 	};
 
 	$scope.radio = currentType = Type.SAME;
+
+	$scope.submit = function()
+	{
+		currentSentenceID++;
+		promptSentences(2, currentSentenceID, getSentencesFromServer, ctx);
+	};
 });
 
 //The main
@@ -331,5 +355,5 @@ window.onload = function()
 {
 	canvas   = document.getElementById('canvasJeu1');
 	ctx      = canvas.getContext('2d');
-	promptSentences(2, 1, getSentencesFromServer, ctx);
+	promptSentences(2, 0, getSentencesFromServer, ctx);
 }

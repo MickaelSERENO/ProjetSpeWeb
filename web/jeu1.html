@@ -13,12 +13,13 @@
 		</div>
 
 		<div ng-controller="form">
-			<form>
+			<form ng-submit="submit()">
 				<div ng-repeat="v in operations">
 					<input type="radio" ng-value="v.value" ng-model="$parent.radio" 
 					ng-change="changeRadio(v.value)"/>
 					<label>{{v.text}}</label>
 				</div>
+				<input type="submit" value="ok">
 			</form>
 		</div>
 	</body>

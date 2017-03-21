@@ -21,8 +21,10 @@ class PSQLDatabase
 		$paires       = pg_fetch_row($resultScript);
 		if($paires)
 		{
-			$idPaire     = $paires[0];
+			if(!array_key_exists($idSents, $paires))
+				return -1;
 
+			$idPaire     = $paires[$idSents];
 			//Scripts
 			$scriptSent1 = "SELECT GroupeMots.id, GroupeMots.texte FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase1 AND PairePhrases.idPaire = $idPaire;";
 			$scriptSent2 = "SELECT GroupeMots.id, GroupeMots.texte FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase2 AND PairePhrases.idPaire = $idPaire;";
@@ -48,7 +50,7 @@ class PSQLDatabase
 
 			return new PairSentences(new Sentence($sent1), new Sentence($sent2), new WordGroupMapping($mapping));
 		}
-		return "-1";
+		return -1;
 	}
 }
 
