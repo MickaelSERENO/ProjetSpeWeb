@@ -1,6 +1,6 @@
 <?php
 ?>
-<!DOCTYPE html>
+<!DOCTYPE>
 <html>
 	<head>
 		<script src="bower_components/angular/angular.min.js"></script>
@@ -31,15 +31,15 @@
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
-		echo <<< EOT
-			<div ng-controller="listStatsCtrl">
-				<statsAccordion>
-					<stats-expander title='$listStats[listStutends]'></stats-expander>
-					<stats-expander title='$listStats[classement]'></stats-expander>
-					<stats-expander title='$listStats[history]'></stats-expander>
-				</statsAccordion>
+		echo("
+			<div ng-controller='listStatsCtrl'>
+				<my-statsAccordion>
+					<my-statsExpander title='$listStats[listStutends]'>Coucou1</my-statsExpander>
+					<my-statsExpander title='$listStats[classement]'>Coucou2</my-statsExpander>
+					<my-statsExpander title='$listStats[history]'>Coucou3</my-statsExpander>
+				</my-statsAccordion>
 			</div>
-		EOT;
+		");
 ?>
 	</body>
 </html>
