@@ -6,6 +6,7 @@
 		<script src="bower_components/angular/angular.min.js"></script>
 		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
 		<script src="script/stats.js"></script>
+		<link rel="stylesheet" type="text/css" href="stats.css">
 	</head>
 
 	<body ng-app="statsApp">
@@ -13,6 +14,42 @@
 		class LangContent
 		{
 			public $listStats;
+			public $historic;
+		}
+
+		function getListStutendsHtml($langData)
+		{
+			$historic = $langData->historic;
+			return "<form>
+						<input type=\"submit\">
+						<input type=\"text\" value=\"search\">
+					</form>
+					<table>
+						<tr>
+							<th>
+								$historic[name]
+							</th>
+							<th>
+								$historic[grade]
+							</th>
+							<th>
+								$historic[nbGame1]
+							</th>
+							<th>
+								$historic[nbGame2]
+							</th>
+						</tr>
+					</table>";
+		}
+
+		function getRankingHtml()
+		{
+			return "";
+		}
+
+		function getHistoricHtml()
+		{
+			return "";
 		}
 
 		//Load symfony
@@ -31,12 +68,20 @@
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
+		$listStutendsHtml = getListStutendsHtml($langData);
+		$rankingHtml      = getRankingHtml();
+		$historicHtml     = getHistoricHtml();
+
 		echo("
 			<div ng-controller='listStatsCtrl'>
 				<my-statsAccordion>
-					<my-statsExpander title='$listStats[listStutends]'>Coucou1</my-statsExpander>
-					<my-statsExpander title='$listStats[classement]'>Coucou2</my-statsExpander>
-					<my-statsExpander title='$listStats[history]'>Coucou3</my-statsExpander>
+					<my-statTabItem title=\"$listStats[listStutends]\"></my-statTabItem>
+					<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
+					<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
+
+					<my-statTabContent>$listStutendsHtml</my-statTabContent>
+					<my-statTabContent>$rankingHtml</my-statTabContent>
+					<my-statTabContent>$historicHtml</my-statTabContent>
 				</my-statsAccordion>
 			</div>
 		");

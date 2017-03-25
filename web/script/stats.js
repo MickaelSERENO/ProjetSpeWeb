@@ -9,44 +9,69 @@ myApp.directive("myStatsaccordion", function()
         restrict: 'EA',
         replace: true,
         transclude: true,
-        template: '<ul class="statsAccordion" ng-transclude></ul>',
+        template: '<div class="statsAccordion" ng-transclude></div>',
         controller: function(){
-            var expanders = [];
-            this.open = function(selectedExpander)
+			var tabIndice = -1;
+			var contentsIndice = -1;
+			var contents  = [];
+
+            this.open = function(tabIndiceTitle)
 			{
-                expanders.forEach(function(expander)
+				contents.forEach(function(content)
 				{
-					expander.show = false;
-                });
-				selectedExpander.show = true;
+					content.show = false;
+				});
+				contents[tabIndiceTitle].show = true;
             };
-            this.addExpander = function(expander)
+
+            this.addTitle = function(title)
 			{
-                expanders.push(expander);
+				tabIndice++;
+				return tabIndice;
+            };
+
+            this.addContent = function(content)
+			{
+                contents.push(content);
+				contentsIndice++;
+				if(contentsIndice == 0)
+					content.show = true;
+				return contentsIndice;
             };
         }
     };
 });
 
-myApp.directive("myStatsexpander", function()
+myApp.directive("myStattabitem", function()
 {
 	return{
 		restrict   : 'EA',
 		replace    : true,
-		transclude : true,
-		require    : '^?myStatsaccordion',
+		require    : '^myStatsaccordion',
 		scope      : {title: '@title'},
-		template   : '<div>' + 
-					     '<li  ng-click="toggleMe()" class="statsExpander">{{title}}</li>' +
-					     '<div ng-show="show" ng-transclude></div>'+
-					 '</div>',
+		template   : '<div ng-click="toggleMe()" class="tabTitle">{{title}}</div>',
 		link       : function($scope, element, attrs, accordionCtrl){
-			accordionCtrl.addExpander($scope);
-			$scope.show = false;
+			var indice = accordionCtrl.addTitle();
 			$scope.toggleMe = function()
 			{
-				accordionCtrl.open($scope);
+				accordionCtrl.open(indice);
 			};
+		}
+	};
+});
+
+myApp.directive("myStattabcontent", function()
+{
+	return{
+		restrict   : 'EA',
+		replace : true,
+		transclude : true,
+		scope      : {},
+		require    : '^myStatsaccordion',
+		template   : '<div ng-show="show" class="tabContent" ng-transclude></div>',
+		link       : function($scope, element, attrs, accordionCtrl){
+			$scope.show=false;
+			accordionCtrl.addContent($scope);
 		}
 	};
 });

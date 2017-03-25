@@ -1,0 +1,16 @@
+.statsAccordion
+{
+}
+
+.tabTitle
+{
+	float : left;
+	padding : 0 0.5em;
+	vertical-align:top;
+	cursor:pointer;
+}
+
+.tabContent
+{
+	clear : both;
+}
