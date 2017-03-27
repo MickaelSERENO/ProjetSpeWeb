@@ -10,6 +10,25 @@
 	cursor:pointer;
 }
 
+.tableStats
+{
+	border-collapse : collapse;
+}
+
+.tableStats, .tableStats th, .tableStats td
+{
+	border : 1px solid black;
+}
+
+.listStudentTable th, .listStudentTable td
+{
+	padding : 0 50px;
+}
+
+.headerStatsRow
+{
+}
+
 .tabContent
 {
 	clear : both;
