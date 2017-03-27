@@ -2,6 +2,8 @@
 CREATE TABLE Eleve(
 id CHAR(50),
 password CHAR(128),
+nbGame1 INTEGER,
+nbGame2 INTEGER,
 PRIMARY KEY(id)
 );
 
@@ -70,12 +72,35 @@ FOREIGN KEY(idPack)  REFERENCES PackPaires(id)
 );
 
 /*Statistiques */
-CREATE TABLE EleveReussite(
+CREATE TYPE GAME AS ENUM ('Game1', 'Game2');
+
+CREATE TABLE Historique(
+idHisto SERIAL,
 idEleve CHAR(50),
-idPhrase integer,
-reussite boolean,
-FOREIGN KEY (idEleve) REFERENCES Eleve(id),
-FOREIGN KEY (idPhrase) REFERENCES Phrase(id)
+idGame GAME, /*Game 1 or Game 2 ?*/
+jour DATE,
+PRIMARY KEY(idHisto),
+FOREIGN KEY (idEleve) REFERENCES Eleve(id)
+);
+
+CREATE TABLE EleveHistoG1(
+idGame1 integer,
+idHisto integer,
+idPack integer,
+idPairePhrase integer,
+PRIMARY KEY(idGame1),
+FOREIGN KEY(idHisto) REFERENCES Historique(idHisto),
+FOREIGN KEY(idPack)  REFERENCES PackPaires(id),
+FOREIGN KEY(idPaire) REFERENCES PairePhrases(idPaire)
+);
+
+CREATE TABLE EleveResultG1(
+idGame1 integer,
+idWord1 integer, /*The id of the word sentence 1*/
+idWord2 integer, /*The id of the word sentence 2*/
+FOREIGN KEY (idGame1) REFERENCES EleveHistoG1(idGame1),
+FOREIGN KEY (idWord1) REFERENCES GroupeMots(id),
+FOREIGN KEY (idWord2) REFERENCES GroupeMots(id)
 );
 
 CREATE TABLE PhraseInventee(
