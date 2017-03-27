@@ -1,14 +1,24 @@
 <lang>
 	<listStats>
-		<listStutends>Liste élèves</listStutends>
+		<listStudents>Liste élèves</listStudents>
 		<ranking>Classement</ranking>
 		<historic>Historique</historic>
 	</listStats>
 
-	<historic>
+	<listStudents>
 		<name>Nom</name>
-		<grade>Classe</grade>
 		<nbGame1>Nb Partie jeu 1</nbGame1>
 		<nbGame2>Nb Partie jeu 2</nbGame2>
+	</listStudents>
+
+	<historic>
+		<name>Nom</name>
+		<idGame>Numéro jeu</idGame>
+		<date>Date</date>
 	</historic>
+
+	<formular>
+		<search>Rechercher</search>
+		<addUser>Ajouter</addUser>
+	</formular>
 </lang>
