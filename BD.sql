@@ -1,3 +1,7 @@
+/*Delete the schema and the table*/
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
 /*Utilisateur*/
 CREATE TABLE Eleve(
 id CHAR(50),
@@ -91,7 +95,7 @@ idPairePhrase integer,
 PRIMARY KEY(idGame1),
 FOREIGN KEY(idHisto) REFERENCES Historique(idHisto),
 FOREIGN KEY(idPack)  REFERENCES PackPaires(id),
-FOREIGN KEY(idPaire) REFERENCES PairePhrases(idPaire)
+FOREIGN KEY(idPairePhrase) REFERENCES PairePhrases(idPaire)
 );
 
 CREATE TABLE EleveResultG1(
@@ -110,7 +114,26 @@ PRIMARY KEY(id)
 
 CREATE TABLE PhrasePhraseInventee(
 idPhrase integer,
-idPhraseInventee,
+idPhraseInventee integer,
 FOREIGN KEY(idPhrase) REFERENCES Phrase(id),
 FOREIGN KEY(idPhraseInventee) REFERENCES PhraseInventee(id)
 );
+
+/*Fill the table for examples*/
+INSERT INTO Eleve       VALUES ('User', '', 0, 0);
+INSERT INTO Classe      VALUES ('Teacher', 'prof@scolaire.fr', '');
+INSERT INTO EleveClasse VALUES ('User', 'prof@scolaire.fr');
+INSERT INTO Phrase      VALUES (DEFAULT);
+INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'Bonjour');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'ce matin');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'je déjeunais');
+INSERT INTO Phrase      VALUES (DEFAULT);
+INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'Coucou');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'à l''aube');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'je mangeais');
+INSERT INTO AssociationMots VALUES (1, 4, 'synonyme');
+INSERT INTO AssociationMots VALUES (2, 5, 'synonyme');
+INSERT INTO AssociationMots VALUES (3, 6, 'synonyme');
+INSERT INTO PairePhrases VALUES (1, 2);
+INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
+INSERT INTO PackPairesPairePhrases VALUES (1, 1);
