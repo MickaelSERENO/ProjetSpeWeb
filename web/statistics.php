@@ -63,7 +63,6 @@
 
 			$result += $rowDataHTML + "</table>";
 			return $result;
-
 		}
 
 		function getRankingHtml()
@@ -93,11 +92,13 @@
 
 		//Load symfony
 		require_once __DIR__.'/../vendor/autoload.php';
+		require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
 
 		//Get serializer XML
 		use Symfony\Component\Serializer\Serializer;
 		use Symfony\Component\Serializer\Encoder\XmlEncoder;
 		use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+		use PSQLDatabase;
 
 		$psql = new PSQLDatabase();
 

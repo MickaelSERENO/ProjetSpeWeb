@@ -7,7 +7,7 @@ class PSQLDatabase
 {
 	private $_conn=null;
 
-	function __construct()
+	public function __construct()
 	{
 		$this->_conn = pg_pconnect("host=127.0.0.1 user=postgres dbname=postgres");
 	}
@@ -44,11 +44,12 @@ class PSQLDatabase
 				array_push($sent2, new WordGroup($row[0], trim($row[1])));
 
 			return new PairSentences(new Sentence($sent1), new Sentence($sent2));
+		}
 		
 		return null;
 	}
 
-	function getAllFromListStudents($idTeacher)
+	public function getAllFromListStudents($idTeacher)
 	{
 		$result = array();
 		$script = "SELECT id, nbGame1, nbGame2 FROM Eleve, EleveClasse WHERE Eleve.id = EleveClasse.idEleve AND EleveClasse.mailClasse = '$idTeacher';";
@@ -56,10 +57,10 @@ class PSQLDatabase
 		while($row = pg_fetch_row($resultScript))
 			array_push($result, new Student($row[0], $row[1], $row[2]));
 
-		return result;
+		return $result;
 	}
 
-	function commitGame1Results($idPack, $idSents, $idHisto, $results)
+	public function commitGame1Results($idPack, $idSents, $idHisto, $results)
 	{
 		//Get the idPaire from the idPack
 		$script       = "SELECT idPaire FROM PackPairesPairePhrases, PackPaires WHERE PackPairesPairePhrases.idPack = PackPaires.id AND idPack = $idPack;";
@@ -105,11 +106,10 @@ class PSQLDatabase
 			//And returns it
             while($row = pg_fetch_row($mappingResult))
 				array_push($mappingArray, new Mapping($row[0], $row[1], $row[2]));
+
 			return new WordGroupMapping($mapping);
 		}
-		
 		return null;
 	}
 }
-
 ?>
