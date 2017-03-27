@@ -362,7 +362,7 @@ myApp.controller("form", function($scope)
 		}
 		httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
 		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpCtx.send("idPrompt=2&idPack="+2+"&idSent="+currentSentenceID+"&results="+results);
+		httpCtx.send("idPrompt=2&idPack="+1+"&idSent="+currentSentenceID+"&results="+results);
 		currentSentenceID++;
 	};
 });
@@ -372,5 +372,5 @@ window.onload = function()
 {
 	canvas   = document.getElementById('canvasJeu1');
 	ctx      = canvas.getContext('2d');
-	promptSentences(2, 0, getSentencesFromServer);
+	promptSentences(1, 0, getSentencesFromServer);
 }
