@@ -40,11 +40,13 @@ class Mapping
 {
 	private $_wordGroup1;
 	private $_wordGroup2;
+	private $_relation;
 
-	public function __construct($id1, $id2)
+	public function __construct($id1, $id2, $relation)
 	{
 		$this->_wordGroup1 = $id1;
 		$this->_wordGroup2 = $id2;
+		$this->_relation   = $relation;
 	}
 
 	public function getWordGroup1()
@@ -55,6 +57,11 @@ class Mapping
 	public function getWordGroup2()
 	{
 		return $this->_wordGroup2;
+	}
+
+	public function getRelation()
+	{
+		return $this->_relation;
 	}
 }
 
@@ -77,13 +84,11 @@ class PairSentences
 {
     private $_sent1;
     private $_sent2;
-	private $_mapping;
 
-    public function __construct($sent1, $sent2, $mapping)
+    public function __construct($sent1, $sent2)
     {
         $this->_sent1   = $sent1;
         $this->_sent2   = $sent2;
-		$this->_mapping = $mapping;
     }
 
 	public function getSent1()
