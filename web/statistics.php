@@ -14,32 +14,56 @@
 		class LangContent
 		{
 			public $listStats;
+			public $listStudents;
 			public $historic;
 		}
 
-		function getListStutendsHtml($langData)
+		function getListStutendsHtml($psql, $langData)
 		{
-			$historic = $langData->historic;
-			return "<form>
-						<input type=\"submit\">
-						<input type=\"text\" value=\"search\">
-					</form>
-					<table>
-						<tr>
-							<th>
-								$historic[name]
-							</th>
-							<th>
-								$historic[grade]
-							</th>
-							<th>
-								$historic[nbGame1]
-							</th>
-							<th>
-								$historic[nbGame2]
-							</th>
-						</tr>
-					</table>";
+			$listStudentsTxt = $langData->listStudents;
+			$listStudents    = $psql->getAllFromListStudents(1); /*1 should be replace by the prof ID*/
+			$result = 
+				"<form>
+					<input type=\"submit\">
+					<input type=\"text\" value=\"search\">
+
+					<input type=\"submit\">
+					<input type=\"text\" value=\"Add\">
+				</form>
+				<table class=\"tableStats\">
+					<tr class=\"headerStatsRow\">
+						<th>
+							$listStudentsTxt[name]
+						</th>
+						<th>
+							$listStudentsTxt[nbGame1]
+						</th>
+						<th>
+							$listStudentsTxt[nbGame2]
+						</th>
+					</tr>";
+			$rowDataHTML = "";
+			foreach($listStudents as $stud)
+			{
+				$rowDataHTML += 
+					"<tr class=\"statsRow\">
+						<td>
+							{$stud->id}
+						</td>		
+
+						<td>
+							{$stud->nbGame1}
+						</td>		
+
+						<td>
+							{$stud->nbGame2}
+						</td>		
+					</tr>";
+			}
+
+			$result += $rowDataHTML + "</table>";
+			return $result;
+
 		}
 
 		function getRankingHtml()
@@ -47,8 +71,23 @@
 			return "";
 		}
 
-		function getHistoricHtml()
+		function getHistoricHtml($langData)
 		{
+			$historic = $langData->historic;
+			return "
+					<table class=\"tableStats\">
+						<tr class=\"headerStatsRow\">
+							<th>
+								$historic[name]
+							</th>
+							<th>
+								$historic[idGame]
+							</th>
+							<th>
+								$historic[date]
+							</th>
+						</tr>
+					</table>";
 			return "";
 		}
 
@@ -60,6 +99,8 @@
 		use Symfony\Component\Serializer\Encoder\XmlEncoder;
 		use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+		$psql = new PSQLDatabase();
+
 		$encoders = array(new XmlEncoder());
 		$normalizers = array(new ObjectNormalizer());
 		$serializer = new Serializer($normalizers, $encoders);
@@ -68,14 +109,14 @@
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
-		$listStutendsHtml = getListStutendsHtml($langData);
+		$listStutendsHtml = getListStutendsHtml($psql, $langData);
 		$rankingHtml      = getRankingHtml();
-		$historicHtml     = getHistoricHtml();
+		$historicHtml     = getHistoricHtml($langData);
 
 		echo("
 			<div ng-controller='listStatsCtrl'>
 				<my-statsAccordion>
-					<my-statTabItem title=\"$listStats[listStutends]\"></my-statTabItem>
+					<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
 					<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
 					<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
 
