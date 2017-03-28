@@ -46,7 +46,7 @@
 			foreach($listStudents as $stud)
 			{
 				$rowDataHTML = $rowDataHTML.
-					"<tr class=\"statsRow\">
+					"<tr class=\"statsRow\" ng-value=\"$stud->id\" ng-click=\"onRowStudentClick($stud->id, $event)\">
 						<td>
 							{$stud->id}
 						</td>		
@@ -91,7 +91,7 @@
 			foreach($historicArray as $histo)
 			{
 				$rowDataHTML = $rowDataHTML.
-					"<tr class=\"statsRow\">
+					"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, $event)\">
 						<td>
 							{$histo->id}
 						</td>		

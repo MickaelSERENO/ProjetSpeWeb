@@ -1,6 +1,21 @@
 var myApp = angular.module("statsApp", []);
+
+function onRowStudentClick(id, $event)
+{
+    console.log("onClickSudent, id : " + id);
+    window.location.href = window.location.hostname + "studentCaracteristics.php?studentID=" + encodeURIComponent(id);
+}
+
+function onRowHistoricClick(id, $event)
+{
+    console.log("onClickHistoric, id : " + id);
+    window.location.href = window.location.hostname + "historicCaracteristics.php?historicID=" + encodeURIComponent(id);
+}
+
 myApp.controller("listStatsCtrl", function($scope)
 {
+    $scope.onRowStudentClick = onRowStudentClick;
+    $scope.onRowHistoricClick = onRowHistoricClick;
 });
 
 myApp.directive("myStatsaccordion", function()
