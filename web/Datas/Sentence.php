@@ -102,4 +102,18 @@ class PairSentences
 	}
 }
 
+class Game1Result
+{
+	public $idPack;
+	public $idSents;
+	public $results;
+
+	public function __construct($idPack_, $idSents_, $results_)
+	{
+		$this->idPack = $idPack_;
+		$this->idSents = $idSents_;
+		$this->results = $results_;
+	}
+}
+
 ?>

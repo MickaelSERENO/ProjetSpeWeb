@@ -14,4 +14,18 @@ class Student
 	}
 }
 
+class Historic
+{
+	public $idStudent;
+	public $idGame;
+	public $date;
+
+	public function __construct($idS, $idG, $d)
+	{
+		$idStudent = $idS;
+		$idGame    = $idG;
+		$date      = $d;
+	}
+}
+
 ?>

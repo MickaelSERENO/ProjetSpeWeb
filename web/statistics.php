@@ -21,7 +21,7 @@
 		function getListStutendsHtml($psql, $langData)
 		{
 			$listStudentsTxt = $langData->listStudents;
-			$listStudents    = $psql->getAllFromListStudents(1); /*1 should be replace by the prof ID*/
+			$listStudents    = $psql->getAllFromListStudents("prof@scolaire.fr"); /*should be replace by the prof ID*/
 			$result = 
 				"<form>
 					<input type=\"submit\">
@@ -45,7 +45,7 @@
 			$rowDataHTML = "";
 			foreach($listStudents as $stud)
 			{
-				$rowDataHTML += 
+				$rowDataHTML = $rowDataHTML.
 					"<tr class=\"statsRow\">
 						<td>
 							{$stud->id}
@@ -61,7 +61,7 @@
 					</tr>";
 			}
 
-			$result += $rowDataHTML + "</table>";
+			$result = $result.$rowDataHTML."</table>";
 			return $result;
 		}
 
@@ -70,24 +70,44 @@
 			return "";
 		}
 
-		function getHistoricHtml($langData)
+		function getHistoricHtml($psql, $langData)
 		{
-			$historic = $langData->historic;
-			return "
+			$historicTxt   = $langData->historic;
+			$historicArray = $psql->getHistoricFromListStudent("prof@scolaire.fr"); //should be replace by teacher ID
+			$result = "
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
 							<th>
-								$historic[name]
+								$historicTxt[name]
 							</th>
 							<th>
-								$historic[idGame]
+								$historicTxt[idGame]
 							</th>
 							<th>
-								$historic[date]
+								$historicTxt[date]
 							</th>
-						</tr>
-					</table>";
-			return "";
+						</tr>";
+			$rowDataHTML = "";
+			foreach($historicArray as $histo)
+			{
+				$rowDataHTML = $rowDataHTML.
+					"<tr class=\"statsRow\">
+						<td>
+							{$histo->id}
+						</td>		
+
+						<td>
+							{$histo->nbGame1}
+						</td>		
+
+						<td>
+							{$histo->nbGame2}
+						</td>		
+					</tr>";
+			}
+
+			$result = $result.$rowDataHTML."</table>";
+			return $result;
 		}
 
 		//Load symfony
@@ -98,7 +118,6 @@
 		use Symfony\Component\Serializer\Serializer;
 		use Symfony\Component\Serializer\Encoder\XmlEncoder;
 		use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-		use PSQLDatabase;
 
 		$psql = new PSQLDatabase();
 
@@ -112,7 +131,7 @@
 
 		$listStutendsHtml = getListStutendsHtml($psql, $langData);
 		$rankingHtml      = getRankingHtml();
-		$historicHtml     = getHistoricHtml($langData);
+		$historicHtml     = getHistoricHtml($psql, $langData);
 
 		echo("
 			<div ng-controller='listStatsCtrl'>

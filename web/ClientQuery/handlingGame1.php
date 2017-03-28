@@ -42,10 +42,15 @@ switch($idPrompt)
 		$results = json_decode($_POST["results"]);
 
 		$prompter = new PSQLDatabase();
-		$prompter->commitGame1Results($idPack, $currentIDSent, $results);
-		$sent = $prompter->getFromPackSentences($idPack, $currentIDSent+1);
+		$prompter->commitGame1ResultsCookies($idPack, $currentIDSent, $results);
+
+		$sent = $prompter->getFromPackSentences($idPack, $currentIDSent);
 		if(!$sent)
-			echo -1;
+		{
+			//TODO Get the user ID (replace User by the user ID
+			$prompter->createHistoricGame1("User", $idPack);
+			echo $currentIDSent+1;
+		}
 		else
 			echo $serializer->serialize($sent, 'json');
 		break;

@@ -5,7 +5,7 @@ CREATE SCHEMA public;
 /*Utilisateur*/
 CREATE TABLE Eleve(
 id CHAR(50),
-password CHAR(128),
+password CHAR(256),
 nbGame1 INTEGER,
 nbGame2 INTEGER,
 PRIMARY KEY(id)
@@ -14,7 +14,7 @@ PRIMARY KEY(id)
 CREATE TABLE Classe(
 nom CHAR(50),
 mail CHAR(150),
-password CHAR(128),
+password CHAR(256),
 PRIMARY KEY(mail)
 );
 
@@ -69,8 +69,8 @@ FOREIGN KEY(mailClasse) REFERENCES Classe(mail)
 );
 
 CREATE TABLE PackPairesPairePhrases(
-idPaire integer,
 idPack integer,
+idPaire integer,
 FOREIGN KEY(idPaire) REFERENCES PairePhrases(idPaire),
 FOREIGN KEY(idPack)  REFERENCES PackPaires(id)
 );
@@ -82,7 +82,7 @@ CREATE TABLE Historique(
 idHisto SERIAL,
 idEleve CHAR(50),
 idGame GAME, /*Game 1 or Game 2 ?*/
-jour DATE,
+jour TIMESTAMP,
 PRIMARY KEY(idHisto),
 FOREIGN KEY (idEleve) REFERENCES Eleve(id)
 );
@@ -119,21 +119,42 @@ FOREIGN KEY(idPhrase) REFERENCES Phrase(id),
 FOREIGN KEY(idPhraseInventee) REFERENCES PhraseInventee(id)
 );
 
-/*Fill the table for examples*/
+/*On remplie la table pour pouvoir faire nos tests*/
 INSERT INTO Eleve       VALUES ('User', '', 0, 0);
 INSERT INTO Classe      VALUES ('Teacher', 'prof@scolaire.fr', '');
 INSERT INTO EleveClasse VALUES ('User', 'prof@scolaire.fr');
+
+/*On créé notre pack*/
+INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
+
+/*Paire phrase 1, peut aussi servir d'exemple sur comment faire*/
 INSERT INTO Phrase      VALUES (DEFAULT);
-INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'Bonjour');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'Bonjour'); /*Psql peut nous permettre de trouver quelle est la valeur maximal courant des clé SERIAL*/
 INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'ce matin');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 1, 'je déjeunais');
 INSERT INTO Phrase      VALUES (DEFAULT);
 INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'Coucou');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'à l''aube');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'je mangeais');
-INSERT INTO AssociationMots VALUES (1, 4, 'synonyme');
+INSERT INTO AssociationMots VALUES (1, 4, 'synonyme'); 
 INSERT INTO AssociationMots VALUES (2, 5, 'synonyme');
 INSERT INTO AssociationMots VALUES (3, 6, 'synonyme');
 INSERT INTO PairePhrases VALUES (1, 2);
-INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
+
+/*Paire phrase 2*/
+INSERT INTO Phrase      VALUES (DEFAULT);
+INSERT INTO GroupeMots  VALUES (DEFAULT, 3, 'Le professeur');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 3, 'cassait');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 3, 'des briques');
+INSERT INTO Phrase      VALUES (DEFAULT);
+INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'Un solide');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'a été cassé');
+INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'par le maître');
+INSERT INTO AssociationMots VALUES (7, 10, 'synonyme');
+INSERT INTO AssociationMots VALUES (8, 11, 'synonyme');
+INSERT INTO AssociationMots VALUES (9, 12, 'synonyme');
+INSERT INTO PairePhrases VALUES (3, 4);
+
+/*On ajoute le paire de phrase dans le pack*/
 INSERT INTO PackPairesPairePhrases VALUES (1, 1);
+INSERT INTO PackPairesPairePhrases VALUES (1, 2);

@@ -357,12 +357,12 @@ myApp.controller("form", function($scope)
 		{
 			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
 			{
-				getSentencesFromServer(httpCtx.responseText);
+				getSentencesFromServer(null, httpCtx.responseText);
 			}
 		}
 		httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
 		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpCtx.send("idPrompt=2&idPack="+1+"&idSent="+currentSentenceID+"&results="+results);
+		httpCtx.send("idPrompt=2&idPack=1&idSent="+(currentSentenceID+1)+"&results="+results);
 		currentSentenceID++;
 	};
 });
