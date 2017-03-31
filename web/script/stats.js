@@ -2,8 +2,7 @@ var myApp = angular.module("statsApp", []);
 
 function onRowStudentClick(id, $event)
 {
-    console.log("onClickSudent, id : " + id);
-    window.location.href = window.location.hostname + "studentCaracteristics.php?studentID=" + encodeURIComponent(id);
+    window.location.href = "studentCaracteristics.php?studentID=" + encodeURIComponent(id);
 }
 
 function onRowHistoricClick(id, $event)
