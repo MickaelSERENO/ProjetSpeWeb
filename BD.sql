@@ -4,8 +4,10 @@ CREATE SCHEMA public;
 
 /*Utilisateur*/
 CREATE TABLE Eleve(
-id CHAR(50),
-password CHAR(256),
+id SERIAL,
+nom CHAR(50),
+prenom CHAR(50),
+password CHAR(32),
 nbGame1 INTEGER,
 nbGame2 INTEGER,
 PRIMARY KEY(id)
@@ -14,12 +16,12 @@ PRIMARY KEY(id)
 CREATE TABLE Classe(
 nom CHAR(50),
 mail CHAR(150),
-password CHAR(256),
+password CHAR(32),
 PRIMARY KEY(mail)
 );
 
 CREATE TABLE EleveClasse(
-idEleve CHAR(50),
+idEleve integer,
 mailClasse CHAR(150),
 FOREIGN KEY(idEleve) REFERENCES Eleve(id),
 FOREIGN KEY(mailClasse) REFERENCES Classe(mail)
@@ -80,22 +82,31 @@ CREATE TYPE GAME AS ENUM ('Game1', 'Game2');
 
 CREATE TABLE Historique(
 idHisto SERIAL,
-idEleve CHAR(50),
 idGame GAME, /*Game 1 or Game 2 ?*/
 jour TIMESTAMP,
 PRIMARY KEY(idHisto),
-FOREIGN KEY (idEleve) REFERENCES Eleve(id)
 );
 
 CREATE TABLE EleveHistoG1(
+idEleve integer,
 idGame1 integer,
 idHisto integer,
 idPack integer,
 idPairePhrase integer,
 PRIMARY KEY(idGame1),
+FOREIGN KEY (idEleve) REFERENCES Eleve(id),
 FOREIGN KEY(idHisto) REFERENCES Historique(idHisto),
 FOREIGN KEY(idPack)  REFERENCES PackPaires(id),
 FOREIGN KEY(idPairePhrase) REFERENCES PairePhrases(idPaire)
+);
+
+CREATE TABLE ClasseHistoG2(
+idGame2 SERIAL,
+idHisto integer,
+mailProf CHAR(50),
+PRIMARY KEY(idGame2),
+FOREIGN KEY(idHisto) REFERENCES Historique(idHisto),
+FOREIGN KEY(mailProf) REFERENCES Classe(mail)
 );
 
 CREATE TABLE EleveResultG1(
@@ -120,9 +131,9 @@ FOREIGN KEY(idPhraseInventee) REFERENCES PhraseInventee(id)
 );
 
 /*On remplie la table pour pouvoir faire nos tests*/
-INSERT INTO Eleve       VALUES ('User', '', 0, 0);
+INSERT INTO Eleve       VALUES (DEFAULT, 'UserName', 'UserFirstName', '', 0, 0);
 INSERT INTO Classe      VALUES ('Teacher', 'prof@scolaire.fr', '');
-INSERT INTO EleveClasse VALUES ('User', 'prof@scolaire.fr');
+INSERT INTO EleveClasse VALUES ('1', 'prof@scolaire.fr');
 
 /*On créé notre pack*/
 INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
