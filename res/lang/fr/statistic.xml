@@ -7,12 +7,14 @@
 
 	<listStudents>
 		<name>Nom</name>
+		<firstName>Prénom</firstName>
 		<nbGame1>Nb Partie jeu 1</nbGame1>
 		<nbGame2>Nb Partie jeu 2</nbGame2>
 	</listStudents>
 
 	<historic>
 		<name>Nom</name>
+		<firstName>Prénom</firstName>
 		<idGame>Numéro jeu</idGame>
 		<date>Date</date>
 	</historic>
