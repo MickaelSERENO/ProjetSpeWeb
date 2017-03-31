@@ -1,0 +1,39 @@
+#listeJeu
+{
+	display : flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+div
+{
+	border-collapse: collapse;
+}
+
+body
+{
+	background-color : #F5EBC6;
+}
+
+.jeu
+{
+	display: flex;
+	flex-direction: row;
+	width: 75%;
+	height: 200px;
+	border: 1px solid black;
+	border-radius : 10px;
+	margin: 10px;
+}
+.jeuImage
+{
+	border-right: 1px solid black;
+}
+
+.presentation
+{
+	overflow: auto;
+}
+
+
