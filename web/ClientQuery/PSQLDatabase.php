@@ -140,10 +140,10 @@ class PSQLDatabase
 	public function getAllFromListStudents($idTeacher)
 	{
 		$result = array();
-		$script = "SELECT id, nbGame1, nbGame2 FROM Eleve, EleveClasse WHERE Eleve.id = EleveClasse.idEleve AND EleveClasse.mailClasse = '$idTeacher';";
+		$script = "SELECT id, nom, prenom, nbGame1, nbGame2 FROM Eleve, EleveClasse WHERE Eleve.id = EleveClasse.idEleve AND EleveClasse.mailClasse = '$idTeacher';";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Student($row[0], $row[1], $row[2]));
+			array_push($result, new Student($row[0], trim($row[1]), trim($row[2]), trim($row[3]), trim($row[4])));
 
 		return $result;
 	}
@@ -151,10 +151,10 @@ class PSQLDatabase
 	public function getHistoricFromListStudent($idTeacher)
 	{
 		$result = array();
-		$script = "SELECT Historique.idEleve, idGame, jour FROM EleveClasse, Historique WHERE EleveClasse.idEleve = Historique.idEleve AND mailClasse = '$idTeacher';";
+		$script = "SELECT idHisto, Eleve.id, nom, prenom, idGame, jour FROM Eleve, EleveClasse, Historique WHERE EleveClasse.idEleve = Historique.idEleve AND Eleve.id = EleveClasse.idEleve AND mailClasse = '$idTeacher';";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Historic($row[0], $row[1], date('Y-m-d H:i:s', $row[2])));
+			array_push($result, new Historic($row[0], $row[1], trim($row[2]), trim($row[3]), $row[4], date('Y-m-d H:i:s', trim($row[5]))));
 
 		return $result;
 	}

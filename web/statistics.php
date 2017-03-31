@@ -33,6 +33,9 @@
 				<table class=\"tableStats\">
 					<tr class=\"headerStatsRow\">
 						<th>
+							$listStudentsTxt[firstName]
+						</th>
+						<th>
 							$listStudentsTxt[name]
 						</th>
 						<th>
@@ -46,9 +49,13 @@
 			foreach($listStudents as $stud)
 			{
 				$rowDataHTML = $rowDataHTML.
-					"<tr class=\"statsRow\" ng-value=\"$stud->id\" ng-click=\"onRowStudentClick($stud->id, $event)\">
+					"<tr class=\"statsRow\" ng-value=\"$stud->id\" ng-click=\"onRowStudentClick('$stud->id', \$event)\">
 						<td>
-							{$stud->id}
+							{$stud->firstName}
+						</td>		
+
+						<td>
+							{$stud->lastName}
 						</td>		
 
 						<td>
@@ -78,6 +85,9 @@
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
 							<th>
+								$historicTxt[firstName]
+							</th>
+							<th>
 								$historicTxt[name]
 							</th>
 							<th>
@@ -91,15 +101,16 @@
 			foreach($historicArray as $histo)
 			{
 				$rowDataHTML = $rowDataHTML.
-					"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, $event)\">
+					"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, \$event)\">
 						<td>
-							{$histo->id}
+							{$histo->firstName}
 						</td>		
-
+						<td>
+							{$histo->lastName}
+						</td>		
 						<td>
 							{$histo->nbGame1}
 						</td>		
-
 						<td>
 							{$histo->nbGame2}
 						</td>		
