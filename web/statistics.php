@@ -23,20 +23,19 @@
 			public $listStudents;
 			public $historic;
 			public $student;
+			public $formular;
 		}
 
 		function getListStutendsHtml($psql, $langData)
 		{
 			$listStudentsTxt = $langData->listStudents;
 			$studentTxt      = $langData->student;
+			$formularTxt     = $langData->formular;
 			$listStudents    = $psql->getAllFromListStudents("prof@scolaire.fr"); /*should be replace by the prof ID*/
 			$result = 
 				"<form>
 					<input type=\"submit\">
 					<input type=\"text\" value=\"search\">
-
-					<input type=\"submit\">
-					<input type=\"text\" value=\"Add\">
 				</form>
 
 				<div class=\"tableDiv\">
@@ -78,7 +77,14 @@
 						</tr>";
 			}
 
-			$result = $result.$rowDataHTML."</table></div>";
+			$result = $result.$rowDataHTML.
+					"</table>
+
+				</div>
+
+				<form class=\"addStudent\">
+					<input type=\"submit\" value=\"$formularTxt[addUser]\">
+				</form>";
 			return $result;
 		}
 
