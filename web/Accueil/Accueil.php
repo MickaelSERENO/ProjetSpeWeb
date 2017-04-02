@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
-		<link rel="SHORTCUT ICON" href="../../res/Img/IcoBal.ico">
+		<link rel="SHORTCUT ICON" href="/res/Img/IcoBal.ico">
 		<title>Balignon Land!</title>
 	</head>
 	
 	<header class="headerAcc">
-		<?php include('../HeaderFooter/Header.inc.php'); ?>
+		<?php include('/HeaderFooter/Header.inc.php'); ?>
 	</header>
 	
 	<body>
@@ -28,6 +28,6 @@
 	</body>
 	
 	<footer>
-		<?php include('../HeaderFooter/Footer.inc.php'); ?>
+		<?php include('/HeaderFooter/Footer.inc.php'); ?>
 	</footer>
 </html>

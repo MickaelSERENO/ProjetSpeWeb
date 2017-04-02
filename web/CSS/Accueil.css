@@ -15,7 +15,7 @@ rgba(228, 255, 218, 1)
 	
 header.headerAcc {
 	border-radius: 25px;
-	background-image: url(../../res/Img/Texture/congruent_pentagon.png);
+	background-image: url(/res/Img/Texture/congruent_pentagon.png);
 	margin :0;
 	padding:0;
 	margin-bottom : 0;
@@ -27,7 +27,7 @@ header.headerAcc {
 
 body
 {
-	background-image: url(../../res/Img/Texture/seigaiha.png);
+	background-image: url(/res/Img/Texture/seigaiha.png);
 }
 
 .backgroundBody
@@ -197,7 +197,7 @@ a.lienInscr:hover
 	flex: display;
 	flex-direction: row;
 	border-radius: 25px;
-	background-image: url(../../res/Img/Texture/congruent_pentagon.png);
+	background-image: url(/res/Img/Texture/congruent_pentagon.png);
 	margin: 0em;
 	padding: 2em;
 	text-align: center;
