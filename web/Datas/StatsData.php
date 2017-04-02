@@ -21,17 +21,13 @@ class Student
 class Historic
 {
 	public $idStudent;
-	public $lastName;
-	public $firstName;
 	public $idGame;
 	public $date;
 
-	public function __construct($idH, $idS, $lastName_, $firstName_, $idG, $d)
+	public function __construct($idS, $idH, $idG, $d)
 	{
-		$this->id        = $idH;
 		$this->idStudent = $idS;
-		$this->lastName  = $lastName_;
-		$this->firstName = $firstName_;
+		$this->id        = $idH;
 		$this->idGame    = $idG;
 		$this->date      = $d;
 	}

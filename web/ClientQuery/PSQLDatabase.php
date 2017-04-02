@@ -148,15 +148,26 @@ class PSQLDatabase
 		return $result;
 	}
 
-	public function getHistoricFromListStudent($idTeacher)
+	public function getHistoricFromListStudent($idStudent, $idTeacher)
 	{
 		$result = array();
-		$script = "SELECT idHisto, Eleve.id, nom, prenom, idGame, jour FROM Eleve, EleveClasse, Historique WHERE EleveClasse.idEleve = Historique.idEleve AND Eleve.id = EleveClasse.idEleve AND mailClasse = '$idTeacher';";
+		$script = "(SELECT Historique.idHisto, idGame, jour FROM Historique, EleveHistoG1 WHERE idEleve='$idStudent' AND Historique.idHisto = EleveHistoG1.idHisto) UNION
+		           (SELECT Historique.idHisto, idGame, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Historic($row[0], $row[1], trim($row[2]), trim($row[3]), $row[4], date('Y-m-d H:i:s', trim($row[5]))));
+			array_push($result, new Historic($idStudent, $row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
 
 		return $result;
+	}
+
+	public function getStudentCara($idStudent)
+	{
+		$script = "SELECT nom, prenom, nbGame1, nbGame2 FROM Eleve WHERE Eleve.id='$idStudent';";
+		$resultScript = pg_query($this->_conn, $script);
+
+		if($row=pg_fetch_row($resultScript))
+			return new Student($idStudent, trim($row[0]), trim($row[1]), $row[2], $row[3]);
+		return null;
 	}
 }
 ?>

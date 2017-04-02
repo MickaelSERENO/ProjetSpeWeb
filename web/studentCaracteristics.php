@@ -7,6 +7,8 @@
 	<head>
 		<script src="bower_components/angular/angular.min.js"></script>
 		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
+		<link rel="stylesheet" type="text/css" href="stats.css">
+		<link rel="stylesheet" type="text/css" href="CSS/Accueil.css">
 	</head>
 
 	<header class="headerAcc">
@@ -16,42 +18,65 @@
 	<body ng-app="studChaApp">
 <?php
 	//The class use to get the XML text from res/lang
-	class XMLText
+	class LangContent
 	{
+		public $listStats;
+		public $listStudents;
+		public $historic;
+		public $student;
+		public $formular;
 	}
+
+    function getStudentCara($psql, $langData)
+    {
+        $studentTxt = $langData->student;
+        $studentData = $psql->getStudentCara($_GET['studentID']);
+
+        if($studentData == null)
+            return "";
+
+        $result = "<div class=\"studentCara\">
+                        <div class=\"studentName\">
+                            <div id=\"firstNameStudent\">
+                                $studentTxt[firstName] : $studentData->firstName
+                            </div>
+                            <div>
+                                $studentTxt[name] : $studentData->lastName
+                            </div>
+                        </div>
+                        <div class=\"nbGame\">
+                            <div>
+                                $studentTxt[nbGame1] : $studentData->nbGame1
+                            </div>
+                            <div>
+                                $studentTxt[nbGame2] : $studentData->nbGame2
+                            </div>
+                        </div>
+                   </div>";
+        return $result;
+    }
 
 	function getHistoricHtml($psql, $langData)
 	{
 		$historicTxt   = $langData->historic;
 		$studentTxt    = $langData->student;
-		$historicArray = $psql->getHistoricFromListStudent("prof@scolaire.fr"); //should be replace by teacher ID
+		$historicArray = $psql->getHistoricFromListStudent($_GET['studentID'], "prof@scolaire.fr"); //should be replace by teacher ID
 		$result = "
-				<table class=\"tableStats\">
-					<tr class=\"headerStatsRow\">
-						<th>
-							$studentTxt[firstName]
-						</th>
-						<th>
-							$studentTxt[name]
-						</th>
-						<th>
-							$historicTxt[idGame]
-						</th>
-						<th>
-							$historicTxt[date]
-						</th>
-					</tr>";
+				<div class=\"tableDiv\">
+					<table class=\"tableStats\">
+						<tr class=\"headerStatsRow\">
+							<th>
+								$historicTxt[idGame]
+							</th>
+							<th>
+								$historicTxt[date]
+							</th>
+						</tr>";
 		$rowDataHTML = "";
 		foreach($historicArray as $histo)
 		{
 			$rowDataHTML = $rowDataHTML.
 				"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, \$event)\">
-					<td>
-						{$histo->firstName}
-					</td>		
-					<td>
-						{$histo->lastName}
-					</td>		
 					<td>
 						{$histo->nbGame1}
 					</td>		
@@ -61,7 +86,7 @@
 				</tr>";
 		}
 
-		$result = $result.$rowDataHTML."</table>";
+		$result = $result.$rowDataHTML."</table></div>";
 		return $result;
 	}
 
@@ -76,11 +101,18 @@
 
 	$psql = new PSQLDatabase();
 
-	$encoders = array(new XmlEncoder());
-	$normalizers = array(new ObjectNormalizer());
-	$serializer = new Serializer($normalizers, $encoders);
+	$encoders        = array(new XmlEncoder());
+	$normalizers     = array(new ObjectNormalizer());
+	$serializer      = new Serializer($normalizers, $encoders);
 
-	$listStatsText = file_get_contents("../res/lang/fr/statistic.xml");
+	$listStatsText   = file_get_contents("res/lang/fr/statistic.xml");
+	$langData        = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
+
+    $studentDataHtml = getStudentCara($psql, $langData);
+	$historicHtml    = getHistoricHtml($psql, $langData);
+
+    echo $studentDataHtml;
+	echo $historicHtml;
 ?>
 	</body>
 
