@@ -13,6 +13,9 @@
 .tableStats
 {
 	border-collapse : collapse;
+	margin-left     : auto; 
+    margin-right    : auto;
+	table-layout    : fixed;
 }
 
 .tableStats, .tableStats th, .tableStats td
@@ -20,9 +23,16 @@
 	border : 1px solid black;
 }
 
-.listStudentTable th, .listStudentTable td
+.tableStats th
 {
-	padding : 0 50px;
+	padding : 10px;
+	width : 150px;
+}
+
+.tableStats td
+{
+	margin : auto;
+	width : 150px;
 }
 
 .headerStatsRow
@@ -32,4 +42,11 @@
 .tabContent
 {
 	clear : both;
+	min-height : 500px;
+}
+
+.tableDiv
+{
+	min-height : 300px;
+	column-width    : auto;
 }

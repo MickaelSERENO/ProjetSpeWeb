@@ -3,11 +3,17 @@
 <!DOCTYPE>
 <html>
 	<head>
+		<meta charset="utf-8" />
 		<script src="bower_components/angular/angular.min.js"></script>
 		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
 		<script src="script/stats.js"></script>
 		<link rel="stylesheet" type="text/css" href="stats.css">
+		<link rel="stylesheet" type="text/css" href="CSS/Accueil.css">
 	</head>
+
+	<header class="headerAcc">
+		<?php include('HeaderFooter/Header.inc.php'); ?>
+	</header>
 
 	<body ng-app="statsApp">
 <?php
@@ -30,45 +36,47 @@
 					<input type=\"submit\">
 					<input type=\"text\" value=\"Add\">
 				</form>
-				<table class=\"tableStats\">
-					<tr class=\"headerStatsRow\">
-						<th>
-							$listStudentsTxt[firstName]
-						</th>
-						<th>
-							$listStudentsTxt[name]
-						</th>
-						<th>
-							$listStudentsTxt[nbGame1]
-						</th>
-						<th>
-							$listStudentsTxt[nbGame2]
-						</th>
-					</tr>";
+
+				<div class=\"tableDiv\">
+					<table class=\"tableStats\">
+						<tr class=\"headerStatsRow\">
+							<th>
+								$listStudentsTxt[firstName]
+							</th>
+							<th>
+								$listStudentsTxt[name]
+							</th>
+							<th>
+								$listStudentsTxt[nbGame1]
+							</th>
+							<th>
+								$listStudentsTxt[nbGame2]
+							</th>
+						</tr>";
 			$rowDataHTML = "";
 			foreach($listStudents as $stud)
 			{
 				$rowDataHTML = $rowDataHTML.
-					"<tr class=\"statsRow\" ng-value=\"$stud->id\" ng-click=\"onRowStudentClick('$stud->id', \$event)\">
-						<td>
-							{$stud->firstName}
-						</td>		
+						"<tr class=\"statsRow\" ng-value=\"$stud->id\" ng-click=\"onRowStudentClick('$stud->id', \$event)\">
+							<td>
+								{$stud->firstName}
+							</td>		
 
-						<td>
-							{$stud->lastName}
-						</td>		
+							<td>
+								{$stud->lastName}
+							</td>		
 
-						<td>
-							{$stud->nbGame1}
-						</td>		
+							<td>
+								{$stud->nbGame1}
+							</td>		
 
-						<td>
-							{$stud->nbGame2}
-						</td>		
-					</tr>";
+							<td>
+								{$stud->nbGame2}
+							</td>		
+						</tr>";
 			}
 
-			$result = $result.$rowDataHTML."</table>";
+			$result = $result.$rowDataHTML."</table></div>";
 			return $result;
 		}
 
@@ -136,7 +144,7 @@
 		$normalizers = array(new ObjectNormalizer());
 		$serializer = new Serializer($normalizers, $encoders);
 
-		$listStatsText = file_get_contents("../res/lang/fr/statistic.xml");
+		$listStatsText = file_get_contents("res/lang/fr/statistic.xml");
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
@@ -159,4 +167,8 @@
 		");
 ?>
 	</body>
+
+	<footer>
+		<?php include('HeaderFooter/Footer.inc.php'); ?>
+	</footer>
 </html>
