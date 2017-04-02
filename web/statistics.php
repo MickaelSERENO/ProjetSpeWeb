@@ -16,11 +16,13 @@
 			public $listStats;
 			public $listStudents;
 			public $historic;
+			public $student;
 		}
 
 		function getListStutendsHtml($psql, $langData)
 		{
 			$listStudentsTxt = $langData->listStudents;
+			$studentTxt      = $langData->student;
 			$listStudents    = $psql->getAllFromListStudents("prof@scolaire.fr"); /*should be replace by the prof ID*/
 			$result = 
 				"<form>
@@ -33,10 +35,10 @@
 				<table class=\"tableStats\">
 					<tr class=\"headerStatsRow\">
 						<th>
-							$listStudentsTxt[firstName]
+							$studentTxt[firstName]
 						</th>
 						<th>
-							$listStudentsTxt[name]
+							$studentTxt[name]
 						</th>
 						<th>
 							$listStudentsTxt[nbGame1]
@@ -80,15 +82,16 @@
 		function getHistoricHtml($psql, $langData)
 		{
 			$historicTxt   = $langData->historic;
+			$studentTxt    = $langData->student;
 			$historicArray = $psql->getHistoricFromListStudent("prof@scolaire.fr"); //should be replace by teacher ID
 			$result = "
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
 							<th>
-								$historicTxt[firstName]
+								$studentTxt[firstName]
 							</th>
 							<th>
-								$historicTxt[name]
+								$studentTxt[name]
 							</th>
 							<th>
 								$historicTxt[idGame]

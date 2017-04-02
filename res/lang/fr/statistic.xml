@@ -6,21 +6,26 @@
 	</listStats>
 
 	<listStudents>
-		<name>Nom</name>
-		<firstName>Prénom</firstName>
 		<nbGame1>Nb Partie jeu 1</nbGame1>
 		<nbGame2>Nb Partie jeu 2</nbGame2>
 	</listStudents>
 
 	<historic>
-		<name>Nom</name>
-		<firstName>Prénom</firstName>
 		<idGame>Numéro jeu</idGame>
 		<date>Date</date>
+		<score>Score</score>
 	</historic>
 
 	<formular>
 		<search>Rechercher</search>
 		<addUser>Ajouter</addUser>
 	</formular>
+
+	<student>
+		<name>Nom</name>
+		<firstName>Prénom</firstName>
+		<nbGame1>Nombre parties jeu 1</nbGame1>
+		<nbGame2>Nombre parties jeu 2</nbGame2>
+		<historic>Historique</historic>
+	</student>
 </lang>
