@@ -47,6 +47,45 @@
 
 .tableDiv
 {
+	clear : both;
 	min-height : 300px;
 	column-width    : auto;
+}
+
+.studentCara
+{
+	margin-top:3em;
+	padding : 0 10em;
+	padding-bottom: 10em;
+}
+
+.studentCara div
+{
+	float : right;
+}
+
+.studentName div
+{
+	clear : right;
+	float : left;
+}
+
+.studentName
+{
+	margin-bottom:3em;
+}
+
+#firstNameStudent
+{
+	margin : 0 5em;
+}
+
+.nbGame div, .nbGame
+{
+	clear : right;
+}
+
+.nbGame div
+{
+	margin-bottom:0.5em;
 }
