@@ -15,7 +15,7 @@
 		<?php include('HeaderFooter/Header.inc.php'); ?>
 	</header>
 
-	<body ng-app="studChaApp">
+	<body ng-app="studCaApp">
 <?php
 	//The class use to get the XML text from res/lang
 	class LangContent
@@ -111,8 +111,13 @@
     $studentDataHtml = getStudentCara($psql, $langData);
 	$historicHtml    = getHistoricHtml($psql, $langData);
 
-    echo $studentDataHtml;
-	echo $historicHtml;
+	echo "
+			<br/>
+			<div class=\"backgroundBody\">
+				$studentDataHtml
+				$historicHtml
+			</div>
+			<br/>";
 ?>
 	</body>
 

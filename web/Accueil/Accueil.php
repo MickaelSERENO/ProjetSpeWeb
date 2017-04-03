@@ -8,7 +8,7 @@
 	</head>
 	
 	<header class="headerAcc">
-		<?php include('/HeaderFooter/Header.inc.php'); ?>
+		<?php include('../HeaderFooter/Header.inc.php'); ?>
 	</header>
 	
 	<body>
@@ -28,6 +28,6 @@
 	</body>
 	
 	<footer>
-		<?php include('/HeaderFooter/Footer.inc.php'); ?>
+		<?php include('../HeaderFooter/Footer.inc.php'); ?>
 	</footer>
 </html>

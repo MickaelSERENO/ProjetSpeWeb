@@ -8,7 +8,7 @@
 		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
 		<script src="script/stats.js"></script>
 		<link rel="stylesheet" type="text/css" href="stats.css">
-		<link rel="stylesheet" type="text/css" href="CSS/Accueil.css">
+		<link rel="stylesheet" type="text/css" href="/CSS/Accueil.css">
 	</head>
 
 	<header class="headerAcc">
@@ -162,6 +162,8 @@
 		$historicHtml     = getHistoricHtml($psql, $langData);
 
 		echo("
+			<br/>
+			<div class=\"backgroundBody\">
 			<div ng-controller='listStatsCtrl'>
 				<my-statsAccordion>
 					<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
@@ -173,6 +175,8 @@
 					<my-statTabContent>$historicHtml</my-statTabContent>
 				</my-statsAccordion>
 			</div>
+			</div>
+			<br/>
 		");
 ?>
 	</body>

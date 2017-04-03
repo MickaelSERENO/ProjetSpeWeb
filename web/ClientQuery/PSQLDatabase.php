@@ -148,14 +148,27 @@ class PSQLDatabase
 		return $result;
 	}
 
-	public function getHistoricFromListStudent($idStudent, $idTeacher)
+	public function getHistoricFromListStudent($idTeacher)
+	{
+		$result = array();
+
+		$script = "(SELECT Historique.idHisto, idGame, jour FROM Historique, EleveHistoG1, EleveClasse WHERE EleveHistoG1.idEleve=EleveClasse.idEleve AND Historique.idHisto = EleveHistoG1.idHisto AND EleveClasse.mailClasse = '$idTeacher') UNION
+		           (SELECT Historique.idHisto, idGame, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
+		$resultScript = pg_query($this->_conn, $script);
+		while($row = pg_fetch_row($resultScript))
+			array_push($result, new Historic($row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
+
+		return $result;
+	}
+
+	public function getHistoricFromStudent($idStudent, $idTeacher)
 	{
 		$result = array();
 		$script = "(SELECT Historique.idHisto, idGame, jour FROM Historique, EleveHistoG1 WHERE idEleve='$idStudent' AND Historique.idHisto = EleveHistoG1.idHisto) UNION
 		           (SELECT Historique.idHisto, idGame, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Historic($idStudent, $row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
+			array_push($result, new Historic($row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
 
 		return $result;
 	}
