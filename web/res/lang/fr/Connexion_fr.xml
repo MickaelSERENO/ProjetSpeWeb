@@ -1,0 +1,8 @@
+<lang>
+	<txt_connect>
+		<connect_title>Connexion à votre compte:</connect_title>
+		<connect_pseudo>Votre adresse e-mail ou nom de compte</connect_pseudo>
+		<connect_pass>Votre mot de passe</connect_pass>
+		<connect_value_submit_button>Connexion</connect_value_submit_button>
+	</txt_connect>
+</lang>

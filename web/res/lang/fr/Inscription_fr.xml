@@ -1,0 +1,12 @@
+<lang>
+	<txt_inscr>
+		<inscr_title>Inscrivez vous en remplissant les champs suivants. Sans autre précision, le champ est obligatoire:</inscr_title>
+		<inscr_mail>Votre adresse e-mail ou nom de compte</inscr_mail>
+		<inscr_pseudo>Pseudonyme (nom avec lequel vous apparaitrez sur le site) :</inscr_pseudo>
+		<inscr_phone>Numéro de téléphone (facultatif) :</inscr_phone>
+		<inscr_pass>Votre mot de passe</inscr_pass>
+		<inscr_repass>Confirmez le mot de passe :</inscr_repass>
+		<inscr_birth>Entrer votre date de naissance :</inscr_birth>
+		<inscr_value_submit_button>Inscription!</inscr_value_submit_button>
+	</txt_inscr>
+</lang>

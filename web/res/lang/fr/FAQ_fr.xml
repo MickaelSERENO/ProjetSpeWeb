@@ -1,0 +1,22 @@
+<lang>
+	<txt_Faq>
+		<goal_quest>Quel est le but de ce site?</goal_quest>
+		<goal_answ>
+			Ce site est là pour vous aider à améliorer votre maîtrise de la langue en vous proposant
+			des jeux de mots, comme par exemple de la réécriture de phrase.
+		</goal_answ>
+		<inscr_quest>Que puis-je faire pour en profiter pleinement?</inscr_quest>
+		<inscr_answ>
+			Nous vous conseillons de vous inscrire et de participer aux jeux assez régulièrement
+			afin de gagner en compétence.
+		</inscr_answ>
+		<connect_error>Je n'arrive pas à me connecter</connect_error>
+		<connect_error_ans_01>
+			Essayez l'option "J'ai perdu mon mot de passe" sous la fenêtre de connexion.
+			En cas de problème autre, veuillez contacter les administrateurs du site via le
+			lien suivant:
+		</connect_error_ans_01>
+		<connect_error_ans_link>Contacter un admin.</connect_error_ans_link>>
+		<connect_error_ans_02>Préciser le nom de compte et le problème dans l'objet du mail.</connect_error_ans_02>
+	</txt_Faq>
+</lang>
