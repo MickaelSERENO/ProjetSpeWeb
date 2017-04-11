@@ -1,10 +1,14 @@
+<?php
+session_start();
+	
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr" charset="UTF-8">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
 		<link rel="SHORTCUT ICON" href="../../res/Img/IcoBal.ico">
-		<title>Balignon Land!</title>
+		<title>Albatros Sensei: connexion</title>
 	</head>
 										
 	<header class="headerAcc">
@@ -14,24 +18,55 @@
 	<body>
 	<br/>
 		<div class="backgroundBody">
-			<h1 class="acc"> Bienvenue sur ce site web funtastic! </h1>
 			<section class="connexion">
 				<div class="connexion">
+					<?php
+						if(!empty($_GET['statut'])) 
+						{
+				 
+							switch($_GET['statut']) 
+							{
+								case 'wrong_captcha':
+									echo'le captcha est incorrect';
+									break;
+									
+								case 'wrong_pseudo':
+									echo'Le pseudonyme ets incorrect ou n\'existe pas';
+									break;
+								
+								case 'wrong_password':
+									echo'Il manque le champ mot de passe';
+									break;
+									
+								default:
+									echo'Erreur Inconnue';
+							}
+						}
+					?>
+				
 					<form method="post" action="connec_status.php">
 						<h3>
-						Connexion à votre compte:
+							Connexion à votre compte:
 						</h3>
 						<br/>
-						<label for="pseudo">Votre adresse mail ou pseudo :</label>
+						<label for="pseudo">Votre adresse mail ou nom de compte :</label>
 						</br>
-						<input type="text" name="pseudo" value="truc@machin.com" id="pseudo" autofocus required/>
+						<input type="text" name="pseudo" id="pseudo" autofocus required/>
 						</br>
 						</br>
 						<label for="passmot">Votre mot de passe :</label>
 						</br>
-						<input type="password" name="passmot" id="passmot" required/>
+						<input type="password" name="password" id="password" required/>
 						</br>
 						</br>
+						
+						<img id="captcha" src="/securimage/securimage_show.php" alt="CAPTCHA Image" />
+						</br>
+						<input type="text" name="captcha_code" size="10" maxlength="6" />
+						<a href="#" onclick="document.getElementById('captcha').src = '/securimage/securimage_show.php?' + Math.random(); return false">[ Different Image ]</a>
+						</br>
+						</br>
+						
 						<input type="submit" value="Connexion"/>
 					<form/>
 				</div>
