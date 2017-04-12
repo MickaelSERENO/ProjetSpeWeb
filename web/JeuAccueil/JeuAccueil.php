@@ -18,7 +18,7 @@
 			<div id="JA_listeJeu">
 				<div class="JA_jeu">
 					<div class="JA_jeuImage">
-						<a href="/jeu1.html"><img src="/res/Img/01.jpg" alt="Jeu 1" /></a> 
+						<a href="/DescJeu/DescJeu.php?jeu=1"><img src="/res/Img/01.jpg" alt="Jeu 1" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
 						<h2>Jeu 1</h2>
@@ -29,7 +29,7 @@
 				</div>
 				<div class="JA_jeu">
 					<div class="JA_jeuImage">
-						<a href="/jeu2.html"><img src="/res/Img/02.jpg" alt="Jeu 2" /></a> 
+						<a href="/DescJeu/DescJeu.php?jeu=2"><img src="/res/Img/02.jpg" alt="Jeu 2" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
 						<h2>Jeu 2</h2>
