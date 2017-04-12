@@ -2,21 +2,23 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="JeuAccueil.css" />
+		<link rel="stylesheet" href="/CSS/Accueil.css" />
+		<link rel="stylesheet" href="/CSS/JeuAccueil.css" />
 		<title>Jeux</title>
 	</head>
 
 	<body>
-		<header>
-			
-		<header>
+		<header class="headerAcc">
+			<?php include('../HeaderFooter/Header.inc.php'); ?>
+		</header>
 
-		<div>
+		<br/>
+		<div class="backgroundBody">
 			<h1>Jeux</h1>
 			<div id="JA_listeJeu">
 				<div class="JA_jeu">
 					<div class="JA_jeuImage">
-						<a href="../jeu1.html"><img src="../01.jpg" alt="Jeu 1" /></a> 
+						<a href="/jeu1.html"><img src="/res/Img/01.jpg" alt="Jeu 1" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
 						<h2>Jeu 1</h2>
@@ -27,7 +29,7 @@
 				</div>
 				<div class="JA_jeu">
 					<div class="JA_jeuImage">
-						<a href="../jeu2.html"><img src="../02.jpg" alt="Jeu 2" /></a> 
+						<a href="/jeu2.html"><img src="/res/Img/02.jpg" alt="Jeu 2" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
 						<h2>Jeu 2</h2>
@@ -37,8 +39,10 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<br/>
 		<footer>
-			
+			<?php include('../HeaderFooter/Footer.inc.php'); ?>
 		</footer>
 	</body>
 </html>

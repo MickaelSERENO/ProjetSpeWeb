@@ -11,27 +11,48 @@ div
 	border-collapse: collapse;
 }
 
-body
-{
-	background-color : #F5EBC6;
-}
-
-.jeu
+.JA_jeu
 {
 	display: flex;
 	flex-direction: row;
-	width: 75%;
-	height: 200px;
-	border: 1px solid black;
-	border-radius : 10px;
-	margin: 10px;
-}
-.jeuImage
-{
-	border-right: 1px solid black;
+	padding-left: 1em;
+	padding-right: 1em;
+	margin: 3em;
+	border: 8px solid var(--borderColor);
+	border-radius : 30px;
+	background-color: rgba(255, 255, 255, 0.6);
+	align-content: stretch;
+
+	/*-webkit-flex-direction: row;
+	-webkit-align-content: stretch;
+	display: -webkit-flex;*/
 }
 
-.presentation
+.JA_jeuImage a img
+{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.JA_jeuImage
+{
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	width: 20%;
+	/*height:100%;*/
+}
+
+.JA_jeuPresentation
+{
+	width:80%;
+	padding-left: 1em;
+	border-left: 8px solid var(--borderColor);
+	/*position:relative;*/
+}
+
+.JA_presentationText
 {
 	overflow: auto;
 }
