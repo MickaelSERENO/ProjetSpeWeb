@@ -2,16 +2,6 @@
 <?php
 
 <?php
-	/*Managing wrong captcha: http://www.phpcaptcha.org/documentation/quickstart-guide/*/
-	include_once $_SERVER['DOCUMENT_ROOT'] . '/securimage/securimage.php';
-	$securimage = new Securimage();
-
-	if ($securimage->check($_POST['captcha_code']) == false) 
-	{
-	  // the captcha code was incorrect
-	  header('location: Connexion.php?statut=wrong_captcha');
-	  exit;
-	}
 	
 	$_POST['pseudo'] = htmlspecialchars($_POST['pseudo']);
 	$_POST['password'] = htmlspecialchars($_POST['password']);

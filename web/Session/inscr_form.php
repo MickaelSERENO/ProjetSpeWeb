@@ -1,22 +1,33 @@
 <?php session_start();?>
 <?php
 	
+	//Load symfony
+	require_once __DIR__.'/../../vendor/autoload.php';
+	require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
+	require_once __DIR__.'/../Datas/Sentence.php';
+
+	use Symfony\Component\Serializer\Serializer;
+	use Symfony\Component\Serializer\Encoder\XmlEncoder;
+	use Symfony\Component\Serializer\Encoder\JsonEncoder;
+	use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+	use PSQLDatabase;
+	
 	/*Deleting any code that could be inserted in those fields*/
 	$_POST['pseudo'] = htmlspecialchars($_POST['pseudo']);
 	$_POST['mail'] = htmlspecialchars($_POST['mail']);
 	$_POST['mailVer'] = htmlspecialchars($_POST['mailVer']);
 	$_POST['password'] = htmlspecialchars($_POST['password']);
 	$_POST['passwordVer'] = htmlspecialchars($_POST['passwordVer']);
-	$_POST['tel'] = htmlspecialchars($_POST['tel']);
+	/*$_POST['tel'] = htmlspecialchars($_POST['tel']);*/
 	
 	/*Saving some of the fields so the user doesn't have to retype everything if he made a mistake*/
 	$_SESSION['mail'] = $_POST['mail'];
 	$_SESSION['pseudo'] = $_POST['pseudo'];
-	if(isset($_POST['tel']))
+	/*if(isset($_POST['tel']))
 		$_SESSION['tel'] = $_POST['tel'];
-	$_SESSION['birthDate'] = $_POST['birthDate'];
+	$_SESSION['birthDate'] = $_POST['birthDate'];*/
 	
-	/*Managing wrong captcha: http://www.phpcaptcha.org/documentation/quickstart-guide/*/
+	/*Managing wrong captcha: http://www.phpcaptcha.org/documentation/quickstart-guide/ */
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/securimage/securimage.php';
 	$securimage = new Securimage();
 
@@ -42,11 +53,11 @@
 		header('location: Inscription.php?statut=password_missing');
 		exit;
 	}
-	else if((empty($_POST['birthDate'])))
+	/*else if((empty($_POST['birthDate'])))
 	{
 		header('location: Inscription.php?statut=birth_missing');
 		exit;
-	}
+	}*/
 	else if (($_POST['mail']) != ($_POST['mailVer']))
 	{
 		header('location: Inscription.php?statut=mail_different');
@@ -80,46 +91,52 @@
 			exit;
 		}
 		
-		$passHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-		
-		$Recordusers = file_get_contents('Secured/pseudaList.txt');
-		
-		/*Cette ligne nous donne un tableau avec des cases de la forme pseudo:mail@host.cc*/
-		$Recordusersarray = explode ("\n", $Recordusers);
+		$passHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 		
 		$ExistentUserMail = false;
 		$ExistentUserPseudal = false;
 		
-		foreach ($Recordusersarray as $Identification)
+		$prompter = new PSQLDatabase();
+	
+		if ($prompter->existPseudo($_POST['pseudo']))
 		{
-			$split = explode(":", $Identification);
-			if ($split[0] == $_POST['pseudo'])
-			{
-				$ExistentUserPseudal = true;
-				break;
-			}
-			if($split[1] == $_POST['mail'])
-			{
-				$ExistentUserMail = true;
-				break;
-			}	
+			$ExistentUserPseudal = true;
 		}
+		if($prompter->existMail($_POST['mail']))
+		{
+			$ExistentUserMail = true;
+		}	
 
 		if($ExistentUserMail)
 			header('location: Inscription.php?statut=mail_existing');
 		else if($ExistentUserPseudal)
 			header('location: Inscription.php?statut=user_existing');
 		else
-		{
-			$f = file_get_contents("Secured/pseudHash.txt");
-			$g = $f.$_POST['pseudo'].":".$passHash."\n";
-			
-			$addNewUser = $Recordusers.$_POST['pseudo'].':'.$_POST['mail']."\n";
-			
-			$f = file_put_contents('Secured/pseudHash.txt', $g);
+		{	
+			//SUPERCLAPIER: Inutile?
+			$Recordusers = file_get_contents('Secured/pseudaList.txt');
+			$addNewUser = $Recordusers.$_POST['pseudo'].':'.$_POST['mail'].':'.$_POST['passHash']."\n";
 			$Recordusers = file_put_contents('Secured/pseudalist.txt', $addNewUser);
-			header('location: InscriptionReussie.php');
 			
+			$code=substr(md5(mt_rand()),0,15);
+			
+			$prompter->registerTeacherClass($_POST['mail'], $_POST['pseudo'], $passHash, false, $code);
+			
+			//Envoi du code d'activation par mail
+			//SUPERCLAPIER: modifier l'adresse de la page si on a un nom de domaine
+			$to=$_POST['mail'];
+			$subject="Code d'activationpour AlbatrosSensei.fr";
+			$from = 'noreplyAlbatrossensei@gmail.com';
+			$body='Votre code d\'activation de compte pour le site Albatros Sensei est '.$code.'\n
+			Merci de cliquer sur le lien ci dessous pour activer votre compte:\n
+			<a href="localhost/Session/verif_account.php">verify.php?mail='.$_POST['mail'].'&code='.$code.'<a> pour activer votre compte.\n
+			Merci pour votre confiance.\n 
+			L\'équipe d\'administration du site\n';
+			$headers = "From:".$from;
+			mail($to,$subject,$body,$headers);
+			
+			
+			header('location: VerifInscr.php');
 		}
 		
 	}

@@ -45,11 +45,11 @@
 							case 'password_missing':
 								echo'Il manque le champ mot de passe';
 								break;
-								
+							/*	
 							case 'birth_missing':
 								echo 'Votre date de naissance a un format incorrext où n\'a pas été rentrée';
 								break;
-								
+							*/
 							case 'mail_different':
 								echo 'les deux adresses mail rentrées sont différentes';
 								break;
@@ -97,7 +97,7 @@
 						?>
 						<label for="mail">Votre adresse mail :</label>
 						</br>
-						<input type="email" name="mail" value=<?php echo $mailEx ?> id="mailInscr" autofocus required/>
+						<input type="email" name="mail" value="<?php echo $mailEx ?>" id="mailInscr" autofocus required/>
 						</br>
 						</br>
 						
@@ -114,21 +114,23 @@
 						?>
 						<label for="pseudo">Pseudonyme (nom avec lequel vous apparaitrez sur le site) :</label>
 						</br>
-						<input type="text" name="pseudo" value=<?php echo $pseudEx ?> id="pseudo" autofocus required/>
+						<input type="text" name="pseudo" value="<?php echo $pseudEx ?>" id="pseudo" autofocus required/>
 						</br>
 						</br>
-						
-						<?php 	if(isset($_SESSION['tel']))
+						<!--
+						<?php 	/*
+								if(isset($_SESSION['tel']))
 									$telEx = $_SESSION['tel'];
 								else
 									$telEx = "";
+								*/
 						?>
 						<label for="tel">Numéro de téléphone (facultatif) :</label>
 						</br>
-						<input type="tel" name="tel" value=<?php echo $telEx ?> id="tel"/>
+						<input type="tel" name="tel" value="<?php echo $telEx ?>" id="tel"/>
 						</br>
 						</br>
-						
+						-->
 						<label for="password">Votre mot de passe. Il doit contenir une majuscule, un chiffre, être long d'au moins 8 charactères et inférieur à 32 charactères: </label>
 						</br>
 						<input type="password" name="password" id="password" required/>
@@ -140,18 +142,20 @@
 						<input type="password" name="passwordVer" id="password" required/>
 						</br>
 						</br>
-						
-						<?php 	if(isset($_SESSION['birthDate']))
+						<!--
+						<?php 	
+								/*if(isset($_SESSION['birthDate']))
 									$birthEx = $_SESSION['birthDate'];
 								else
 									$birthEx = "";
+								*/
 						?>
 						<label for="birthDate">Entrer votre date de naissance :</label>
 						</br>
-						<input type="date" name="birthDate" value=<?php echo $birthEx ?> id="birthDate" required/>
+						<input type="date" name="birthDate" value="<?php echo $birthEx ?>" id="birthDate" required/>
 						</br>
 						</br>
-						
+						-->
 						
 						<img id="captcha" src="/securimage/securimage_show.php" alt="CAPTCHA Image" />
 						</br>

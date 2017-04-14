@@ -7,7 +7,7 @@ CREATE TABLE Eleve(
 id SERIAL,
 nom CHAR(50),
 prenom CHAR(50),
-password CHAR(32),
+password CHAR(60),
 nbGame1 INTEGER,
 nbGame2 INTEGER,
 PRIMARY KEY(id)
@@ -16,7 +16,9 @@ PRIMARY KEY(id)
 CREATE TABLE Classe(
 nom CHAR(50),
 mail CHAR(150),
-password CHAR(32),
+password CHAR(60),
+verifiedUser BOOLEAN,
+code CHAR(15),
 PRIMARY KEY(mail)
 );
 

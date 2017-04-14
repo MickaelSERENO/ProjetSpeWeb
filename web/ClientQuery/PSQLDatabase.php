@@ -172,7 +172,7 @@ class PSQLDatabase
 
 		return $result;
 	}
-
+	
 	public function getStudentCara($idStudent)
 	{
 		$script = "SELECT nom, prenom, nbGame1, nbGame2 FROM Eleve WHERE Eleve.id='$idStudent';";
@@ -181,6 +181,85 @@ class PSQLDatabase
 		if($row=pg_fetch_row($resultScript))
 			return new Student($idStudent, trim($row[0]), trim($row[1]), $row[2], $row[3]);
 		return null;
+	}
+	
+	
+	/*Function which will put the user in the database, he still have to verify his mail adress*/
+	public function registerTeacherClass($mail, $pseudo, $passhash, $verify, $code)
+	{
+		
+		$script       = "INSERT INTO Classe VALUES ($pseudo, $mail, $password, $verify, $code);";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return null;
+	}
+	
+	/*Update the boolean to true, the account is now validated*/
+	public function verifyTeacherClass($mail)
+	{
+		$script       = "UPDATE Classe SET verifiedUser = true WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return true;
+	}
+	
+	public function updateVerifCode($mail, $code)
+	{
+		$script       = "UPDATE Classe SET code = $code WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return true;
+	}
+	
+	public function compare_code($mail, $code)
+	{
+		$script       = "SELECT code FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		if(strcmp($row, $code))
+			return true;
+		else
+			return false;
+	}
+	
+	public function existPseudo($pseudo)
+	{
+		$script       = "SELECT CASE WHEN EXISTS (SELECT * FROM Classe WHERE pseudo = '$pseudo') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		if(pg_fetch_row($resultScript))
+			return true;
+		else
+			return false;
+		
+	}
+	
+	public function existMail($mail)
+	{
+		$script       = "SELECT CASE WHEN EXISTS (SELECT * FROM Classe WHERE mail = 'mail') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		if(pg_fetch_row($resultScript))
+			return true;
+		else
+			return false;
+	}
+	
+	public function getPassHash($mail)
+	{
+		$script       = "SELECT password FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return $row = pg_fetch_row($resultScript);
+	}
+	
+	public function updatePassHash($mail, $passHash)
+	{
+		$script       = "UPDATE Classe SET password = $passHash WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return true;
 	}
 }
 ?>
