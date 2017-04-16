@@ -100,44 +100,42 @@
 	
 		if ($prompter->existPseudo($_POST['pseudo']))
 		{
-			$ExistentUserPseudal = true;
+			$_SESSION['clapier'] = $prompter->existMail($_POST['pseudo']);
+			header('location: Inscription.php?statut=user_existing');
+			exit;
 		}
 		if($prompter->existMail($_POST['mail']))
 		{
-			$ExistentUserMail = true;
+			$_SESSION['clapier'] = $prompter->existMail($_POST['mail']);
+			header('location: Inscription.php?statut=mail_existing');
+			exit;
 		}	
 
-		if($ExistentUserMail)
-			header('location: Inscription.php?statut=mail_existing');
-		else if($ExistentUserPseudal)
-			header('location: Inscription.php?statut=user_existing');
-		else
-		{	
-			//SUPERCLAPIER: Inutile?
-			$Recordusers = file_get_contents('Secured/pseudaList.txt');
-			$addNewUser = $Recordusers.$_POST['pseudo'].':'.$_POST['mail'].':'.$_POST['passHash']."\n";
-			$Recordusers = file_put_contents('Secured/pseudalist.txt', $addNewUser);
-			
-			$code=substr(md5(mt_rand()),0,15);
-			
-			$prompter->registerTeacherClass($_POST['mail'], $_POST['pseudo'], $passHash, false, $code);
-			
-			//Envoi du code d'activation par mail
-			//SUPERCLAPIER: modifier l'adresse de la page si on a un nom de domaine
-			$to=$_POST['mail'];
-			$subject="Code d'activationpour AlbatrosSensei.fr";
-			$from = 'noreplyAlbatrossensei@gmail.com';
-			$body='Votre code d\'activation de compte pour le site Albatros Sensei est '.$code.'\n
-			Merci de cliquer sur le lien ci dessous pour activer votre compte:\n
-			<a href="localhost/Session/verif_account.php">verify.php?mail='.$_POST['mail'].'&code='.$code.'<a> pour activer votre compte.\n
-			Merci pour votre confiance.\n 
-			L\'équipe d\'administration du site\n';
-			$headers = "From:".$from;
-			mail($to,$subject,$body,$headers);
-			
-			
-			header('location: VerifInscr.php');
-		}
+		//SUPERCLAPIER: Inutile?
+		$Recordusers = file_get_contents('Secured/pseudaList.txt');
+		$addNewUser = $Recordusers.$_POST['pseudo'].':'.$_POST['mail'].':'.$passHash."\n";
+		$Recordusers = file_put_contents('Secured/pseudalist.txt', $addNewUser);
+		
+		$code=substr(md5(mt_rand()),0,15);
+		
+		$prompter->registerTeacherClass($_POST['mail'], $_POST['pseudo'], $passHash, false, $code);
+		$_SESSION['clapier'] = $code;
+		//Envoi du code d'activation par mail
+		//SUPERCLAPIER: modifier l'adresse de la page si on a un nom de domaine
+		$to=$_POST['mail'];
+		$subject="Code d'activationpour AlbatrosSensei.fr";
+		$from = 'noreplyAlbatrossensei@gmail.com';
+		$body='Votre code d\'activation de compte pour le site Albatros Sensei est '.$code.'\n
+		Merci de cliquer sur le lien ci dessous pour activer votre compte:\n
+		<a href="localhost/Session/verif_account.php">verify.php?mail='.$_POST['mail'].'&code='.$code.'<a> pour activer votre compte.\n
+		Merci pour votre confiance.\n 
+		L\'équipe d\'administration du site\n';
+		$headers = "From:".$from;
+		mail($to,$subject,$body,$headers);
+		
+		
+		header('location: VerifInscr.php');
+
 		
 	}
 ?>

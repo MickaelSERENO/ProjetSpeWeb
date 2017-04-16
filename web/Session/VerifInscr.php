@@ -23,21 +23,23 @@ session_start();
 					<br/>
 					
 					<?php
+					
+						/*if(isset($_SESSION['clapier']))
+							echo $_SESSION['clapier'];*/
 						if(!empty($_GET['statut'])) 
 						{
-				 
 							switch($_GET['statut']) 
 							{
-								case 'wrong_mail'
+								case 'wrong_mail':
 									echo'Le lien utilisé pour vérifier le compte est incorrect.\n
 											Assurez-vous de bien utiliser celui qui vous a été envoyé.';
 									break;
 									
-								case 'wrong_code';
+								case 'wrong_code':
 									echo'Le code de vérification est incorrect, assurez vous de ne pas avoir modifier le lien.';
 									break;
 									
-								case 'wrong_captcha'
+								case 'wrong_captcha':
 									echo'Le captcha entré pour renvoyer le code par mail est incorrect';
 									break;
 									

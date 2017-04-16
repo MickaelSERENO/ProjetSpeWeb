@@ -62,6 +62,8 @@ session_start();
 						
 						<input type="submit" value="Connexion"/>
 					<form/>
+					
+					<a href="forgottenPass.php"> Mot de passe oublié?</a>
 				</div>
 			</section>
 		</div>

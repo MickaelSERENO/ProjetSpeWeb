@@ -15,7 +15,7 @@ class PSQLDatabase
 
 	public function __construct()
 	{
-		$this->_conn = pg_pconnect("host=127.0.0.1 user=postgres dbname=postgres");
+		$this->_conn = pg_pconnect("host=127.0.0.1 user=postgres dbname=postgres password=postgresql");
 	}
 
 	public function getIDPaireSentences($idPack, $idSents)
@@ -188,7 +188,7 @@ class PSQLDatabase
 	public function registerTeacherClass($mail, $pseudo, $passhash, $verify, $code)
 	{
 		
-		$script       = "INSERT INTO Classe VALUES ($pseudo, $mail, $password, $verify, $code);";
+		$script       = "INSERT INTO Classe VALUES('$pseudo', '$mail', '$passhash', $verify, '$code');";
 		$resultScript = pg_query($this->_conn, $script);
 		
 		return null;
@@ -205,7 +205,7 @@ class PSQLDatabase
 	
 	public function updateVerifCode($mail, $code)
 	{
-		$script       = "UPDATE Classe SET code = $code WHERE mail = '$mail';";
+		$script       = "UPDATE Classe SET code = '$code' WHERE mail ='$mail';";
 		$resultScript = pg_query($this->_conn, $script);
 		
 		return true;
@@ -225,10 +225,10 @@ class PSQLDatabase
 	
 	public function existPseudo($pseudo)
 	{
-		$script       = "SELECT CASE WHEN EXISTS (SELECT * FROM Classe WHERE pseudo = '$pseudo') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$script       = "SELECT CASE WHEN EXISTS (SELECT mail FROM Classe WHERE nom = '$pseudo') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
 		$resultScript = pg_query($this->_conn, $script);
 		
-		if(pg_fetch_row($resultScript))
+		if($resultScript == 1)
 			return true;
 		else
 			return false;
@@ -237,11 +237,11 @@ class PSQLDatabase
 	
 	public function existMail($mail)
 	{
-		$script       = "SELECT CASE WHEN EXISTS (SELECT * FROM Classe WHERE mail = 'mail') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$script       = "SELECT CASE WHEN EXISTS (SELECT nom FROM Classe WHERE mail = '$mail') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
 		$resultScript = pg_query($this->_conn, $script);
-		
-		if(pg_fetch_row($resultScript))
-			return true;
+
+		if($resultScript == 1)
+			return $resultScript;
 		else
 			return false;
 	}
@@ -256,7 +256,7 @@ class PSQLDatabase
 	
 	public function updatePassHash($mail, $passHash)
 	{
-		$script       = "UPDATE Classe SET password = $passHash WHERE mail = '$mail';";
+		$script       = "UPDATE Classe SET password = '$passHash' WHERE mail = '$mail';";
 		$resultScript = pg_query($this->_conn, $script);
 		
 		return true;
