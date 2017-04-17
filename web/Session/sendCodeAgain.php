@@ -3,7 +3,7 @@
 	
 	//Load symfony
 	require_once __DIR__.'/../../vendor/autoload.php';
-	require_once __DIR__.'../ClientQuery/PSQLDatabase.php';
+	require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
 	require_once __DIR__.'/../Datas/Sentence.php';
 
 	use Symfony\Component\Serializer\Serializer;
@@ -27,7 +27,7 @@
 	$mail = htmlspecialchars($_POST['mailV']);
 	
 	$prompter = new PSQLDatabase();
-	if (empty($mail) || !prompter->existMail($mail))
+	if (empty($mail) || !($prompter->existMail($mail)))
 	{
 		header('location: mailResent.php');
 		exit;
@@ -35,7 +35,7 @@
 	else
 	{
 		$code=substr(md5(mt_rand()),0,15);
-		prompter->updateVerifCode($mail, $code);
+		$prompter->updateVerifCode($mail, $code);
 		
 		//Envoi du code d'activation par mail
 		//SUPERCLAPIER: modifier l'adresse de la page si on a un nom de domaine
@@ -44,7 +44,7 @@
 		$from = 'noreplyAlbasensei@gmail.com';
 		$body='Votre code d\'activation de compte pour le site Albatros Sensei est '.$code.'\n
 		Merci de cliquer sur le lien ci dessous pour activer votre compte:\n
-		<a href="localhost/Session/verif_account.php">verify.php?mail='.$mail.'&code='.$code.'<a> pour activer votre compte.\n
+		<a href="spamhost/Session/verif_account.php">verify.php?mail='.$mail.'&code='.$code.'</a> pour activer votre compte.\n
 		Merci pour votre confiance.\n 
 		L\'équipe d\'administration du site\n';
 		$headers = "From:".$from;

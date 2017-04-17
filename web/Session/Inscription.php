@@ -20,10 +20,10 @@
 					</br>
 					
 					<?php
-					/*if(isset($_SESSION['clapier']))
+					if(isset($_SESSION['clapier']))
 								echo "Live : ".$_SESSION['clapier'];
 							else
-								echo "DIE DIE DIE";*/
+								echo "DIE DIE DIE";
 					echo"\r\n";
 					echo"\r\n";
 					echo"\r\n";
@@ -129,7 +129,7 @@
 						?>
 						<label for="tel">Numéro de téléphone (facultatif) :</label>
 						</br>
-						<input type="tel" name="tel" value="<?php echo $telEx ?>" id="tel"/>
+						<input type="tel" name="tel" value="</*?php echo $telEx ?*/>" id="tel"/>
 						</br>
 						</br>
 						-->
@@ -154,7 +154,7 @@
 						?>
 						<label for="birthDate">Entrer votre date de naissance :</label>
 						</br>
-						<input type="date" name="birthDate" value="<?php echo $birthEx ?>" id="birthDate" required/>
+						<input type="date" name="birthDate" value="</*?php echo $birthEx ?*/>" id="birthDate" required/>
 						</br>
 						</br>
 						-->

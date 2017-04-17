@@ -1,4 +1,7 @@
-<?php session_start();?>
+<?php
+session_start();
+	
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr" charset="UTF-8">
 	<head>
@@ -17,15 +20,10 @@
 		<div class="backgroundBody">
 			<section class="connexion">
 				<div class="connexion">
-					<h2>Votre inscription est  terminée!</h2>
+					<h2>Le mail a été renvoyé!</h2>
 					<br/>
-					<h3>
-						Bienvenue dans la communauté.
-						<br/>
-						Vous pouvez dès maintenant accéder à votre compte
-					</h3>
+					<h3>Un email vous a été envoyé à l'adresse utilisée pour valider votre compte si vous vous étiez inscrit avec.</h3>
 					<br/>
-					
 				</div>
 			</section>
 		</div>

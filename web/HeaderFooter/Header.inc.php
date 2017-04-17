@@ -21,9 +21,23 @@
 						<li><a class="linksMenuItems" href="/Jeux/JeuAccueil.html"> Jeux </a></li>
 						<li><a class="linksMenuItems" href="/Community/HCommunity.html"> Communauté </a></li>
 					</div>
-					<div class="connect">	
-						<div class="lienConnec"><li><a class="lienConnec" href="/Session/Connexion.php"> Connexion</a></li></div>
-						<div class="lienInscr"><li><a class="lienInscr" href="/Session/Inscription.php"> Inscription</a></li></div>
+					<div class="connect">
+						<?php
+						if(isset($_SESSION['mail']) && isset($_SESSION['verified_user']) && $_SESSION['verified_user'] == 1)
+						{
+							echo'
+							<div class="lienConnec"><li><a class="lienConnec" href="/statistics.php"> Mon compte</a></li></div>
+							<div class="lienInscr"><li><a class="lienInscr" href="/Session/Disconnect.php"> Deconnexion</a></li></div>
+							';
+						}
+						else
+						{
+							echo '
+								<div class="lienConnec"><li><a class="lienConnec" href="/Session/Connexion.php"> Connexion</a></li></div>
+								<div class="lienInscr"><li><a class="lienInscr" href="/Session/Inscription.php"> Inscription</a></li></div>
+							';
+						}
+						?>
 					</div>
 				</ul>
 			</div>

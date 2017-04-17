@@ -187,18 +187,29 @@ class PSQLDatabase
 	/*Function which will put the user in the database, he still have to verify his mail adress*/
 	public function registerTeacherClass($mail, $pseudo, $passhash, $verify, $code)
 	{
+		if($verify)
+			$script       = "INSERT INTO Classe VALUES('$pseudo', '$mail', '$passhash', 't', '$code');";
+		else
+			$script       = "INSERT INTO Classe VALUES('$pseudo', '$mail', '$passhash', 'f', '$code');";
 		
-		$script       = "INSERT INTO Classe VALUES('$pseudo', '$mail', '$passhash', $verify, '$code');";
 		$resultScript = pg_query($this->_conn, $script);
+		/*$data = array('nom'=>$pseudo, 'mail'=>$mail, 'password'=>$passhash, 'verifiedUser'=>$verify, 'code'=>$code);
+		$res = pg_insert($this->_conn, 'Classe', $data);
+		if ($res)
+			echo "Les données POSTées ont pu être enregistrées avec succès.\n";
+		else 
+			echo "Il y a un problème avec les données.\n";*/
 		
-		return null;
+		pg_query($this->_conn, 'COMMIT');
+		return true;
 	}
 	
 	/*Update the boolean to true, the account is now validated*/
 	public function verifyTeacherClass($mail)
 	{
-		$script       = "UPDATE Classe SET verifiedUser = true WHERE mail = '$mail';";
+		$script       = "UPDATE Classe SET verifiedUser = 't' WHERE mail = '$mail';";
 		$resultScript = pg_query($this->_conn, $script);
+		pg_query($this->_conn, 'COMMIT');
 		
 		return true;
 	}
@@ -207,8 +218,33 @@ class PSQLDatabase
 	{
 		$script       = "UPDATE Classe SET code = '$code' WHERE mail ='$mail';";
 		$resultScript = pg_query($this->_conn, $script);
+		pg_query($this->_conn, 'COMMIT');
 		
 		return true;
+	}
+	
+	public function isVerifiedUserMail($mail)
+	{
+		$script       = "SELECT verifiedUser FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		if(row[0])
+			return true;
+		else
+			return false;
+	}
+	
+	public function isVerifiedUserPseudal($pseudal)
+	{
+		$script       = "SELECT verifiedUser FROM Classe WHERE nom = '$pseudal';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		if(row[0])
+			return true;
+		else
+			return false;
 	}
 	
 	public function compare_code($mail, $code)
@@ -217,33 +253,70 @@ class PSQLDatabase
 		$resultScript = pg_query($this->_conn, $script);
 		
 		$row = pg_fetch_row($resultScript);
-		if(strcmp($row, $code))
+		if(strcmp($row[0], $code)==0)
 			return true;
 		else
 			return false;
+	}
+	
+	public function getPseudalFromMail($mail)
+	{
+		$script       = "SELECT nom FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		$row = pg_fetch_row($resultScript);
+		return $row[0];
+	}
+	
+	public function getMailFromPseudal($pseudal)
+	{
+		$script       = "SELECT mail FROM Classe WHERE nom = '$pseudo';";
+		$resultScript = pg_query($this->_conn, $script);
+		$row = pg_fetch_row($resultScript);
+		return $row[0];
 	}
 	
 	public function existPseudo($pseudo)
 	{
 		$script       = "SELECT CASE WHEN EXISTS (SELECT mail FROM Classe WHERE nom = '$pseudo') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
 		$resultScript = pg_query($this->_conn, $script);
+		$row=pg_fetch_row($resultScript);
 		
-		if($resultScript == 1)
+		if($row[0])
 			return true;
 		else
 			return false;
-		
 	}
 	
 	public function existMail($mail)
 	{
 		$script       = "SELECT CASE WHEN EXISTS (SELECT nom FROM Classe WHERE mail = '$mail') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
 		$resultScript = pg_query($this->_conn, $script);
-
-		if($resultScript == 1)
-			return $resultScript;
+		$row=pg_fetch_row($resultScript);
+		/*$script       = "SELECT nom FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);*/
+	
+		if($row[0])
+			return true;
 		else
 			return false;
+	}
+	
+	public function cmpPassHashPseudal($passTest, $pseudal)
+	{
+		$script       = "SELECT password FROM Classe WHERE nom = '$pseudal';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		return row[0];
+	}
+	
+	public function cmpPassHashMail($passTest, $mail)
+	{
+		$script       = "SELECT password FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		return row[0];
 	}
 	
 	public function getPassHash($mail)
@@ -251,7 +324,8 @@ class PSQLDatabase
 		$script       = "SELECT password FROM Classe WHERE mail = '$mail';";
 		$resultScript = pg_query($this->_conn, $script);
 		
-		return $row = pg_fetch_row($resultScript);
+		$row = pg_fetch_row($resultScript);
+		return row[0];
 	}
 	
 	public function updatePassHash($mail, $passHash)
