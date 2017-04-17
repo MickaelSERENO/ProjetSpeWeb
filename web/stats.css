@@ -52,6 +52,21 @@
 	column-width    : auto;
 }
 
+.studentDiv
+{
+	margin-right:15em;
+}
+
+.studentDiv div
+{
+	float : right;
+}
+
+.studentForm
+{
+	margin-top:3em;
+}
+
 .studentCara
 {
 	margin-top:3em;
