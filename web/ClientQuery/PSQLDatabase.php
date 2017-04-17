@@ -261,5 +261,13 @@ class PSQLDatabase
 		
 		return true;
 	}
+
+	public function reinitStudentPasswd($studentID, $passHash)
+	{
+		$script = "UPDATE Eleve SET password = '$passHash' WHERE studentID = '$studentID';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		return true;
+	}
 }
 ?>

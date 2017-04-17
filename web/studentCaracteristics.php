@@ -1,6 +1,4 @@
-<?php
-
-?>
+<?php session_start();?>
 
 <!DOCTYPE>
 <html>
@@ -29,30 +27,36 @@
 
     function getStudentCara($psql, $langData)
     {
-        $studentTxt = $langData->student;
+        $studentTxt  = $langData->student;
         $studentData = $psql->getStudentCara($_GET['studentID']);
+		$formHtml    = getFormHtml($psql, $langData);
 
         if($studentData == null)
             return "";
 
-        $result = "<div class=\"studentCara\">
-                        <div class=\"studentName\">
-                            <div id=\"firstNameStudent\">
-                                $studentTxt[firstName] : $studentData->firstName
-                            </div>
-                            <div>
-                                $studentTxt[name] : $studentData->lastName
-                            </div>
-                        </div>
-                        <div class=\"nbGame\">
-                            <div>
-                                $studentTxt[nbGame1] : $studentData->nbGame1
-                            </div>
-                            <div>
-                                $studentTxt[nbGame2] : $studentData->nbGame2
-                            </div>
-                        </div>
-                   </div>";
+		$result = "
+
+				   <div class=\"studentDiv\">
+						$formHtml
+					   <div class=\"studentCara\">
+							<div class=\"studentName\">
+								<div id=\"firstNameStudent\">
+									$studentTxt[firstName] : $studentData->firstName
+								</div>
+								<div>
+									$studentTxt[name] : $studentData->lastName
+								</div>
+							</div>
+							<div class=\"nbGame\">
+								<div>
+									$studentTxt[nbGame1] : $studentData->nbGame1
+								</div>
+								<div>
+									$studentTxt[nbGame2] : $studentData->nbGame2
+								</div>
+							</div>
+					   </div>
+				   </div>";
         return $result;
     }
 
@@ -90,6 +94,57 @@
 		return $result;
 	}
 
+	function getFormHtml($psql, $langData)
+	{
+		$missingHtml = getMissingHtml($langData);
+
+		$formularTxt = $langData->formular;
+		$studentTxt  = $langData->student;
+		$studentID   = $_GET['studentID'];
+		$result = "<div class=\"studentForm\">
+					<p>$studentTxt[reinit]</p>
+					$missingHtml
+						<form method=\"post\" action=\"verifPasswdStudent.php\">
+							<input type=\"hidden\" name=\"studentID\" value=\"$studentID\"/>
+							<label>$formularTxt[password]</label>
+							</br>
+							<input type=\"password\" name=\"passwd\" required autofocus/>
+							</br>
+							<label>$formularTxt[confirmPasswd]</label>
+							</br>
+							<input type=\"password\" name=\"confirmPasswd\" required/>
+							</br>
+							</br>
+							<input type=\"submit\" value=\"$formularTxt[validate]\"/>
+						</form>
+				   </div>";
+		return $result;
+	}
+
+	function getMissingHtml($langData)
+	{
+		if(!empty($_GET['statut'])) 
+		{
+			$formularTxt = $langData->formular;
+			switch($_GET['statut'])
+			{
+				case "empty":
+					return "<p>$formularTxt[emptyPasswd]</p>";
+				case "different":
+					return "<p>$formularTxt[notConfirmPasswd]</p>"; 
+				case "length":
+					return "<p>$formularTxt[lengthPasswd]</p>";
+
+				case "confirm":
+					return "<p>$formularTxt[passwdSet]</p>";
+			}
+			return '';
+		}
+		else
+			return "";
+	}
+
+
 	//Load symfony
 	require_once __DIR__.'/../vendor/autoload.php';
 	require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
@@ -117,6 +172,7 @@
 				$studentDataHtml
 				$historicHtml
 			</div>
+
 			<br/>";
 ?>
 	</body>
