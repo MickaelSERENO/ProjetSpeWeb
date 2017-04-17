@@ -20,14 +20,16 @@
 					</br>
 					
 					<?php
-	
+					/*if(isset($_SESSION['clapier']))
+								echo "Live : ".$_SESSION['clapier'];
+							else
+								echo "DIE DIE DIE";*/
 					echo"\r\n";
 					echo"\r\n";
 					echo"\r\n";
 					
 					if(!empty($_GET['statut'])) 
 					{
-			 
 						switch($_GET['statut']) 
 						{
 							case 'wrong_captcha':
