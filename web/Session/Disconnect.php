@@ -24,7 +24,7 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
 		<link rel="SHORTCUT ICON" href="../../res/Img/IcoBal.ico">
-		<title>Albatros Sensei: connexion</title>
+		<title>Albatros Sensei: Deconnexion</title>
 	</head>
 										
 	<header class="headerAcc">

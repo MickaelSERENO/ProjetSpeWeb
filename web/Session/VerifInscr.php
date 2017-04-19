@@ -41,10 +41,6 @@
 									echo'Le captcha entré pour renvoyer le code par mail est incorrect';
 									break;
 									
-								case 'non_verified_user':
-									echo 'notset status';
-									break;
-									
 								default:
 									echo'Erreur Inconnue';
 							}
@@ -68,7 +64,7 @@
 					<form/>
 					<br/><br/><br/><br/>
 					
-					<h5>En cas d'impossibilité totale de validation, veuillez envoyez un mail à l'aide du lien ci-dessous contenant votre mail et le code reçu à askalbatrossensei@gmail.com:</h5>
+					<h5></h5>
 					</br>
 					<a href="mailto:askalbatrossensei@gmail.com">Contact</a>
 				</div>

@@ -20,10 +20,6 @@
 					</br>
 					
 					<?php
-					if(isset($_SESSION['clapier']))
-								echo "Live : ".$_SESSION['clapier'];
-							else
-								echo "DIE DIE DIE";
 					echo"\r\n";
 					echo"\r\n";
 					echo"\r\n";
@@ -37,7 +33,7 @@
 								break;
 							
 							case 'mail_missing':
-								echo'Il manque le champ mot de passe';
+								echo'Il manque le champ mail';
 								break;
 								
 							case 'pseudo_missing':

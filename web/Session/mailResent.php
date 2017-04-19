@@ -8,7 +8,7 @@ session_start();
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
 		<link rel="SHORTCUT ICON" href="../../res/Img/IcoBal.ico">
-		<title>Albatros Sensei: Valider le compte</title>
+		<title>Albatros Sensei: Mail Renvoyé</title>
 	</head>
 										
 	<header class="headerAcc">

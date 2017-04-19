@@ -5,7 +5,7 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="/CSS/Accueil.css" />
 		<link rel="SHORTCUT ICON" href="/res/Img/IcoBal.ico">
-		<title>Balignon Land!</title>
+		<title>Albatros Sensei: Accueil</title>
 	</head>
 	
 	<header class="headerAcc">

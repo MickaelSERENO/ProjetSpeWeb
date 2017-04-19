@@ -24,11 +24,11 @@
 							switch($_GET['statut']) 
 							{
 								case 'wrong_captcha':
-									echo'le captcha est incorrect';
+									echo'Le captcha est incorrect';
 									break;
 									
 								case 'wrong_pseudo':
-									echo'Le pseudonyme ets incorrect ou n\'existe pas';
+									echo'Le pseudonyme est incorrect ou n\'existe pas';
 									break;
 								
 								case 'wrong_password':
