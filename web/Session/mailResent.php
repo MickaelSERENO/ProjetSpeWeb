@@ -19,7 +19,7 @@ session_start();
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 					<h2>Le mail a été renvoyé!</h2>
 					<br/>
 					<h3>Un email vous a été envoyé à l'adresse utilisée pour valider votre compte si vous vous étiez inscrit avec.</h3>

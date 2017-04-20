@@ -15,8 +15,9 @@
 	<body>
 	<br/>
 		<div class="backgroundBody">
-			<section class="connexion">
+			<section class="presentationAcc">
 				<div class="connexion">
+					<div class="statusList">
 					<?php
 						if(!empty($_GET['statut'])) 
 						{
@@ -40,11 +41,11 @@
 							}
 						}
 					?>
-				
+					</div>
 					<form method="post" action="connec_status.php">
-						<h3>
+						<h2>
 							Connexion à votre compte:
-						</h3>
+						</h2>
 						<br/>
 						<label for="pseudo">Votre adresse mail ou nom de compte :</label>
 						</br>

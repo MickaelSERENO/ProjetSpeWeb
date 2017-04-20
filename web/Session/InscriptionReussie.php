@@ -16,7 +16,7 @@
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 					<h2>Votre inscription est  terminée!</h2>
 					<br/>
 					<h3>
