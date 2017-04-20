@@ -23,7 +23,7 @@
 				</div>
 				<div class="bouton">
 					<div><p> Tutoriel </p></div>
-					<div><p> Jouer </p></div>
+					<div><p> <a href="/Jeu/Jeu.php">Jouer</a> </p></div>
 				</div>
 			</div>
 		</div>

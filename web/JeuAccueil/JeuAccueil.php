@@ -21,7 +21,7 @@
 						<a href="/DescJeu/DescJeu.php?jeu=1"><img src="/res/Img/01.jpg" alt="Jeu 1" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
-						<h2>Jeu 1</h2>
+						<a href="/DescJeu/DescJeu.php?jeu=1"> <h2> Jeu 1 </h2> </a>
 						<div class="JA_presentationText">
 							<p>Petite description rapide du jeu.Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
 						</div>
