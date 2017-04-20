@@ -18,7 +18,7 @@
 						</div>
 					</a> </li>
 					<div class="menuItems">
-						<li><a class="linksMenuItems" href="/Jeux/JeuAccueil.html"> Jeux </a></li>
+						<li><a class="linksMenuItems" href="/JeuAccueil/JeuAccueil.php"> Jeux </a></li>
 						<li><a class="linksMenuItems" href="/Community/HCommunity.html"> Communauté </a></li>
 					</div>
 					<div class="connect">

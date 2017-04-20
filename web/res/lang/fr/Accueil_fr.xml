@@ -1,12 +1,12 @@
 <lang>
-	<txt_Acc>
+	<txt_acc>
 		<title>Albatros Sensei: Accueil</title>
-		<phrase_Acc>Bienvenue sur ce site web funtastic!</phrase_Acc>
-		<A_propos>A propos</A_propos>
-		<pres_Acc>
+		<phrase_acc>Bienvenue sur ce site web funtastic!</phrase_acc>
+		<A_propos>Accueil</A_propos>
+		<pres_acc>
 			Ce site a pour vocation principale d'améliorer la connaissance des langues chez les
 			plus jeunes. Il a été créé en 2017 dans le cadre d'un projet étudiant de 4ème année
 			de l'école d'ingénieur Polytech Paris-Sud.
-		</pres_Acc>
-	</txt_Acc>
+		</pres_acc>
+	</txt_acc>
 </lang>

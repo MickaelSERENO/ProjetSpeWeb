@@ -16,14 +16,12 @@
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 					<h2>Votre inscription est presque terminée!</h2>
 					<br/>
 					
+					<div class="statusList">
 					<?php
-					
-						if(isset($_SESSION['clapier']))
-							echo 'LIVE'.$_SESSION['clapier'];
 						if(!empty($_GET['statut'])) 
 						{
 							switch($_GET['statut']) 
@@ -46,6 +44,7 @@
 							}
 						}
 					?>
+					</div>
 					<p>Vous n'avez pas reçu le mail? Renvoyer un code<p>
 					<form method="post" action="sendCodeAgain.php">
 						<label for="code">Mail utilisé lors de l'inscription :</label>

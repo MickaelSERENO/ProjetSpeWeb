@@ -35,7 +35,7 @@
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 				<br/>
 				<br/>
 				<br/>

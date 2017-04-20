@@ -16,9 +16,15 @@
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 					</br>
 					
+					<h3>
+						Inscrivez vous en remplissant les champs suivants. Sans autre précision, le champ est obligatoire:
+					</h3>
+					</br>
+					
+					<div class="statusList">
 					<?php
 					echo"\r\n";
 					echo"\r\n";
@@ -80,13 +86,9 @@
 						}
 					}
 					?>
-					
-					</br>
+					</div>
+					</br></br>
 					<form method="post" action="inscr_form.php">
-						<h3>
-							Inscrivez vous en remplissant les champs suivants. Sans autre précision, le champ est obligatoire:
-						</h3>
-						</br>
 						
 						<?php 	if(isset($_SESSION['mail']))
 									$mailEx = $_SESSION['mail'];
