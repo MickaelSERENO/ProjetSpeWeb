@@ -22,8 +22,8 @@
 					<p> Description du jeu. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
 				</div>
 				<div class="bouton">
-					<div><p> Tutoriel </p></div>
-					<div><p> <a href="/Jeu/Jeu.php">Jouer</a> </p></div>
+					<div><p> <a href="/Tutoriel/Tutoriel.php"> Tutoriel </a></p></div>
+					<div><p> <a href="/Jeu/Jeu.php">Jouer </a></p></div>
 				</div>
 			</div>
 		</div>
