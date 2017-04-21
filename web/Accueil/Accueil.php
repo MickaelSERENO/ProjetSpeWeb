@@ -20,6 +20,8 @@
 	
 	$listStatsText = file_get_contents("../res/lang/fr/Accueil_fr.xml");
 	$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
+	
+	
 	$txt_acc = $langData->txt_acc;
 
 ?>
@@ -42,10 +44,10 @@
 			<h1 class="acc"> <?php echo ("$txt_acc[phrase_acc]"); ?> </h1>
 			<section class="presentationAcc">
 				<h3>
-					<?php  ?>
+					<?php echo ("$txt_acc[A_propos]"); ?>
 				</h3>
 				<p>
-					Ce site web a pour vocation d'améliorer la compréhension de certaines langues en proposant des jeux basés sur la compréhension du langage.
+					<?php echo ("$txt_acc[pres_acc]"); ?>
 				<p>
 			</section>
 		</div>

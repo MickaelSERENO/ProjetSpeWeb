@@ -20,7 +20,10 @@
 		</default>
 	</status_list>
 	<formular>
+		<not_received>Vous n'avez pas reçu le mail? Renvoyez un code à l'aide du formulaire ci-dessous</not_received>
 		<mail>Mail utilisé lors de l'inscription :</mail>
+		<inscr_captcha>Recopier le texte de l'image dans le cadre ci-dessous:</inscr_captcha>
+		<resend_button_value>Renvoyer un mail</resend_button_value>
 		<impossible>
 			En cas d'impossibilité totale de validation, veuillez envoyez un mail à l'aide du lien ci-dessous contenant votre mail et le code reçu à askalbatrossensei@gmail.com:
 		</impossible>
