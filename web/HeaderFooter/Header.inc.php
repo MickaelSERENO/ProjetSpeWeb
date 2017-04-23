@@ -26,7 +26,7 @@
 						if(isset($_SESSION['mail']) && isset($_SESSION['verified_user']) && $_SESSION['verified_user'] == 1)
 						{
 							echo'
-							<div class="lienConnec"><li><a class="lienConnec" href="/statistics.php"> Mon compte</a></li></div>
+							<div class="lienConnec"><li><a class="lienConnec" href="/Settings/statistics.php"> Mon compte</a></li></div>
 							<div class="lienInscr"><li><a class="lienInscr" href="/Session/Disconnect.php"> Deconnexion</a></li></div>
 							';
 						}

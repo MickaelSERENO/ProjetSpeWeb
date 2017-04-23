@@ -86,7 +86,7 @@ CREATE TABLE Historique(
 idHisto SERIAL,
 idGame GAME, /*Game 1 or Game 2 ?*/
 jour TIMESTAMP,
-PRIMARY KEY(idHisto),
+PRIMARY KEY(idHisto)
 );
 
 CREATE TABLE EleveHistoG1(

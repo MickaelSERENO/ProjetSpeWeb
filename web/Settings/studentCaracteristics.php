@@ -1,16 +1,26 @@
 <?php session_start();?>
+<?php
+	if(!isset($_SESSION['mail']))
+	{
+		header('location: /Session/Connexion.php');
+		exit;
+	}
+?>
 
 <!DOCTYPE>
 <html>
 	<head>
-		<script src="bower_components/angular/angular.min.js"></script>
-		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
-		<link rel="stylesheet" type="text/css" href="stats.css">
-		<link rel="stylesheet" type="text/css" href="CSS/Accueil.css">
+		<script src="../bower_components/angular/angular.min.js"></script>
+		<script src="../bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
+		<script src="../script/settings.js"></script>
+		<script src="../script/studentCaracteristics.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/CSS/Accueil.css">
+		<link rel="stylesheet" type="text/css" href="/CSS/stats.css">
 	</head>
 
 	<header class="headerAcc">
-		<?php include('HeaderFooter/Header.inc.php'); ?>
+		<?php include('../HeaderFooter/Header.inc.php'); ?>
 	</header>
 
 	<body ng-app="studCaApp">
@@ -146,8 +156,8 @@
 
 
 	//Load symfony
-	require_once __DIR__.'/../vendor/autoload.php';
-	require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
+	require_once __DIR__.'/../../vendor/autoload.php';
+	require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
 
 	//Get serializer XML
 	use Symfony\Component\Serializer\Serializer;
@@ -160,7 +170,7 @@
 	$normalizers     = array(new ObjectNormalizer());
 	$serializer      = new Serializer($normalizers, $encoders);
 
-	$listStatsText   = file_get_contents("res/lang/fr/statistic.xml");
+	$listStatsText   = file_get_contents("../res/lang/fr/statistic.xml");
 	$langData        = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 
     $studentDataHtml = getStudentCara($psql, $langData);
@@ -168,9 +178,15 @@
 
 	echo "
 			<br/>
-			<div class=\"backgroundBody\">
-				$studentDataHtml
-				$historicHtml
+			<div class=\"backgroundBody\">";
+
+	include('settingsMenu.php');
+
+	echo "
+				<div id=\"settingsDiv\">
+					$studentDataHtml
+					$historicHtml
+				</div>
 			</div>
 
 			<br/>";
@@ -178,6 +194,6 @@
 	</body>
 
 	<footer>
-		<?php include('HeaderFooter/Footer.inc.php'); ?>
+		<?php include('../HeaderFooter/Footer.inc.php'); ?>
 	</footer>
 </html>

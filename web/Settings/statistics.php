@@ -1,18 +1,30 @@
+<?php session_start();
+
+//CLAPIER A SUPPRIMER !!!!
+$_SESSION['mail'] = "prof@scolaire.fr";
+
+?>
 <?php
+	if(!isset($_SESSION['mail']))
+	{
+		header('location: /Session/Connexion.php');
+		exit;
+	}
 ?>
 <!DOCTYPE>
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<script src="bower_components/angular/angular.min.js"></script>
-		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
-		<script src="script/stats.js"></script>
-		<link rel="stylesheet" type="text/css" href="stats.css">
+		<script src="../bower_components/angular/angular.min.js"></script>
+		<script src="../bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
+		<script src="../script/settings.js"></script>
+		<script src="../script/stats.js"></script>
+		<link rel="stylesheet" type="text/css" href="/CSS/stats.css">
 		<link rel="stylesheet" type="text/css" href="/CSS/Accueil.css">
 	</head>
 
 	<header class="headerAcc">
-		<?php include('HeaderFooter/Header.inc.php'); ?>
+		<?php include('../HeaderFooter/Header.inc.php'); ?>
 	</header>
 
 	<body ng-app="statsApp">
@@ -97,7 +109,7 @@
 		{
 			$historicTxt   = $langData->historic;
 			$studentTxt    = $langData->student;
-			$historicArray = $psql->getHistoricFromListStudent("prof@scolaire.fr"); //should be replace by teacher ID
+			$historicArray = $psql->getHistoricFromListStudent($_SESSION['mail']); //should be replace by teacher ID
 			$result = "
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
@@ -139,8 +151,8 @@
 		}
 
 		//Load symfony
-		require_once __DIR__.'/../vendor/autoload.php';
-		require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
+		require_once __DIR__.'/../../vendor/autoload.php';
+		require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
 
 		//Get serializer XML
 		use Symfony\Component\Serializer\Serializer;
@@ -153,7 +165,7 @@
 		$normalizers = array(new ObjectNormalizer());
 		$serializer = new Serializer($normalizers, $encoders);
 
-		$listStatsText = file_get_contents("res/lang/fr/statistic.xml");
+		$listStatsText = file_get_contents("../res/lang/fr/statistic.xml");
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
@@ -163,18 +175,24 @@
 
 		echo("
 			<br/>
-			<div class=\"backgroundBody\">
-			<div ng-controller='listStatsCtrl'>
-				<my-statsAccordion>
-					<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
-					<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
-					<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
+			<div class=\"backgroundBody\">");
 
-					<my-statTabContent>$listStutendsHtml</my-statTabContent>
-					<my-statTabContent>$rankingHtml</my-statTabContent>
-					<my-statTabContent>$historicHtml</my-statTabContent>
-				</my-statsAccordion>
-			</div>
+		include("settingsMenu.php");
+
+		echo("
+				<div ng-controller='listStatsCtrl' id='settingsDiv' ng-class='settingsDiv'>
+					<my-statsAccordion>
+						<div class=\"myTitles\">
+							<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
+							<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
+							<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
+						</div>
+
+						<my-statTabContent>$listStutendsHtml</my-statTabContent>
+						<my-statTabContent>$rankingHtml</my-statTabContent>
+						<my-statTabContent>$historicHtml</my-statTabContent>
+					</my-statsAccordion>
+				</div>
 			</div>
 			<br/>
 		");
@@ -182,6 +200,6 @@
 	</body>
 
 	<footer>
-		<?php include('HeaderFooter/Footer.inc.php'); ?>
+		<?php include('../HeaderFooter/Footer.inc.php'); ?>
 	</footer>
 </html>

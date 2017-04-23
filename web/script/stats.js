@@ -22,15 +22,23 @@ myApp.directive("myStatsaccordion", function()
     return{
         restrict: 'EA',
         replace: true,
+		scope      : {height: '@height'},
         transclude: true,
         template: '<div class="statsAccordion" ng-transclude></div>',
         controller: function(){
 			var tabIndice = -1;
 			var contentsIndice = -1;
 			var contents  = [];
+			var titles = [];
 
             this.open = function(tabIndiceTitle)
 			{
+				titles.forEach(function(title)
+				{
+					title.font ="normal";
+				});
+				titles[tabIndiceTitle].font="bold";
+
 				contents.forEach(function(content)
 				{
 					content.show = false;
@@ -40,6 +48,7 @@ myApp.directive("myStatsaccordion", function()
 
             this.addTitle = function(title)
 			{
+				titles.push(title);
 				tabIndice++;
 				return tabIndice;
             };
@@ -50,6 +59,8 @@ myApp.directive("myStatsaccordion", function()
 				contentsIndice++;
 				if(contentsIndice == 0)
 					content.show = true;
+
+				this.open(0);
 				return contentsIndice;
             };
         }
@@ -63,11 +74,13 @@ myApp.directive("myStattabitem", function()
 		replace    : true,
 		require    : '^myStatsaccordion',
 		scope      : {title: '@title'},
-		template   : '<div ng-click="toggleMe()" class="tabTitle">{{title}}</div>',
+		template   : '<div display="flex" ng-click="toggleMe()" class="tabTitle" style="font-weight:{{font}}">{{title}}</div>',
 		link       : function($scope, element, attrs, accordionCtrl){
-			var indice = accordionCtrl.addTitle();
+			$scope.font = "normal";
+			var indice = accordionCtrl.addTitle($scope);
 			$scope.toggleMe = function()
 			{
+				$scope.font="bold";
 				accordionCtrl.open(indice);
 			};
 		}
@@ -89,3 +102,11 @@ myApp.directive("myStattabcontent", function()
 		}
 	};
 });
+
+function onLoadFunction()
+{
+	setSettingsSize();
+}
+
+
+window.onload = onLoadFunction;
