@@ -11,13 +11,8 @@
         <header>
             <h1>Test/Demo</h1>
         </header>
-		<div ng-controller="monCtrl" >
-		
-			<h1 ng-style={'background-color':{{bgC}}} ng-mousemove="hoverPhrase($event)" ng-click="changeColor($event)">Hello : {{phraseJeu.join(' ') +  valeur}}</h1>
-			<span ng-repeat="pj in phraseJeu track by $index">
-				<strong ng-mousemove="hoverPhrase($event)">{{pj}}</strong>
-			</span>
-			<canvas id="canvasJeu2" width="1500px" height="800">
+		<div ng-controller="CanvasCtrl">
+			<canvas ng-mousedown="detectBlock($event)", id="canvasJeu2" width="1500px" height="800">
 			</canvas>
 		</div>
 		
