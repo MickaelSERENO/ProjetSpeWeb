@@ -1,6 +1,7 @@
 /*DraftVert Sympa #73AD21
 Gold: 
 rgba(228, 255, 218, 1)
+https://www.w3schools.com/css/css_form.asp
 */
 
 :root{
@@ -9,8 +10,13 @@ rgba(228, 255, 218, 1)
 }
 
 @font-face {
-    font-family: chalkFont;
-    src: url(squarechalk.ttf);
+    font-family: titleFont;
+    src: url(jaapokki-regular.ttf);
+}
+
+@font-face {
+	font-family: textFont;
+	src: url(Andika-R);
 }
 	
 header.headerAcc {
@@ -28,6 +34,7 @@ header.headerAcc {
 body
 {
 	background-image: url(/res/Img/Texture/seigaiha.png);
+	font-family: textFont;
 }
 
 .backgroundBody
@@ -53,7 +60,7 @@ body
 
 .headerStyle
 {
-	font-family: chalkFont;
+	font-family: titleFont;
 }
 
 .menuItems
@@ -143,7 +150,7 @@ a.lienConnec:hover
 
 div.lienInscr
 {
-	margin: 0em 0em;
+	margin: 1em 0em 0em 0em;
 	color: black;
 	background-color:rgba(228, 255, 218, 1);
 }
@@ -209,4 +216,31 @@ a.footerClass
 {
 	margin: 2em 2em;
 	padding: 1em;
+}
+
+.statusList
+{
+	color: red;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+label
+{
+	text-align: center;
+}
+
+input
+{
+	text-align: center;
+	margin-left: auto;
+	/*margin-right: 5em;*/
+	width: 60%;
 }

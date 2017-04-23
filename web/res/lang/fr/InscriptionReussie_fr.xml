@@ -1,0 +1,11 @@
+<lang>
+	<head>
+		<title>Albatros Sensei: compte validé</title>
+	</head>
+	
+	<body>
+		<terminated>Votre inscription est terminée!</terminated>
+		<welcome>Bienvenue dans la communauté</welcome>
+		<access>Vous pouvez dès maintenant accéder à votre compte</access>
+	</body>
+</lang>

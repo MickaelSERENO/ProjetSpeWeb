@@ -2,12 +2,6 @@ const SENT1Y      = 100;
 const SENT2Y      = 300;
 const FONT_HEIGHT = 35;
 
-var currentSentenceID;
-var currentType;
-var sentences;
-var canvas;
-var ctx;
-
 const Type = 
 {
 	SAME:1,
@@ -15,6 +9,28 @@ const Type =
 	PRECISE: 3,
 	GENERAL: 4,	
 }
+
+const MouseType = 
+{
+	NOTHING:0,
+	MOVING:1,
+	ENDING:2,
+	STARTING:3,
+}
+
+const Context = 
+{
+	PACK_SELECTOP:0,
+	INGAME:1,
+}
+
+var currentSentenceID;
+var currentType;
+var sentences;
+var canvas;
+var ctx;
+var gameCtx=Context.PACK_SELECTION;
+var pack;
 
 function clearCanvas()
 {
@@ -77,6 +93,103 @@ function isInRect(rect, x, y)
 		    y > rect[1] && y < rect[1]+rect[3]);
 }
 
+function Pack(arrayPack)
+{
+	this._arrayPack    = arrayPack;
+	this._packSelected = -1;
+	this._rectArray = this._initRectArray();
+	this._textPos = this._getTextPos();
+}
+
+Pack.prototype.getIDPack = function()
+{
+	if(this._packSelected >= 0)
+		return this._arrayPack[this._packSelected].id;
+	else
+		return null;
+}
+
+Pack.prototype._getTextPos = function()
+{
+	var array = new Array();
+
+	var py = 50;
+	for(var i=0; i < this._arrayPack.length; i+=2)
+	{
+		var px = 30;
+		for(var j=0; j < this._arrayPack.length - i && j < 2; j++)
+		{
+			var spaceMeasure = ctx.measureText("       ").width;
+			px += spaceMeasure/3.0;
+			array.push([px, py]);
+			px+=400;
+		}
+
+		py+=FONT_HEIGHT+20;
+	}
+
+	return array;
+}
+
+Pack.prototype._initRectArray = function()
+{
+	var array = new Array();
+
+	var py = 50;
+	for(var i=0; i < this._arrayPack.length; i+=2)
+	{
+		var px = 30;
+		for(var j=0; j < this._arrayPack.length - i && j < 2; j++)
+		{
+			ctx.font="25px Arial";
+			ctx.strokeStyle = "Green";
+			var spaceMeasure = ctx.measureText("       ").width;
+			px += spaceMeasure/3.0;
+
+			var measure = ctx.measureText(this._arrayPack[i].text).width;
+			array.push([px-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+2*spaceMeasure/3, FONT_HEIGHT]);
+
+			px+=400;
+		}
+
+		py+=FONT_HEIGHT+20;
+	}
+
+	return array;
+}
+
+Pack.prototype.draw = function()
+{
+	clearCanvas();
+
+	//Draw packs text and rect
+	ctx.font="25px Arial";
+	for(var i=0; i < this._rectArray.length; i++)
+	{
+		ctx.fillText(this._arrayPack[i].text, this._textPos[i][0], this._textPos[i][1]);
+		if(i== this._packSelected)
+			ctx.strokeStyle = "Green";
+		else
+			ctx.strokeStyle = "Brown";
+
+		ctx.strokeRect(this._rectArray[i][0], this._rectArray[i][1], this._rectArray[i][2], this._rectArray[i][3]);
+	}
+}
+
+Pack.prototype.selectPack = function(x, y)
+{
+	for(var i=0; i < this._rectArray.length; i++)
+	{
+		if(x > this._rectArray[i][0] && x < this._rectArray[i][0] + this._rectArray[i][2] &&
+		   y > this._rectArray[i][1] && y < this._rectArray[i][1] + this._rectArray[i][3])
+		{
+			this._packSelected = i;
+			this.draw();
+			break;
+		}
+	}
+}
+
 function Sentence(sent1, sent2)
 {
 	this._sent1       = sent1;
@@ -101,6 +214,7 @@ function Sentence(sent1, sent2)
 	this._endX   = 0;
 	this._startY = 0;
 	this._endY   = 0;
+	this._mouseType = MouseType.NOTHING;
 }
 
 Sentence.prototype.getResults     = function()
@@ -114,6 +228,18 @@ Sentence.prototype.draw           = function()
 
 	this._drawSentences();
 	this._drawLinks();
+	if(this._mouseType === MouseType.MOVING)
+		this._drawPartialLine();
+}
+
+Sentence.prototype._drawPartialLine = function()
+{
+	console.log("partialDraw");
+	ctx.strokeStyle = "Gray";
+	ctx.beginPath();
+	ctx.moveTo(this._startX, this._startY);
+	ctx.lineTo(this._endX, this._endY);
+	ctx.stroke();
 }
 
 Sentence.prototype._drawLinks     = function()
@@ -167,12 +293,21 @@ Sentence.prototype._drawSentences = function()
 	drawSentence(ctx, this._sent2, 0, SENT2Y);
 }
 
+Sentence.prototype.setMousePos = function(x, y)
+{
+	this._endX = x;
+	this._endY = y;
+	this._mouseType = MouseType.MOVING;
+	this.draw();
+}
+
 Sentence.prototype.setStartPoint  = function(x, y)
 {
 	this._startX = x;
 	this._startY = y;
 	this._endX   = x;
 	this._endY   = y;
+	this._mouseType = MouseType.STARTING;
 }
 
 Sentence.prototype.commitPoint    = function(x, y)
@@ -260,6 +395,8 @@ Sentence.prototype.commitPoint    = function(x, y)
 		}
 	}
 
+	this._mouseType = MouseType.ENDING;
+
 	this.draw();
 }
 
@@ -273,10 +410,27 @@ function promptSentences(idPackSentence, idSentence, callback, data=null)
 			callback(data, httpCtx.responseText);
 		}
 	}
-	httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
+	httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
 	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	httpCtx.send("idPrompt=1&idPack="+idPackSentence+"&idSent="+idSentence);
 	currentSentenceID = idSentence;
+}
+
+function promptListPack()
+{
+	var httpCtx = new XMLHttpRequest();
+	httpCtx.onreadystatechange = function()
+	{
+		if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+		{
+			console.log(httpCtx.responseText);
+			pack = new Pack(JSON.parse(httpCtx.responseText));
+			pack.draw();
+		}
+	}
+	httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
+	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	httpCtx.send("idPrompt=0");
 }
 
 function getSentencesFromServer(data, response)
@@ -284,7 +438,6 @@ function getSentencesFromServer(data, response)
 	console.log(response);
 	if(data === "-1")
 	{
-		console.log("finish");
 		sentences = null;
 		clearCanvas();
 	}
@@ -299,14 +452,58 @@ function getSentencesFromServer(data, response)
 
 function onClickCanvas($event)
 {
-	if(sentences)
-		sentences.setStartPoint($event.offsetX, $event.offsetY);
+	if(gameCtx === Context.INGAME)
+	{
+		if(sentences)
+			sentences.setStartPoint($event.offsetX, $event.offsetY);
+	}
+	else if(gameCtx === Context.PACK_SELECTION)
+	{
+		if(pack)
+			pack.selectPack($event.offsetX, $event.offsetY);
+	}
+}
+
+function onMouseMoveCanvas($event)
+{
+	if(gameCtx == Context.INGAME)
+	{
+		if(sentences && (sentences._mouseType === MouseType.STARTING || sentences._mouseType === MouseType.MOVING))
+		{
+			sentences.setMousePos($event.offsetX, $event.offsetY);
+		}
+	}
+	else if(gameCtx == Context.PACK_SELECTION)
+	{
+	}
 }
 
 function onMouseUpCanvas($event)
 {
-	if(sentences)
-		sentences.commitPoint($event.offsetX, $event.offsetY);
+	if(gameCtx == Context.INGAME)
+	{
+		if(sentences)
+			sentences.commitPoint($event.offsetX, $event.offsetY);
+	}
+	else if(gameCtx == Context.PACK_SELECTION)
+	{
+	}
+}
+
+function onMouseWheelUp($event)
+{
+	if(gameCtx == Context.PACK_SELECTION)
+	{
+		//TODO need to scroll down
+	}
+}
+
+function onMouseWheelDown($event)
+{
+	if(gameCtx == Context.PACK_SELECTION)
+	{
+		//TODO need to scroll down
+	}
 }
 
 var myApp = angular.module("AppGame1", []);
@@ -314,6 +511,7 @@ myApp.controller("CanvasCtrl", function($scope)
 {
 	$scope.onClickCanvas   = onClickCanvas;
 	$scope.onMouseUpCanvas = onMouseUpCanvas;
+	$scope.onMouseMoveCanvas = onMouseMoveCanvas;
 });
 
 myApp.controller("form", function($scope)
@@ -341,6 +539,8 @@ myApp.controller("form", function($scope)
 		}
 	];
 
+	$scope.showValue = false;
+
 	$scope.changeRadio = function(value)
 	{
 		currentType = value;
@@ -350,20 +550,34 @@ myApp.controller("form", function($scope)
 
 	$scope.submit = function()
 	{
-		var results = JSON.stringify(sentences.getResults());
-		var httpCtx = new XMLHttpRequest();
-
-		httpCtx.onreadystatechange = function()
+		if(gameCtx == Context.INGAME)
 		{
-			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+			var results = JSON.stringify(sentences.getResults());
+			var httpCtx = new XMLHttpRequest();
+
+			httpCtx.onreadystatechange = function()
 			{
-				getSentencesFromServer(null, httpCtx.responseText);
+				if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+				{
+					getSentencesFromServer(null, httpCtx.responseText);
+				}
+			}
+			httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
+			httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			httpCtx.send("idPrompt=2&idPack=1&idSent="+(currentSentenceID+1)+"&results="+results);
+			currentSentenceID++;
+		}
+		else if(gameCtx == Context.PACK_SELECTION)
+		{
+			//Move to ingame
+			var idPack = pack.getIDPack();
+			if(idPack != null)
+			{
+				gameCtx = Context.INGAME;
+				$scope.showValue = true;
+				promptSentences(idPack, 0, getSentencesFromServer);
 			}
 		}
-		httpCtx.open("POST", "ClientQuery/handlingGame1.php", true);
-		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpCtx.send("idPrompt=2&idPack=1&idSent="+(currentSentenceID+1)+"&results="+results);
-		currentSentenceID++;
 	};
 });
 
@@ -372,5 +586,6 @@ window.onload = function()
 {
 	canvas   = document.getElementById('canvasJeu1');
 	ctx      = canvas.getContext('2d');
-	promptSentences(1, 0, getSentencesFromServer);
+	canvas.width = window.innerWidth-0.1*window.innerWidth;
+	promptListPack();
 }

@@ -7,7 +7,7 @@ CREATE TABLE Eleve(
 id SERIAL,
 nom CHAR(50),
 prenom CHAR(50),
-password CHAR(32),
+password CHAR(60),
 nbGame1 INTEGER,
 nbGame2 INTEGER,
 PRIMARY KEY(id)
@@ -16,7 +16,9 @@ PRIMARY KEY(id)
 CREATE TABLE Classe(
 nom CHAR(50),
 mail CHAR(150),
-password CHAR(32),
+password CHAR(60),
+verifiedUser BOOLEAN,
+code CHAR(15),
 PRIMARY KEY(mail)
 );
 
@@ -62,7 +64,7 @@ FOREIGN KEY(idGroupeMots2) REFERENCES GroupeMots(id)
 
 CREATE TABLE PackPaires(
 id SERIAL,
-nom CHAR(50),
+nom CHAR(30),
 mailClasse CHAR(150),
 note integer,
 telechargement integer,
@@ -84,7 +86,7 @@ CREATE TABLE Historique(
 idHisto SERIAL,
 idGame GAME, /*Game 1 or Game 2 ?*/
 jour TIMESTAMP,
-PRIMARY KEY(idHisto),
+PRIMARY KEY(idHisto)
 );
 
 CREATE TABLE EleveHistoG1(
@@ -137,6 +139,7 @@ INSERT INTO EleveClasse VALUES ('1', 'prof@scolaire.fr');
 
 /*On créé notre pack*/
 INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
+INSERT INTO PackPaires VALUES (DEFAULT, 'default pack2', 'prof@scolaire.fr');
 
 /*Paire phrase 1, peut aussi servir d'exemple sur comment faire*/
 INSERT INTO Phrase      VALUES (DEFAULT);

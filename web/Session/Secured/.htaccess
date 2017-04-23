@@ -1,0 +1,4 @@
+AuthName "Zone Admin de Albatros Sensei: Authentification nécessaire"
+AuthType Basic
+AuthUserFile "/Session/Secured/.htpasswd"
+deny from all

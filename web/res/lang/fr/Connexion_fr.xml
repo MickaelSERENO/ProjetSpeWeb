@@ -1,8 +1,20 @@
 <lang>
-	<txt_connect>
+	<head>
+		<title>Albatros Sensei:Connexion</title>
+	</head>
+	
+	<status_list>
+		<wrong_captcha>Le captcha est incorrect</wrong_captcha>
+		<wrong_pseudo>Le pseudonyme est incorrect ou n\'existe pas</wrong_pseudo>
+		<wrong_password>Il manque le champs mot de passe.</wrong_password>
+		<default>Erreur Inconnue</default>
+	</status_list>
+	
+	<formular>
 		<connect_title>Connexion à votre compte:</connect_title>
 		<connect_pseudo>Votre adresse e-mail ou nom de compte</connect_pseudo>
 		<connect_pass>Votre mot de passe</connect_pass>
 		<connect_value_submit_button>Connexion</connect_value_submit_button>
-	</txt_connect>
+		<forgot_pass>Mot de passe oublié?</forgot_pass>
+	</formular>
 </lang>

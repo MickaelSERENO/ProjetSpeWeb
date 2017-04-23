@@ -1,12 +1,32 @@
 <lang>
+	<head>
+		<title>Albatros Sensei: Inscription</title>
+	</head>
+	<status_list>
+		<wrong_captcha>le captcha est incorrect</wrong_captcha>
+		<mail_missing>Il manque le champ mail</mail_missing>
+		<pseudo_missing>Il manque le champ pseudo</pseudo_missing>
+		<password_missing>Il manque le champ mot de passe</password_missing>
+		<mail_different>Les deux adresses mails entrées sont différentes</mail_different>
+		<password_different>Les mots de passe entrés sont différents</password_different>
+		<not_secured_length>Le mot de passe ne respecte pas les consignes demandées (longueur non réglementaire)</not_secured_length>
+		<not_secured>Le mot de passe ne respecte pas les consignes demandées: Il ne contient pas de majuscule ou de chiffre</not_secured>
+		<existing_mail>Le mail entré est déja celui d\'un utilisateur existant</existing_mail>
+		<user_existing>Ce nom d'utilisateur est déja pris: Veuillez choisir un autre pseudo</user_existing>
+		<mail_existing>Ce mail est déja enregistré pour un autre utilisateur</mail_existing>
+		<default>Erreur inconnue</default>
+		
+	</status_list>
 	<txt_inscr>
-		<inscr_title>Inscrivez vous en remplissant les champs suivants. Sans autre précision, le champ est obligatoire:</inscr_title>
-		<inscr_mail>Votre adresse e-mail ou nom de compte</inscr_mail>
+		<inscr_title>Inscrivez vous en remplissant les champs suivants. Tous les champs sont obligatoire:</inscr_title>
+		<inscr_mail>Votre adresse e-mail</inscr_mail>
 		<inscr_pseudo>Pseudonyme (nom avec lequel vous apparaitrez sur le site) :</inscr_pseudo>
-		<inscr_phone>Numéro de téléphone (facultatif) :</inscr_phone>
-		<inscr_pass>Votre mot de passe</inscr_pass>
+		<inscr_pass>
+			Votre mot de passe: il doit contenir une majuscule, un chiffre, être long d'au 
+			moins 8 charactères et inférieur à 32 charactères:
+		</inscr_pass>
 		<inscr_repass>Confirmez le mot de passe :</inscr_repass>
-		<inscr_birth>Entrer votre date de naissance :</inscr_birth>
+		<inscr_captcha>Recopier le texte de l'image dans le cadre ci-dessous:</inscr_captcha>
 		<inscr_value_submit_button>Inscription!</inscr_value_submit_button>
 	</txt_inscr>
 </lang>
