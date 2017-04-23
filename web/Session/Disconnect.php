@@ -1,6 +1,33 @@
 <?php session_start();?>
 <?php
 
+	if(!isset($_SESSION['mail']))
+		header('location: /Accueil/Accueil.php');
+	class LangContent
+	{
+		public $all;
+	}
+	
+	//Load symfony
+	require_once __DIR__.'/../../vendor/autoload.php';
+	require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
+
+	//Get serializer XML
+	use Symfony\Component\Serializer\Serializer;
+	use Symfony\Component\Serializer\Encoder\XmlEncoder;
+	use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+	
+	$encoders = array(new XmlEncoder());
+	$normalizers = array(new ObjectNormalizer());
+	$serializer = new Serializer($normalizers, $encoders);
+	
+	$listStatsText = file_get_contents("../res/lang/fr/Disconnect_fr.xml");
+	$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
+	$all = $langData->all;
+
+?>
+<?php
+
 	// Détruit toutes les variables de session
 	$_SESSION = array();
 
@@ -24,7 +51,7 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
 		<link rel="SHORTCUT ICON" href="../../res/Img/IcoBal.ico">
-		<title>Albatros Sensei: Deconnexion</title>
+		<title><?php echo "$all[title]";?></title>
 	</head>
 										
 	<header class="headerAcc">
@@ -35,11 +62,11 @@
 	<br/>
 		<div class="backgroundBody">
 			<section class="connexion">
-				<div class="connexion">
+				<div class="presentationAcc">
 				<br/>
 				<br/>
 				<br/>
-					<h2>Vous vous êtes bien déconnecté</h2>
+					<h2><?php echo "$all[content]";?></h2>
 				</div>
 			</section>
 		</div>

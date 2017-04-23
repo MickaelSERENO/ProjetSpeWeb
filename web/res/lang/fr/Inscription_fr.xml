@@ -18,7 +18,7 @@
 		
 	</status_list>
 	<txt_inscr>
-		<inscr_title>Inscrivez vous en remplissant les champs suivants. Sans autre précision, le champ est obligatoire:</inscr_title>
+		<inscr_title>Inscrivez vous en remplissant les champs suivants. Tous les champs sont obligatoire:</inscr_title>
 		<inscr_mail>Votre adresse e-mail</inscr_mail>
 		<inscr_pseudo>Pseudonyme (nom avec lequel vous apparaitrez sur le site) :</inscr_pseudo>
 		<inscr_pass>
@@ -26,6 +26,7 @@
 			moins 8 charactères et inférieur à 32 charactères:
 		</inscr_pass>
 		<inscr_repass>Confirmez le mot de passe :</inscr_repass>
+		<inscr_captcha>Recopier le texte de l'image dans le cadre ci-dessous:</inscr_captcha>
 		<inscr_value_submit_button>Inscription!</inscr_value_submit_button>
 	</txt_inscr>
 </lang>

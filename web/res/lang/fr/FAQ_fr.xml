@@ -1,5 +1,7 @@
 <lang>
 	<txt_Faq>
+		<title>FAQ</title>
+		<faq_pres>Bienvenue sur la FAQ du site Albatros Sensei</faq_pres>
 		<goal_quest>Quel est le but de ce site?</goal_quest>
 		<goal_answ>
 			Ce site est là pour vous aider à améliorer votre maîtrise de la langue en vous proposant

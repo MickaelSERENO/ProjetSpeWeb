@@ -32,7 +32,7 @@
 						<a href="/DescJeu/DescJeu.php?jeu=2"><img src="/res/Img/02.jpg" alt="Jeu 2" /></a> 
 					</div>
 					<div class="JA_jeuPresentation">
-						<h2>Jeu 2</h2>
+						<a href="/DescJeu/DescJeu.php?jeu=2"><h2>Jeu 2</h2></a>
 						<div class="JA_presentationText">
 							<p>Petite description rapide du jeu.</p>
 						</div>

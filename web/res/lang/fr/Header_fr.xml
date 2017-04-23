@@ -1,8 +1,11 @@
 <lang>
 	<txt_Header>
+		<home>Accueil</home>
 		<game_txt>Jeux</game_txt>
 		<community_txt>Communaute</community_txt>
 		<connect_txt>Connexion</connect_txt>
 		<inscr_txt>Inscription</inscr_txt>
+		<my_account>Mon Compte</my_account>
+		<disconnection>Déconnexion</disconnection>
 	</txt_Header>
 </lang>
