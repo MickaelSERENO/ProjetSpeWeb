@@ -1,8 +1,6 @@
 <?php session_start();
-
 //CLAPIER A SUPPRIMER !!!!
 $_SESSION['mail'] = "prof@scolaire.fr";
-
 ?>
 <?php
 	if(!isset($_SESSION['mail']))

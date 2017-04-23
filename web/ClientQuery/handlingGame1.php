@@ -1,5 +1,8 @@
+<?php session_start();
+//SUPERCLAPIER à retirer
+$_SESSION["mailProf"] = "prof@scolaire.fr";?>
+
 <?php
-namespace ClientQuery;
 
 //Load symfony
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -10,7 +13,6 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use PSQLDatabase;
 
 header("Content-Type:text/plain.txt");
 $encoders    = array(new JsonEncoder());
@@ -22,6 +24,16 @@ $serializer  = new Serializer($normalizers, $encoders);
 $idPrompt    = (isset($_POST["idPrompt"])) ? $_POST["idPrompt"] : NULL;
 switch($idPrompt)
 {
+	//Asking list packs
+	case 0:
+		$prompter = new PSQLDatabase();
+		$packs = $prompter->getListPackGame1($_SESSION["mailProf"]);
+		if(!$packs)
+			echo -1;
+		else
+			echo $serializer->serialize($packs, 'json');
+		break;
+
 	//Asking for the sentences
 	case 1:
 		$idPack   = $_POST["idPack"];

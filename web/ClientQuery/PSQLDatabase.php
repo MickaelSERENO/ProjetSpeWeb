@@ -3,6 +3,7 @@
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../Datas/Sentence.php';
 require_once __DIR__.'/../Datas/StatsData.php';
+require_once __DIR__.'/../Datas/Game1Data.php';
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -342,6 +343,23 @@ class PSQLDatabase
 		$resultScript = pg_query($this->_conn, $script);
 		
 		return true;
+	}
+
+	public function getListPackGame1($mail)
+	{
+		$script = "SELECT id, nom FROM PackPaires WHERE mailClasse = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+		if($resultScript)
+		{
+			$arrayPack = array();
+			while($row = pg_fetch_row($resultScript))
+			{
+				array_push($arrayPack, new PackG1($row[0], trim($row[1])));
+			}
+			return $arrayPack;
+		}
+		return null;
+
 	}
 }
 ?>

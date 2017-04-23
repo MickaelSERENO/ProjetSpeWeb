@@ -64,7 +64,7 @@ FOREIGN KEY(idGroupeMots2) REFERENCES GroupeMots(id)
 
 CREATE TABLE PackPaires(
 id SERIAL,
-nom CHAR(50),
+nom CHAR(30),
 mailClasse CHAR(150),
 note integer,
 telechargement integer,
@@ -139,6 +139,7 @@ INSERT INTO EleveClasse VALUES ('1', 'prof@scolaire.fr');
 
 /*On créé notre pack*/
 INSERT INTO PackPaires VALUES (DEFAULT, 'default pack', 'prof@scolaire.fr');
+INSERT INTO PackPaires VALUES (DEFAULT, 'default pack2', 'prof@scolaire.fr');
 
 /*Paire phrase 1, peut aussi servir d'exemple sur comment faire*/
 INSERT INTO Phrase      VALUES (DEFAULT);
