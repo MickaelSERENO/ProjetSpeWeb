@@ -302,13 +302,25 @@ class PSQLDatabase
 			return false;
 	}
 	
+	public function existEleve($pseudeleve)
+	{
+		$script       = "SELECT CASE WHEN EXISTS (SELECT id FROM Eleve WHERE id = '$pseudeleve') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$resultScript = pg_query($this->_conn, $script);
+		$row=pg_fetch_row($resultScript);
+		
+		if($row[0])
+			return true;
+		else
+			return false;
+	}
+	
 	public function cmpPassHashPseudal($passTest, $pseudal)
 	{
 		$script       = "SELECT password FROM Classe WHERE nom = '$pseudal';";
 		$resultScript = pg_query($this->_conn, $script);
 		
 		$row = pg_fetch_row($resultScript);
-		return row[0];
+		return password_verify($passTest, $row[0]);
 	}
 	
 	public function cmpPassHashMail($passTest, $mail)
@@ -317,7 +329,17 @@ class PSQLDatabase
 		$resultScript = pg_query($this->_conn, $script);
 		
 		$row = pg_fetch_row($resultScript);
-		return row[0];
+		return password_verify($passTest, $row[0]);
+	}
+	
+	public function cmpPassHashEleve($passTest, $eleve)
+	{
+		$script       = "SELECT password FROM Eleve WHERE id = '$eleve';";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		return password_verify($passTest, $row[0]);
+		
 	}
 	
 	public function getPassHash($mail)
@@ -326,7 +348,7 @@ class PSQLDatabase
 		$resultScript = pg_query($this->_conn, $script);
 		
 		$row = pg_fetch_row($resultScript);
-		return row[0];
+		return $row[0];
 	}
 	
 	public function updatePassHash($mail, $passHash)
