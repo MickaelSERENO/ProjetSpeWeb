@@ -71,17 +71,25 @@ class PSQLDatabase
 		return null;
 	}
 
-	public function createHistoricGame1($userID, $idPack)
+	public function createHistoricGame1($results, $userID, $idPack)
 	{
 		//Insert a new row in Historique table
 		$dateStr = date('Y-m-d H:i:s');
-		$scriptInsertToHisto = "INSERT INTO Historique(idHisto, idEleve, idGame, jour) VALUES (DEFAULT, '$userID', ''Game1'', $dateStr) RETURNING (idHisto);";
+		$scriptInsertToHisto = "INSERT INTO Historique(idHisto, idGame, jour) VALUES (DEFAULT, 'Game1', '$dateStr') RETURNING idHisto;";
+		error_log($scriptInsertToHisto);
 		$resultInsertToHisto = pg_query($this->_conn, $scriptInsertToHisto);
 
 		//Get the idHisto thanks to RETURNING operation
 		$idHisto = pg_fetch_row($resultInsertToHisto)[0];						 
 
-		//Use cookies
+		//Create EleveHistoG1
+
+		//Commit results
+		$length = count($results);
+		for($i=0; $i < $length; $i++)
+		{
+			$this->commitGame1Results($idHisto, $userID, $idPack, strval($i), $results[$i]);
+		}
 	}
 
 	//Commit to the cookies
@@ -124,16 +132,26 @@ class PSQLDatabase
 		return null;
 	}
 
-	public function commitGame1Results($idPack, $idSent, $result)
+	public function commitGame1Results($idHisto, $userID, $idPack, $idSent, $result)
 	{
 		//Get the idPaire from the idPack
 		$sentences = $this->getFromPackSentences($idPack, $idSent);
+		$trueIDSent = $this->getIDPaireSentences($idPack, $idSent);
+		$scriptHistoG1 = "INSERT INTO EleveHistoG1(idGame1, idEleve, idHisto, idPack, idPairePhrase) VALUES (DEFAULT, '$userID', '$idHisto', '$idPack', '$trueIDSent') RETURNING idGame1";
+		$histoG1Result = pg_query($this->_conn, $scriptHistoG1);
+		$idGame1 = pg_fetch_row($histoG1Result)[0];						 
+		
+
 		if($sentences)
 		{
 			//Commit result
 			foreach($result as $r)
 			{
-				$commitScript = "INSERT INTO EleveResultG1(idGame1, idWord1, idWord2) VALUE({$sentences->getSent1()->getWordArray()[$r[0]]->getID()}, {$sentences->getSent2()->getWordArray()[$r[1]]->getID()}, {$r[2]});";
+				if($r[0] != null && $r[1] != null)
+				{
+					$commitScript = "INSERT INTO EleveResultG1(idGame1, idWord1, idWord2, operation) VALUE('idGame1', '{$sentences->getSent1()->getWordArray()[$r[0]]->getID()}', '{$sentences->getSent2()->getWordArray()[$r[1]]->getID()}', '{$r[2]}');";
+					$commitScriptResult = pg_query($this->_conn, $commitScript);
+				}
 			}
 		}
 	}
@@ -153,11 +171,11 @@ class PSQLDatabase
 	{
 		$result = array();
 
-		$script = "(SELECT Historique.idHisto, idGame, jour FROM Historique, EleveHistoG1, EleveClasse WHERE EleveHistoG1.idEleve=EleveClasse.idEleve AND Historique.idHisto = EleveHistoG1.idHisto AND EleveClasse.mailClasse = '$idTeacher') UNION
-		           (SELECT Historique.idHisto, idGame, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
+		$script = "(SELECT DISTINCT Historique.idHisto, jour, 1 FROM Historique, EleveHistoG1, EleveClasse WHERE EleveHistoG1.idEleve=EleveClasse.idEleve AND Historique.idHisto = EleveHistoG1.idHisto AND EleveClasse.mailClasse = '$idTeacher') UNION
+		           (SELECT DISTINCT Historique.idHisto, jour, 2 FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Historic($row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
+			array_push($result, new Historic($row[0], -1, trim($row[1]), $row[2]));
 
 		return $result;
 	}
@@ -165,11 +183,11 @@ class PSQLDatabase
 	public function getHistoricFromStudent($idStudent, $idTeacher)
 	{
 		$result = array();
-		$script = "(SELECT Historique.idHisto, idGame, jour FROM Historique, EleveHistoG1 WHERE idEleve='$idStudent' AND Historique.idHisto = EleveHistoG1.idHisto) UNION
-		           (SELECT Historique.idHisto, idGame, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
+		$script = "(SELECT Historique.idHisto, idGame1, jour FROM Historique, EleveHistoG1 WHERE idEleve='$idStudent' AND Historique.idHisto = EleveHistoG1.idHisto) UNION
+		           (SELECT Historique.idHisto, idGame2, jour FROM Historique, ClasseHistoG2 WHERE ClasseHistoG2.idHisto = Historique.idHisto AND mailProf = '$idTeacher') ORDER BY jour ASC;";
 		$resultScript = pg_query($this->_conn, $script);
 		while($row = pg_fetch_row($resultScript))
-			array_push($result, new Historic($row[0], $row[1], date('Y-m-d H:i:s', trim($row[2]))));
+			array_push($result, new Historic($row[0], $row[1], trim($row[2])));
 
 		return $result;
 	}
@@ -304,7 +322,7 @@ class PSQLDatabase
 	
 	public function existEleve($pseudeleve)
 	{
-		$script       = "SELECT CASE WHEN EXISTS (SELECT id FROM Eleve WHERE id = '$pseudeleve') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
+		$script       = "SELECT CASE WHEN EXISTS (SELECT id FROM Eleve WHERE pseudo = '$pseudeleve') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;";
 		$resultScript = pg_query($this->_conn, $script);
 		$row=pg_fetch_row($resultScript);
 		
@@ -381,7 +399,6 @@ class PSQLDatabase
 			return $arrayPack;
 		}
 		return null;
-
 	}
 }
 ?>

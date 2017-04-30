@@ -17,6 +17,8 @@
 	</historic>
 
 	<formular>
+		<name>Nom</name>
+		<firstName>Prénom</firstName>
 		<search>Rechercher</search>
 		<addUser>Ajouter élève</addUser>
 		<password>Mot de passe :</password>

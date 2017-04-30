@@ -23,13 +23,14 @@ class Historic
 	public $id;
 	public $idGame;
 	public $date;
+	public $typeGame;
 
-	public function __construct($idH, $idG, $d)
+	public function __construct($idH, $idG, $d, $typeGame)
 	{
 		$this->id        = $idH;
 		$this->idGame    = $idG;
 		$this->date      = $d;
+		$this->typeGame  = $typeGame;
 	}
 }
-
 ?>
