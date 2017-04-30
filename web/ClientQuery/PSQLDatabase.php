@@ -360,6 +360,15 @@ class PSQLDatabase
 		
 	}
 	
+	public function getMailProfFromEleve($eleve)
+	{
+		$script       = "SELECT mailClasse FROM EleveClasse, Eleve WHERE id = '$eleve' AND EleveClasse.idEleve = Eleve.id;";
+		$resultScript = pg_query($this->_conn, $script);
+		
+		$row = pg_fetch_row($resultScript);
+		return $row[0];
+	}
+	
 	public function getPassHash($mail)
 	{
 		$script       = "SELECT password FROM Classe WHERE mail = '$mail';";
