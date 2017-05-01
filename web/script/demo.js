@@ -1,11 +1,26 @@
 ﻿const SPACE_BLANK = 50;
 const START_MARGE = 10;
+var timeY =200;
 var canvas;
 var ctx;
 var playerArray = new Array();
 var phraseJeu = ['Ceci','est', 'la', 'phrase', 'de', 'la', 'partie.'];
 var phraseArray = new Array();
+var requestID =0;
 
+/* Pour les animations du countdown */
+window.requestAnimFrame = function(){
+    return (
+        window.requestAnimationFrame       || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame    || 
+        window.oRequestAnimationFrame      || 
+        window.msRequestAnimationFrame     || 
+        function(callback){
+            window.setTimeout(callback, 500 / 60);
+        }
+    );
+}();
 
 var app = angular.module('demoApp', []);
 
@@ -71,21 +86,54 @@ class Chrono
 		this.sec = s;
 		this.cen = 0;
 	}
-	
-	countdown(timeStamp)
+
+	drawLine()
 	{
-		ctx.clearRect(80,80,200,200);
-		ctx.fillText(this.sec+" : "+this.cen,200,100);
+	    ctx.strokeStyle= 'hsl(348, 100%, 40%)';
+	    ctx.lineWidth=10;
+	    ctx.beginPath();
+	    ctx.arc(800,100,65,0,2*Math.PI);
+	    ctx.stroke();
+	    ctx.restore();
+	}
+
+	drawTimer()
+	{
+	    var nbDisplay = ((180 - this.sec)%180)/180;
+		var angle = (2*Math.PI)*(nbDisplay)+(Math.PI/-2);
+	    ctx.strokeStyle= 'hsl(56, 100%, 68%)';
+	    ctx.lineWidth=8;
+	    ctx.beginPath();
+	    ctx.arc(800,100,65,Math.PI/-2,angle);
+	    ctx.stroke();
+	    ctx.restore();
+
+	}
+	
+	countdown(timer)
+	{
 		this.cen--;
-		if(this.cen<=0)
+		if(this.cen<0)
 		{
 			this.sec--;
-			this.cen = 10;
+			this.cen = 9;
+			timeY*= 1.1;
 		}
-		if(this.sec>=0)
-			requestAnimationFrame(this.countdown());
+		if(this.sec>=0 && this.cen>=0)
+		{ 
+		    ctx.clearRect(747,80,107,70);
+		    ctx.fillText(this.sec+" : "+this.cen,800,100);
+		    this.drawLine();
+		    this.drawTimer(this.cen);
+		    requestID=requestAnimFrame(this.countdown.bind(this));
+		}
 		else
-			cancelAnimationFrame(this.countdown());
+		{
+			this.sec=0;this.cen=0;
+		    cancelAnimationFrame(requestID);
+		    this.sec=0;
+		    this.cen =0;
+		}
 	}
 };
 
@@ -139,19 +187,19 @@ class TextBlock
 	createSentence(abX,abY)
 	{
 		ctx.font = "35px Arial";
+		ctx.lineWidth=1;
 		ctx.strokeStyle = "Green";
 		ctx.shadowBlur = 10;
 		ctx.shadowColor = "black";
 		ctx.textAlign='center';
 		ctx.textBaseline="middle";
 		ctx.fillText(this.text,abX+2+this.w/2,abY+this.h/2);
-		ctx.strokeStyle = "Green";
 		ctx.strokeRect(abX,abY,this.w+5,this.h);
 		this.x = abX;
 		this.y = abY;
 		ctx.shadowOffsetX=2;
 		ctx.shadowOffsetY=2;
-		//ctx.shadowBlur = 0;
+		ctx.shadowBlur = 0;
 		ctx.save();
 	}
 	
@@ -181,13 +229,11 @@ function detectBlock(evt)
 			{
 				/*ctx.fillRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w,phraseArray[i].h);
 				ctx.clearRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w+6,phraseArray[i].h);*/
+				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
 				phraseArray[i].text="NewText";
-				phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y+100);
-				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w);
+				phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y+100/*timeY*/);
 				//phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y);
-				var cnw =createNewWord(phraseArray[i]);
-				//playerArray[0].wordTaped.
-				cnw.createSentence(phraseArray[i].x,phraseArray[i].y+100);
+				//cnw.createSentence(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
 				break;				
 			}
 	}
@@ -220,10 +266,14 @@ window.onload = function()
 	{
 		phraseArray[i].createSentence(ms,160);
 		ms += phraseArray[i].w+SPACE_BLANK;
+
 	}
+
 	var chr = new Chrono(100);
-	playerArray.push(new Player("j1",1,10));
+	requestID = requestAnimFrame(chr.countdown());
+	
+	//playerArray.push(new Player("j1",1,10));
 	//ctx.fillText(chr.sec+" : "+chr.cen,200,100);
 	//requestAnimationFrame(chr.countdown);
-	//chr.countdown();
+	//ctx.restore();
 }
