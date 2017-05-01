@@ -54,12 +54,34 @@
 		}
 		else if($prompter->existMail($pseudal))
 		{
+			$_SESSION['clapier'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
+			$_SESSION['clapier2'] = $prompter->getPassHash($pseudal);
 			if($prompter->cmpPassHashMail($passhash, $pseudal))
 			{
 				/*Récupération de la session dans la BD*/
 				$_SESSION['verified_user']=$prompter->isVerifiedUserPseudal($pseudal);
 				$_SESSION['mail']=$pseudal;
 				$_SESSION['pseudal']=$prompter->getPseudalFromMail($pseudal);
+				
+				if($_SESSION['verified_user']==1)
+					header('location: /Accueil/Accueil.php');
+				else if($_SESSION['verified_user']==0)
+					header('location: VerifInscr.php?statut=non_verified_user');
+			}
+			else
+			{
+				header('location: Connexion.php?statut=wrong_password');
+				exit;
+			}
+		}
+		else if($prompter->existEleve($pseudal)) //Student exist in the database
+		{
+			if($prompter->cmpPassHashEleve($passhash, $pseudal))
+			{
+				/*Récupération de la session dans la BD*/
+				$_SESSION['verified_user']=1;
+				$_SESSION['pseudal']=$pseudal;
+				$_SESSION['mailprof']=prompter->getMailProfFromEleve($pseudal)
 				
 				if($_SESSION['verified_user']==1)
 					header('location: /Accueil/Accueil.php');

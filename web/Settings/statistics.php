@@ -93,6 +93,9 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 				</div>
 
 				<form class=\"addStudent\">
+					<label class=\"formularTxt\">$formularTxt[firstName] : </label> <br/> <input type=\"text\" placeholder=\"$formularTxt[firstName]\"> <br/>
+					<label class=\"formularTxt\">$formularTxt[name] : </formular> <br/> <input type=\"text\" placeholder=\"$formularTxt[name]\"><br/>
+					<label class=\"formularTxt\">$formularTxt[password] </label> <br/> <input type=\"password\"><br/>
 					<input type=\"submit\" value=\"$formularTxt[addUser]\">
 				</form>";
 			return $result;
@@ -112,12 +115,6 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
 							<th>
-								$studentTxt[firstName]
-							</th>
-							<th>
-								$studentTxt[name]
-							</th>
-							<th>
 								$historicTxt[idGame]
 							</th>
 							<th>
@@ -130,16 +127,10 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 				$rowDataHTML = $rowDataHTML.
 					"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, \$event)\">
 						<td>
-							{$histo->firstName}
+							{$histo->typeGame}
 						</td>		
 						<td>
-							{$histo->lastName}
-						</td>		
-						<td>
-							{$histo->nbGame1}
-						</td>		
-						<td>
-							{$histo->nbGame2}
+							{$histo->date}
 						</td>		
 					</tr>";
 			}

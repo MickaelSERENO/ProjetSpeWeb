@@ -5,6 +5,7 @@ CREATE SCHEMA public;
 /*Utilisateur*/
 CREATE TABLE Eleve(
 id SERIAL,
+pseudo CHAR(50) UNIQUE,
 nom CHAR(50),
 prenom CHAR(50),
 password CHAR(60),
@@ -90,8 +91,8 @@ PRIMARY KEY(idHisto)
 );
 
 CREATE TABLE EleveHistoG1(
+idGame1 SERIAL,
 idEleve integer,
-idGame1 integer,
 idHisto integer,
 idPack integer,
 idPairePhrase integer,
@@ -115,6 +116,7 @@ CREATE TABLE EleveResultG1(
 idGame1 integer,
 idWord1 integer, /*The id of the word sentence 1*/
 idWord2 integer, /*The id of the word sentence 2*/
+operation OP,    /*The operation between these words*/
 FOREIGN KEY (idGame1) REFERENCES EleveHistoG1(idGame1),
 FOREIGN KEY (idWord1) REFERENCES GroupeMots(id),
 FOREIGN KEY (idWord2) REFERENCES GroupeMots(id)
@@ -133,7 +135,7 @@ FOREIGN KEY(idPhraseInventee) REFERENCES PhraseInventee(id)
 );
 
 /*On remplie la table pour pouvoir faire nos tests*/
-INSERT INTO Eleve       VALUES (DEFAULT, 'UserName', 'UserFirstName', '', 0, 0);
+INSERT INTO Eleve       VALUES (DEFAULT, 'User', 'UserName', 'UserFirstName', '', 0, 0);
 INSERT INTO Classe      VALUES ('Teacher', 'prof@scolaire.fr', '');
 INSERT INTO EleveClasse VALUES ('1', 'prof@scolaire.fr');
 

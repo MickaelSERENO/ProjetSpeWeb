@@ -61,6 +61,7 @@
 									break;
 								
 								case 'wrong_password':
+									echo $_SESSION['clapier']." | ".$_SESSION['clapier2']." | ";
 									echo "$status_list[wrong_password]";
 									break;
 									

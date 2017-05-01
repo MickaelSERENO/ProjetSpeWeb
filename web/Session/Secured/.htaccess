@@ -1,4 +1,5 @@
 AuthName "Zone Admin de Albatros Sensei: Authentification nécessaire"
 AuthType Basic
 AuthUserFile "/Session/Secured/.htpasswd"
+php_value always_populate_raw_post_data -1
 deny from all
