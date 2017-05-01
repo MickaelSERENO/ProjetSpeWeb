@@ -18,7 +18,7 @@ window.requestAnimFrame = function(){
         window.oRequestAnimationFrame      || 
         window.msRequestAnimationFrame     || 
         function(callback){
-            window.setTimeout(callback, 500 / 60);
+            window.setTimeout(callback, 1000 / 60);
         }
     );
 }();
@@ -229,21 +229,46 @@ function detectBlock(evt)
 		if( (mousePos.x>posX) && (mousePos.x<(posX+prec)) && (mousePos.y>posY) && (mousePos.y<(posY+suiv)) )
 			{
 				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
-				var cnw = createNewWord(phraseArray[i]);
-				phrasePlayerArray.push(cnw);
-				console.log(phrasePlayerArray[phrasePlayerArray.length-1]);
-				console.log(phraseArray[i]);
-				phrasePlayerArray[phrasePlayerArray.length-1].createSentence(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
+				createInputWord(phraseArray[i]);
 				break;				
 			}
 	}
 }
 
-function createNewWord(phraseBlock)
+function createNewWord(newText)
 {
-	let wBlock = new TextBlock(phraseBlock.text,phraseBlock.h);
+	let wBlock = new TextBlock(newText,40);
 	console.log(wBlock.text+" : "+wBlock.x+"  , "+wBlock.w+" , "+wBlock.h);
 	return wBlock;
+}
+
+function createInputWord(phraseBlock)
+{
+	var input = document.createElement('input');
+	input.type = 'text';
+	input.style.position = 'fixed';
+	input.style.left = phraseBlock.x+7+'px';
+	input.style.top = phraseBlock.y + phraseBlock.h + 10+'px';
+	var cnw = createNewWord("New Text");
+	cnw.x = phraseBlock.x;
+	cnw.y = phraseBlock.y; 
+	phrasePlayerArray.push(cnw);
+	input.onkeydown = enterWord;
+	document.body.appendChild(input);
+	input.focus();
+}
+
+function enterWord(evt)
+{
+	/* Si la touche Entree est appuyee */
+	console.log("keycode : "+evt.keyCode);
+	if(evt.keyCode === 13)
+	{
+		console.log(this.value);
+		phrasePlayerArray[phrasePlayerArray.length-1].text = this.value;
+		phrasePlayerArray[phrasePlayerArray.length-1].createSentence(phrasePlayerArray[phrasePlayerArray.length-1].x,/*phraseArray[i].y+100*/timeY);
+		document.body.removeChild(this);
+	}
 }
 
 /* main pour charger le canvas */
