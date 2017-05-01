@@ -3,9 +3,10 @@ const START_MARGE = 10;
 var timeY =200;
 var canvas;
 var ctx;
-var playerArray = new Array();
+var playerArray = [];
 var phraseJeu = ['Ceci','est', 'la', 'phrase', 'de', 'la', 'partie.'];
-var phraseArray = new Array();
+var phraseArray = [];
+var phrasePlayerArray = [];
 var requestID =0;
 
 /* Pour les animations du countdown */
@@ -117,7 +118,7 @@ class Chrono
 		{
 			this.sec--;
 			this.cen = 9;
-			timeY*= 1.1;
+			timeY*= 1.01;
 		}
 		if(this.sec>=0 && this.cen>=0)
 		{ 
@@ -146,6 +147,7 @@ class TextBlock
 		this.h = hgt;
 		this.x = 0;
 		this.y = 0;
+		return this;
 	}
 	
 	get text()
@@ -203,7 +205,6 @@ class TextBlock
 		ctx.save();
 	}
 	
-
 };
 
 /* Recupere les coordonnes exactes du click dans le canvas */
@@ -227,13 +228,12 @@ function detectBlock(evt)
 		suiv = phraseArray[i].h;
 		if( (mousePos.x>posX) && (mousePos.x<(posX+prec)) && (mousePos.y>posY) && (mousePos.y<(posY+suiv)) )
 			{
-				/*ctx.fillRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w,phraseArray[i].h);
-				ctx.clearRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w+6,phraseArray[i].h);*/
 				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
-				phraseArray[i].text="NewText";
-				phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y+100/*timeY*/);
-				//phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y);
-				//cnw.createSentence(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
+				var cnw = createNewWord(phraseArray[i]);
+				phrasePlayerArray.push(cnw);
+				console.log(phrasePlayerArray[phrasePlayerArray.length-1]);
+				console.log(phraseArray[i]);
+				phrasePlayerArray[phrasePlayerArray.length-1].createSentence(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
 				break;				
 			}
 	}
@@ -241,10 +241,9 @@ function detectBlock(evt)
 
 function createNewWord(phraseBlock)
 {
-	wBlock = new TextBlock("NEW BLOCK",phraseBlock.hgt);
-	console.log(wBlock.text+" : "+wBlock.x+"  , "+wBlock.w);
+	let wBlock = new TextBlock(phraseBlock.text,phraseBlock.h);
+	console.log(wBlock.text+" : "+wBlock.x+"  , "+wBlock.w+" , "+wBlock.h);
 	return wBlock;
-
 }
 
 /* main pour charger le canvas */
@@ -260,7 +259,6 @@ window.onload = function()
 	{
 		phraseArray.push(new TextBlock(phraseJeu[i],40));
 	}
-	//drawSentence();
 	var ms =10;
 	for(var i=0;i<phraseArray.length;i++)
 	{
@@ -273,7 +271,4 @@ window.onload = function()
 	requestID = requestAnimFrame(chr.countdown());
 	
 	//playerArray.push(new Player("j1",1,10));
-	//ctx.fillText(chr.sec+" : "+chr.cen,200,100);
-	//requestAnimationFrame(chr.countdown);
-	//ctx.restore();
 }
