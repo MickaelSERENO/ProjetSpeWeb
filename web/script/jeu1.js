@@ -22,6 +22,7 @@ const Context =
 {
 	PACK_SELECTOP:0,
 	INGAME:1,
+	END_GAME:2,
 }
 
 var currentSentenceID;
@@ -31,6 +32,7 @@ var canvas;
 var ctx;
 var gameCtx=Context.PACK_SELECTION;
 var pack;
+var end;
 
 function clearCanvas()
 {
@@ -92,6 +94,17 @@ function isInRect(rect, x, y)
 	return (x > rect[0] && x < rect[0]+rect[2] &&
 		    y > rect[1] && y < rect[1]+rect[3]);
 }
+
+function End()
+{
+	this._text = "Fin de partie !";
+}
+
+End.prototype.draw = function()
+{
+	ctx.fillText(this._text, 50, 50);
+}
+
 
 function Pack(arrayPack)
 {
@@ -412,7 +425,7 @@ function promptSentences(idPackSentence, idSentence, callback, data=null)
 	}
 	httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
 	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	httpCtx.send("idPrompt=1&idPack="+idPackSentence+"&idSent="+idSentence);
+	httpCtx.send("idPrompt=1&idPack="+idPackSentence);
 	currentSentenceID = idSentence;
 }
 
@@ -435,11 +448,13 @@ function promptListPack()
 
 function getSentencesFromServer(data, response)
 {
-	console.log(response);
-	if(data === "-1")
+	if(response === "-1")
 	{
 		sentences = null;
+		gameCtx = Context.END_GAME;
+		end = new End();
 		clearCanvas();
+		end.draw();
 	}
 	else
 	{
@@ -506,7 +521,7 @@ function onMouseWheelDown($event)
 	}
 }
 
-var myApp = angular.module("AppGame1", []);
+var myApp = angular.module("AppGame", []);
 myApp.controller("CanvasCtrl", function($scope)
 {
 	$scope.onClickCanvas   = onClickCanvas;
@@ -564,7 +579,7 @@ myApp.controller("form", function($scope)
 			}
 			httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
 			httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			httpCtx.send("idPrompt=2&idPack=1&idSent="+(currentSentenceID+1)+"&results="+results);
+			httpCtx.send("idPrompt=2&idPack=1&results="+results);
 			currentSentenceID++;
 		}
 		else if(gameCtx == Context.PACK_SELECTION)
@@ -577,6 +592,10 @@ myApp.controller("form", function($scope)
 				$scope.showValue = true;
 				promptSentences(idPack, 0, getSentencesFromServer);
 			}
+		}
+		else
+		{
+			//TODO Maybe we should do a thing here...
 		}
 	};
 });

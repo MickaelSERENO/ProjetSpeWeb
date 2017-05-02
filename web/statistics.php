@@ -1,28 +1,18 @@
-<?php session_start();
-//CLAPIER A SUPPRIMER !!!!
-$_SESSION['mail'] = "prof@scolaire.fr";
-?>
 <?php
-	if(!isset($_SESSION['mail']))
-	{
-		header('location: /Session/Connexion.php');
-		exit;
-	}
 ?>
 <!DOCTYPE>
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<script src="../bower_components/angular/angular.min.js"></script>
-		<script src="../bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
-		<script src="../script/settings.js"></script>
-		<script src="../script/stats.js"></script>
-		<link rel="stylesheet" type="text/css" href="/CSS/stats.css">
+		<script src="bower_components/angular/angular.min.js"></script>
+		<script src="bower_components/xmlhttprequest/XMLHttpRequest.js"></script>
+		<script src="script/stats.js"></script>
+		<link rel="stylesheet" type="text/css" href="stats.css">
 		<link rel="stylesheet" type="text/css" href="/CSS/Accueil.css">
 	</head>
 
 	<header class="headerAcc">
-		<?php include('../HeaderFooter/Header.inc.php'); ?>
+		<?php include('HeaderFooter/Header.inc.php'); ?>
 	</header>
 
 	<body ng-app="statsApp">
@@ -86,33 +76,15 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 							</td>		
 						</tr>";
 			}
-			$classNumber = $psql->getClassID($_SESSION[mail]);
 
-			$rowDataAngular = "<tr ng-repeat=\"addStudentRow in studentRow\">
-									<td>{{addStudentRow.firstName}}</td>
-									<td>{{addStudentRow.name}}</td>
-									<td>0</td>
-									<td>0</td>
-							   </tr>";
-			$result = $result.$rowDataHTML.$rowDataAngular.
+			$result = $result.$rowDataHTML.
 					"</table>
 
 				</div>
 
 				<form class=\"addStudent\">
-					<label>{{issue}}</label><br/>
-					<label class=\"formularTxt\">$formularTxt[firstName] : </label> <br/> <input type=\"text\" ng-model=\"studentForm.firstName\" placeholder=\"$formularTxt[firstName]\" required> <br/>
-					<label class=\"formularTxt\">$formularTxt[name] : </formular> <br/> <input type=\"text\" ng-model=\"studentForm.name\" placeholder=\"$formularTxt[name]\" required><br/>
-					<label class=\"formularTxt\">$formularTxt[password] </label> <br/> <input type=\"password\" ng-model=\"studentForm.password\" required><br/>
-					<input type=\"submit\" value=\"$formularTxt[addUser]\" ng-click=\"addStudent(\$scope)\">
-
-					<br/>
-					<label>
-						numéro classe        : $classNumber <br/>
-						identifiant étudiant : numéroClasse 4premièreLettrePrénom 4premièreLettreNom
-					</label>
+					<input type=\"submit\" value=\"$formularTxt[addUser]\">
 				</form>";
-
 			return $result;
 		}
 
@@ -125,10 +97,16 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 		{
 			$historicTxt   = $langData->historic;
 			$studentTxt    = $langData->student;
-			$historicArray = $psql->getHistoricFromListStudent($_SESSION['mail']); //should be replace by teacher ID
+			$historicArray = $psql->getHistoricFromListStudent("prof@scolaire.fr"); //should be replace by teacher ID
 			$result = "
 					<table class=\"tableStats\">
 						<tr class=\"headerStatsRow\">
+							<th>
+								$studentTxt[firstName]
+							</th>
+							<th>
+								$studentTxt[name]
+							</th>
 							<th>
 								$historicTxt[idGame]
 							</th>
@@ -142,10 +120,16 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 				$rowDataHTML = $rowDataHTML.
 					"<tr class=\"statsRow\" ng-value=\"$histo->id\" ng-click=\"onRowHistoricClick($histo->id, \$event)\">
 						<td>
-							{$histo->typeGame}
+							{$histo->firstName}
 						</td>		
 						<td>
-							{$histo->date}
+							{$histo->lastName}
+						</td>		
+						<td>
+							{$histo->nbGame1}
+						</td>		
+						<td>
+							{$histo->nbGame2}
 						</td>		
 					</tr>";
 			}
@@ -155,8 +139,8 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 		}
 
 		//Load symfony
-		require_once __DIR__.'/../../vendor/autoload.php';
-		require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
+		require_once __DIR__.'/../vendor/autoload.php';
+		require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
 
 		//Get serializer XML
 		use Symfony\Component\Serializer\Serializer;
@@ -169,7 +153,7 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 		$normalizers = array(new ObjectNormalizer());
 		$serializer = new Serializer($normalizers, $encoders);
 
-		$listStatsText = file_get_contents("../res/lang/fr/statistic.xml");
+		$listStatsText = file_get_contents("res/lang/fr/statistic.xml");
 		$langData      = $serializer->deserialize($listStatsText, LangContent::class, 'xml');
 		$listStats     = $langData->listStats;
 
@@ -179,24 +163,18 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 
 		echo("
 			<br/>
-			<div class=\"backgroundBody\">");
+			<div class=\"backgroundBody\">
+			<div ng-controller='listStatsCtrl'>
+				<my-statsAccordion>
+					<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
+					<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
+					<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
 
-		include("settingsMenu.php");
-
-		echo("
-				<div ng-controller='listStatsCtrl' id='settingsDiv' ng-class='settingsDiv'>
-					<my-statsAccordion>
-						<div class=\"myTitles\">
-							<my-statTabItem title=\"$listStats[listStudents]\"></my-statTabItem>
-							<my-statTabItem title=\"$listStats[ranking]\"></my-statTabItem>
-							<my-statTabItem title=\"$listStats[historic]\"></my-statTabItem>
-						</div>
-
-						<my-statTabContent>$listStutendsHtml</my-statTabContent>
-						<my-statTabContent>$rankingHtml</my-statTabContent>
-						<my-statTabContent>$historicHtml</my-statTabContent>
-					</my-statsAccordion>
-				</div>
+					<my-statTabContent>$listStutendsHtml</my-statTabContent>
+					<my-statTabContent>$rankingHtml</my-statTabContent>
+					<my-statTabContent>$historicHtml</my-statTabContent>
+				</my-statsAccordion>
+			</div>
 			</div>
 			<br/>
 		");
@@ -204,6 +182,6 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 	</body>
 
 	<footer>
-		<?php include('../HeaderFooter/Footer.inc.php'); ?>
+		<?php include('HeaderFooter/Footer.inc.php'); ?>
 	</footer>
 </html>

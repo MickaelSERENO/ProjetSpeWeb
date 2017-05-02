@@ -1,0 +1,8 @@
+
+Game:Raccroche
+nbPlayers:1
+Sentence:Pour ouvrir les portes du bonheur, il faut bien des poignets d'amour.
+Player:test@test.truc:Jean-Christophe
+Score:0
+---
++++

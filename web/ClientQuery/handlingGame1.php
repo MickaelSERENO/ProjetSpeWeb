@@ -1,7 +1,8 @@
 <?php session_start();
 //SUPERCLAPIER à retirer
-$_SESSION["mailProf"] = "prof@scolaire.fr";?>
-
+$_SESSION["mailProf"] = "prof@scolaire.fr";
+$_SESSION['pseudal'] = "User";
+$_SESSION['userID'] = 1;?>
 <?php
 
 //Load symfony
@@ -26,6 +27,10 @@ switch($idPrompt)
 {
 	//Asking list packs
 	case 0:
+		$_SESSION['idSent'] = 0;
+		$_SESSION['result'] = array();
+		$_SESSION['finishG1'] = false;
+
 		$prompter = new PSQLDatabase();
 		$packs = $prompter->getListPackGame1($_SESSION["mailProf"]);
 		if(!$packs)
@@ -36,10 +41,10 @@ switch($idPrompt)
 
 	//Asking for the sentences
 	case 1:
+		$_SESSION['idSent'] = 0;
 		$idPack   = $_POST["idPack"];
-		$idSent   = $_POST["idSent"];
 		$prompter = new PSQLDatabase();
-		$sent     = $prompter->getFromPackSentences($idPack, $idSent);
+		$sent     = $prompter->getFromPackSentences($idPack, $_SESSION['idSent']);
 
 		if(!$sent)
 			echo -1;
@@ -50,18 +55,21 @@ switch($idPrompt)
 	//Give results from idPack, idSent and ask next pair of sentences
 	case 2:
 		$idPack = $_POST["idPack"];
-		$currentIDSent = $_POST["idSent"];
+		error_log($_POST['results']);
 		$results = json_decode($_POST["results"]);
 
-		$prompter = new PSQLDatabase();
-		$prompter->commitGame1ResultsCookies($idPack, $currentIDSent, $results);
+		//Get result
+		array_push($_SESSION['result'], $results);
 
-		$sent = $prompter->getFromPackSentences($idPack, $currentIDSent);
-		if(!$sent)
+		$prompter = new PSQLDatabase();
+		$_SESSION['idSent']+=1;
+
+		$sent = $prompter->getFromPackSentences($idPack, $_SESSION['idSent']);
+		if(!$sent && !$_SESSION['finishG1'])
 		{
-			//TODO Get the user ID (replace User by the user ID
-			$prompter->createHistoricGame1("User", $idPack);
-			echo $currentIDSent+1;
+			$_SESSION['finishG1'] = true;
+			$prompter->createHistoricGame1($_SESSION['result'], $_SESSION['userID'], $idPack);
+			echo -1;
 		}
 		else
 			echo $serializer->serialize($sent, 'json');

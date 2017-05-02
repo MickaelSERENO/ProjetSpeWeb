@@ -1,0 +1,39 @@
+Game:premierepartie
+nbPlayers:2
+Sentence : Phrase à reformuler
+Player:Jean-Pierre
+Score:10
+Bonjour, j'aime l'humour.
+Et des gobelets
+---
+Player:Plocate
+Score:3
+Salut !
+Ca va ?
+---
++++
+Game:deuxièmepartie
+nbPlayers:3
+Sentence : Phrase qu'il nous faut reformuler
+Player:Moi
+Score:0
+---
+Player:toi
+Score:100
+Il était une fois
+Dans un grand manoir
+Une grand magicien
+Qui cuisait du pain
+---
+Player:lui
+Score:2
+Ding dong
+---
++++
+Game:nouvellePartie
+nbPlayers:1
+Sentence : Reformule-moi cette phrase !!
+Player:admin
+Score:0
+---
++++

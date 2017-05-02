@@ -1,11 +1,27 @@
 ﻿const SPACE_BLANK = 50;
 const START_MARGE = 10;
+var timeY =200;
 var canvas;
 var ctx;
-var playerArray = new Array();
+var playerArray = [];
 var phraseJeu = ['Ceci','est', 'la', 'phrase', 'de', 'la', 'partie.'];
-var phraseArray = new Array();
+var phraseArray = [];
+var phrasePlayerArray = [];
+var requestID =0;
 
+/* Pour les animations du countdown */
+window.requestAnimFrame = function(){
+    return (
+        window.requestAnimationFrame       || 
+        window.webkitRequestAnimationFrame || 
+        window.mozRequestAnimationFrame    || 
+        window.oRequestAnimationFrame      || 
+        window.msRequestAnimationFrame     || 
+        function(callback){
+            window.setTimeout(callback, 1000 / 60);
+        }
+    );
+}();
 
 var app = angular.module('demoApp', []);
 
@@ -71,21 +87,54 @@ class Chrono
 		this.sec = s;
 		this.cen = 0;
 	}
-	
-	countdown(timeStamp)
+
+	drawLine()
 	{
-		ctx.clearRect(80,80,200,200);
-		ctx.fillText(this.sec+" : "+this.cen,200,100);
+	    ctx.strokeStyle= 'hsl(348, 100%, 40%)';
+	    ctx.lineWidth=10;
+	    ctx.beginPath();
+	    ctx.arc(800,100,65,0,2*Math.PI);
+	    ctx.stroke();
+	    ctx.restore();
+	}
+
+	drawTimer()
+	{
+	    var nbDisplay = ((180 - this.sec)%180)/180;
+		var angle = (2*Math.PI)*(nbDisplay)+(Math.PI/-2);
+	    ctx.strokeStyle= 'hsl(56, 100%, 68%)';
+	    ctx.lineWidth=8;
+	    ctx.beginPath();
+	    ctx.arc(800,100,65,Math.PI/-2,angle);
+	    ctx.stroke();
+	    ctx.restore();
+
+	}
+	
+	countdown(timer)
+	{
 		this.cen--;
-		if(this.cen<=0)
+		if(this.cen<0)
 		{
 			this.sec--;
-			this.cen = 10;
+			this.cen = 9;
+			timeY*= 1.01;
 		}
-		if(this.sec>=0)
-			requestAnimationFrame(this.countdown());
+		if(this.sec>=0 && this.cen>=0)
+		{ 
+		    ctx.clearRect(747,80,107,70);
+		    ctx.fillText(this.sec+" : "+this.cen,800,100);
+		    this.drawLine();
+		    this.drawTimer(this.cen);
+		    requestID=requestAnimFrame(this.countdown.bind(this));
+		}
 		else
-			cancelAnimationFrame(this.countdown());
+		{
+			this.sec=0;this.cen=0;
+		    cancelAnimationFrame(requestID);
+		    this.sec=0;
+		    this.cen =0;
+		}
 	}
 };
 
@@ -98,6 +147,7 @@ class TextBlock
 		this.h = hgt;
 		this.x = 0;
 		this.y = 0;
+		return this;
 	}
 	
 	get text()
@@ -139,23 +189,22 @@ class TextBlock
 	createSentence(abX,abY)
 	{
 		ctx.font = "35px Arial";
+		ctx.lineWidth=1;
 		ctx.strokeStyle = "Green";
 		ctx.shadowBlur = 10;
 		ctx.shadowColor = "black";
 		ctx.textAlign='center';
 		ctx.textBaseline="middle";
 		ctx.fillText(this.text,abX+2+this.w/2,abY+this.h/2);
-		ctx.strokeStyle = "Green";
 		ctx.strokeRect(abX,abY,this.w+5,this.h);
 		this.x = abX;
 		this.y = abY;
 		ctx.shadowOffsetX=2;
 		ctx.shadowOffsetY=2;
-		//ctx.shadowBlur = 0;
+		ctx.shadowBlur = 0;
 		ctx.save();
 	}
 	
-
 };
 
 /* Recupere les coordonnes exactes du click dans le canvas */
@@ -179,26 +228,47 @@ function detectBlock(evt)
 		suiv = phraseArray[i].h;
 		if( (mousePos.x>posX) && (mousePos.x<(posX+prec)) && (mousePos.y>posY) && (mousePos.y<(posY+suiv)) )
 			{
-				/*ctx.fillRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w,phraseArray[i].h);
-				ctx.clearRect(phraseArray[i].x,phraseArray[i].y,phraseArray[i].w+6,phraseArray[i].h);*/
-				phraseArray[i].text="NewText";
-				phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y+100);
-				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w);
-				//phraseArray[i].createSentence(phraseArray[i].x,phraseArray[i].y);
-				var cnw =createNewWord(phraseArray[i]);
-				//playerArray[0].wordTaped.
-				cnw.createSentence(phraseArray[i].x,phraseArray[i].y+100);
+				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
+				createInputWord(phraseArray[i]);
 				break;				
 			}
 	}
 }
 
-function createNewWord(phraseBlock)
+function createNewWord(newText)
 {
-	wBlock = new TextBlock("NEW BLOCK",phraseBlock.hgt);
-	console.log(wBlock.text+" : "+wBlock.x+"  , "+wBlock.w);
+	let wBlock = new TextBlock(newText,40);
+	console.log(wBlock.text+" : "+wBlock.x+"  , "+wBlock.w+" , "+wBlock.h);
 	return wBlock;
+}
 
+function createInputWord(phraseBlock)
+{
+	var input = document.createElement('input');
+	input.type = 'text';
+	input.style.position = 'fixed';
+	input.style.left = phraseBlock.x+7+'px';
+	input.style.top = phraseBlock.y + phraseBlock.h + 10+'px';
+	var cnw = createNewWord("New Text");
+	cnw.x = phraseBlock.x;
+	cnw.y = phraseBlock.y; 
+	phrasePlayerArray.push(cnw);
+	input.onkeydown = enterWord;
+	document.body.appendChild(input);
+	input.focus();
+}
+
+function enterWord(evt)
+{
+	/* Si la touche Entree est appuyee */
+	console.log("keycode : "+evt.keyCode);
+	if(evt.keyCode === 13)
+	{
+		console.log(this.value);
+		phrasePlayerArray[phrasePlayerArray.length-1].text = this.value;
+		phrasePlayerArray[phrasePlayerArray.length-1].createSentence(phrasePlayerArray[phrasePlayerArray.length-1].x,/*phraseArray[i].y+100*/timeY);
+		document.body.removeChild(this);
+	}
 }
 
 /* main pour charger le canvas */
@@ -214,16 +284,16 @@ window.onload = function()
 	{
 		phraseArray.push(new TextBlock(phraseJeu[i],40));
 	}
-	//drawSentence();
 	var ms =10;
 	for(var i=0;i<phraseArray.length;i++)
 	{
 		phraseArray[i].createSentence(ms,160);
 		ms += phraseArray[i].w+SPACE_BLANK;
+
 	}
+
 	var chr = new Chrono(100);
-	playerArray.push(new Player("j1",1,10));
-	//ctx.fillText(chr.sec+" : "+chr.cen,200,100);
-	//requestAnimationFrame(chr.countdown);
-	//chr.countdown();
+	requestID = requestAnimFrame(chr.countdown());
+	
+	//playerArray.push(new Player("j1",1,10));
 }

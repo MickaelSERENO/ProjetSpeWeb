@@ -15,6 +15,52 @@ myApp.controller("listStatsCtrl", function($scope)
 {
     $scope.onRowStudentClick = onRowStudentClick;
     $scope.onRowHistoricClick = onRowHistoricClick;
+	$scope.studentForm = {}
+	$scope.studentRow = []
+	$scope.issue = "";
+
+	$scope.addStudent = function()
+	{
+		if($scope.studentRow.firstName == null || $scope.studentRow.name == null || $scope.studentRow.password == null)
+			return;
+		//Send student to the database
+		var httpCtx = new XMLHttpRequest();
+
+		httpCtx.onreadystatechange = function()
+		{
+			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+			{
+				console.log(httpCtx.responseText+"okep");
+				if(httpCtx.responseText == 1)
+				{
+					$scope.studentRow.push({'firstName':$scope.studentForm.firstName, 'name':$scope.studentForm.name});
+					$scope.issue = "L'étudiant "+$scope.studentForm.firstName + " " + $scope.studentForm.name + " à été ajouté";
+					$scope.$apply();
+				}
+
+				else if(httpCtx.responseText == -2)
+				{
+					$scope.issue = "Mot de passe trop court";
+					$scope.$apply();
+				}
+
+				else if(httpCtx.responseText == 0)
+				{
+					console.log("yeah, 0");
+					$scope.issue = "L'étudiant "+$scope.studentForm.firstName + " " + $scope.studentForm.name + " existe déjà.";
+					$scope.$apply();
+				}
+
+				else
+				{
+				}
+			}
+		}
+		httpCtx.open("POST", "/ClientQuery/addStudent.php", true);
+		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpCtx.send("nameStudent="+$scope.studentForm.name+"&surnameStudent="+$scope.studentForm.firstName+"&password="+$scope.studentForm.password);
+		
+	}
 });
 
 myApp.directive("myStatsaccordion", function()
