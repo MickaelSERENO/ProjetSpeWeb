@@ -1,4 +1,7 @@
-<?php session_start();?>
+<?php session_start();
+
+$_SESSION['userID'] = 1;
+?>
 <!DOCTYPE html>
 <html>
 	<head>

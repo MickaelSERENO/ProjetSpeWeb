@@ -20,6 +20,7 @@ mail CHAR(150),
 password CHAR(60),
 verifiedUser BOOLEAN,
 code CHAR(15),
+id SERIAL,
 PRIMARY KEY(mail)
 );
 

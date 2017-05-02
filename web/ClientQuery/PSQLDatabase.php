@@ -352,7 +352,7 @@ class PSQLDatabase
 	
 	public function cmpPassHashEleve($passTest, $eleve)
 	{
-		$script       = "SELECT password FROM Eleve WHERE id = '$eleve';";
+		$script       = "SELECT password FROM Eleve WHERE pseudo = '$eleve';";
 		$resultScript = pg_query($this->_conn, $script);
 		
 		$row = pg_fetch_row($resultScript);
@@ -408,6 +408,39 @@ class PSQLDatabase
 			return $arrayPack;
 		}
 		return null;
+	}
+
+	public function getClassID($mail)
+	{
+		$script = "SELECT id FROM Classe WHERE mail = '$mail';";
+		$resultScript = pg_query($this->_conn, $script);
+
+		$row = pg_fetch_row($resultScript);
+		if($row)
+			return $row[0];
+		return null;
+	}
+
+	public function addStudent($mail, $nameStudent, $surnameStudent, $password)
+	{
+		$idClass = $this->getClassID($mail);
+		if($idClass == null)
+			return -1;
+
+		$passHash = password_hash($password, PASSWORD_BCRYPT);
+		$pseudo = dechex($idClass).substr($nameStudent, 0, 4).substr($surnameStudent, 0, 4);
+		if($this->existEleve($pseudo))
+			return 0;
+
+		$script = "INSERT INTO Eleve(id, pseudo, nom, prenom, password, nbGame1, nbGame2) VALUES (DEFAULT, '$pseudo', '$nameStudent', '$surnameStudent', '$passHash', '0', '0') RETURNING Eleve.id;";
+		$resultScript = pg_query($this->_conn, $script);
+
+		$idEleve = pg_fetch_row($resultScript)[0];
+
+		$script = "INSERT INTO EleveClasse(idEleve, mailClasse) VALUES ('$idEleve', '$mail');";
+		$resultScript = pg_query($this->_conn, $script);
+
+		return 1;
 	}
 }
 ?>
