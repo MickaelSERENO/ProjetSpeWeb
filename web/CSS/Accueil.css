@@ -20,8 +20,9 @@ https://www.w3schools.com/css/css_form.asp
 }
 	
 header.headerAcc {
-	border-radius: 25px;
+	/*border-radius: 25px;*/
 	background-image: url(/res/Img/Texture/congruent_pentagon.png);
+	background-color: rgba(221, 229, 223, 1);
 	margin :0;
 	padding:0;
 	margin-bottom : 0;
@@ -41,14 +42,38 @@ body
 {
 	margin: 0em, 3em;
 	padding: 2em;
-	border-radius: 25px;
-	background-color: rgba(228, 255, 218, 1); 
+	/*border-radius: 25px;*/
+	background-color: rgba(187, 206, 216, 1); 
+}
+/*<img class="fade" src="/res/Img/LogoAlbatros.png" alt="Return to Home" title="Logo"/>*/
+.logoAndHead
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+
+.imgLogo
+{
+	display: flex;
+	justify-content: space-between;
+	margin: 1em;
+}
+
+.headerStyle
+{
+	font-family: titleFont;
+	flex: 2;
 }
 
 .menu 
 {
+	 
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	flex-grow:1;
 	padding: 0px 0px;
 	padding-right: 1em;
 	list-style: none;
@@ -58,14 +83,10 @@ body
 	text-align : center;
 }
 
-.headerStyle
-{
-	font-family: titleFont;
-}
-
 .menuItems
 {
 	display: flex;
+	align-items: center;
 	margin: auto;
 }
 
@@ -74,30 +95,24 @@ a.linksMenuItems
 	margin: 0em 0em 0em 1em;
 	padding: 0.2em 0.2em;
 	font-size: 2em;
-	color: black;
+	color: white;
 	text-decoration : none;
-	border: 4px solid var(--borderColor);
-	background-color: rgba(228, 255, 218, 1); 
+	/*border: 4px solid var(--borderColor);*/
+	background-color: rgba(50, 109, 178, 1); 
 }
 
 a.linksMenuItems:hover
 {
-	border: 4px solid seagreen;
-	text-decoration: underline;
-}
-
-.logoHome
-{
-	
+	/*border: 4px solid seagreen;*/
+	background-color: darkorange;
 }
 
 .divFade
 {
 	position: relative;
-	height:100px;
-	width:177px;
+	height: 80px;
+	width: 80px;
 	margin:0em 1em;
-	border: 4px solid black;
 }
 
 .divFade img
@@ -108,6 +123,12 @@ a.linksMenuItems:hover
   -moz-transition: opacity 1s ease-in-out;
   -o-transition: opacity 1s ease-in-out;
   transition: opacity 1s ease-in-out;
+
+}
+
+.divFade img.fade:hover
+{
+	opacity:1;
 }
 
 .divFade img.nofade:hover
@@ -127,7 +148,7 @@ a.linksMenuItems:hover
 div.lienConnec
 {
 	margin: 0em 0em 1em 0em;
-	color: black;
+	color: rgba(50, 109, 178, 1);
 	text-decoration : none;
 }
 
@@ -135,56 +156,54 @@ a.lienConnec
 {
 	margin: 5px;
 	padding: 5px;
-	color: black;
+	color: rgba(50, 109, 178, 1);
 	text-decoration : none;
-	border: 3px solid black;
-	background-color:rgba(228, 255, 218, 1);
+	border: 3px solid rgba(50, 109, 178, 1);
+	/*background-color:rgba(228, 255, 218, 1);*/
 }
 
 a.lienConnec:hover
 {
-	color: black;
-	text-decoration: underline;
-	border: 3px solid slateblue;
+	color: rgba(50, 109, 178, 1);
+	border: 3px solid darkorange;
 }
 
 div.lienInscr
 {
 	margin: 1em 0em 0em 0em;
-	color: black;
-	background-color:rgba(228, 255, 218, 1);
+	color: rgba(50, 109, 178, 1);
+	/*background-color:rgba(228, 255, 218, 1);*/
 }
 
 a.lienInscr
 {
 	margin: 5px;
 	padding: 5px;
-	color: black;
+	color: rgba(50, 109, 178, 1);
 	text-decoration : none;
-	border: 3px solid black;
-	background-color:rgba(228, 255, 218, 1);
+	border: 3px solid rgba(50, 109, 178, 1);
+	/*background-color:rgba(228, 255, 218, 1);*/
 }
 
 a.lienInscr:hover
 {
-	color: black;
-	text-decoration: underline;
+	color: rgba(50, 109, 178, 1);
 	border: 3px solid darkorange;
 	text-align: justify;
 }
 
 .phraseAcc
 {
-	border-radius: 25px;
-	border: 4px solid var(--borderColor);
+	/*border-radius: 25px;*/
+	/*border: 4px solid var(--borderColor);*/
 	background-color: rgba(255, 255, 255, 0.6);
 	padding: 1em, 2em; 
 }
 
 .presentationAcc
 {
-	border-radius: 30px;
-	border: 8px solid var(--borderColor);
+	border-radius: 10px;
+	/*border: 8px solid var(--borderColor);*/
 	padding: 2em;
 	margin: 5em;
 	background-color: rgba(255, 255, 255, 0.6);
@@ -203,8 +222,9 @@ a.lienInscr:hover
 {
 	flex: display;
 	flex-direction: row;
-	border-radius: 25px;
+	/*border-radius: 25px;*/
 	background-image: url(/res/Img/Texture/congruent_pentagon.png);
+	background-color: rgba(221, 229, 223, 1);
 	margin: 0em;
 	padding: 2em;
 	text-align: center;
@@ -224,7 +244,7 @@ a.footerClass
 }
 
 input[type=button], input[type=submit], input[type=reset] {
-    background-color: #4CAF50;
+    background-color: #326db2;
     border: none;
     color: white;
     padding: 16px 32px;

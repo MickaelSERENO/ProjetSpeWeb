@@ -32,40 +32,47 @@
 	</head>
 	
 	<div class="header">
-		<header>
-			<div class="headerStyle">
-				<ul class="menu">
-					<li><a class="logoHome" href="/Accueil/Accueil.php">
-						<div class="divFade">
-							<img class="fade" src="/res/Img/LogoHeaderFade.png" alt="Return to Home" title=<?php echo ("$txt_Header[home]"); ?>/>
-							<img class="nofade" src="/res/Img/LogoHeader.png" alt="Return to Home" title=<?php echo ("$txt_Header[home]"); ?>/> 
-						</div>
-					</a> </li>
-					<div class="menuItems">
-						<li><a class="linksMenuItems" href="/JeuAccueil/JeuAccueil.php"> <?php echo ("$txt_Header[game_txt]"); ?> </a></li>
-						<li><a class="linksMenuItems" href="/Community/HCommunity.html"> <?php echo ("$txt_Header[community_txt]"); ?> </a></li>
+		<div>
+			<header>
+				<div class="logoAndHead" >
+					<div class="imgLogo">
+						<img class="fade" src="/res/Img/LogoAlbatros.png" alt="Return to Home" title="Logo"/>
 					</div>
-					<div class="connect">
-						<?php
-						if(isset($_SESSION['mail']) && isset($_SESSION['verified_user']) && $_SESSION['verified_user'] == 1)
-						{
-							echo"
-							<div class=\"lienConnec\"><li><a class=\"lienConnec\" href=\"/statistics.php\"> $txt_Header[my_account]</a></li></div>
-							<div class=\"lienInscr\"><li><a class=\"lienInscr\" href=\"/Session/Disconnect.php\"> $txt_Header[disconnection]</a></li></div>
-							";
-						}
-						else
-						{
-							echo "
-								<div class=\"lienConnec\"><li><a class=\"lienConnec\" href=\"/Session/Connexion.php\"> $txt_Header[connect_txt]</a></li></div>
-								<div class=\"lienInscr\"><li><a class=\"lienInscr\" href=\"/Session/Inscription.php\"> $txt_Header[inscr_txt]</a></li></div>
-							";
-						}
-						?>
+					<div class="headerStyle">
+						<ul class="menu">
+							
+							<div class="menuItems"><li><a class="logoHome" href="/Accueil/Accueil.php">
+								<div class="divFade">
+									<img class="fade" src="/res/Img/LogoHeaderFade.png" alt="Return to Home" title=<?php echo ("$txt_Header[home]"); ?>/>
+									<img class="nofade" src="/res/Img/LogoHeader.png" alt="Return to Home" title=<?php echo ("$txt_Header[home]"); ?>/>
+								</div>
+								</a> </li>
+								<li><a class="linksMenuItems" href="/JeuAccueil/JeuAccueil.php"> <?php echo ("$txt_Header[game_txt]"); ?> </a></li>
+								<li><a class="linksMenuItems" href="/Community/HCommunity.php"> <?php echo ("$txt_Header[community_txt]"); ?> </a></li>
+							</div>
+							<div class="connect">
+								<?php
+								if(isset($_SESSION['mail']) && isset($_SESSION['verified_user']) && $_SESSION['verified_user'] == 1)
+								{
+									echo"
+									<div class=\"lienConnec\"><li><a class=\"lienConnec\" href=\"/statistics.php\"> $txt_Header[my_account]</a></li></div>
+									<div class=\"lienInscr\"><li><a class=\"lienInscr\" href=\"/Session/Disconnect.php\"> $txt_Header[disconnection]</a></li></div>
+									";
+								}
+								else
+								{
+									echo "
+										<div class=\"lienConnec\"><li><a class=\"lienConnec\" href=\"/Session/Connexion.php\"> $txt_Header[connect_txt]</a></li></div>
+										<div class=\"lienInscr\"><li><a class=\"lienInscr\" href=\"/Session/Inscription.php\"> $txt_Header[inscr_txt]</a></li></div>
+									";
+								}
+								?>
+							</div>
+						</ul>
 					</div>
-				</ul>
-			</div>
-		</header>
+				</div>
+			</header>
+		</div>
 	</div>
 	
 </html>
