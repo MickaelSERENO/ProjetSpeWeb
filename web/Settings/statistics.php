@@ -86,6 +86,7 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 							</td>		
 						</tr>";
 			}
+			$classNumber = $psql->getClassID($_SESSION[mail]);
 
 			$rowDataAngular = "<tr ng-repeat=\"addStudentRow in studentRow\">
 									<td>{{addStudentRow.firstName}}</td>
@@ -99,11 +100,19 @@ $_SESSION['mail'] = "prof@scolaire.fr";
 				</div>
 
 				<form class=\"addStudent\">
-					<label class=\"formularTxt\">$formularTxt[firstName] : </label> <br/> <input type=\"text\" ng-model=\"studentForm.firstName\" placeholder=\"$formularTxt[firstName]\"> <br/>
-					<label class=\"formularTxt\">$formularTxt[name] : </formular> <br/> <input type=\"text\" ng-model=\"studentForm.name\" placeholder=\"$formularTxt[name]\"><br/>
-					<label class=\"formularTxt\">$formularTxt[password] </label> <br/> <input type=\"password\" ng-model=\"studentForm.password\"><br/>
-					<input type=\"submit\" value=\"$formularTxt[addUser]\" ng-click=\"addStudent()\">
+					<label>{{issue}}</label><br/>
+					<label class=\"formularTxt\">$formularTxt[firstName] : </label> <br/> <input type=\"text\" ng-model=\"studentForm.firstName\" placeholder=\"$formularTxt[firstName]\" required> <br/>
+					<label class=\"formularTxt\">$formularTxt[name] : </formular> <br/> <input type=\"text\" ng-model=\"studentForm.name\" placeholder=\"$formularTxt[name]\" required><br/>
+					<label class=\"formularTxt\">$formularTxt[password] </label> <br/> <input type=\"password\" ng-model=\"studentForm.password\" required><br/>
+					<input type=\"submit\" value=\"$formularTxt[addUser]\" ng-click=\"addStudent(\$scope)\">
+
+					<br/>
+					<label>
+						numéro classe        : $classNumber <br/>
+						identifiant étudiant : numéroClasse 4premièreLettrePrénom 4premièreLettreNom
+					</label>
 				</form>";
+
 			return $result;
 		}
 

@@ -1,8 +1,8 @@
 <?php session_start();?>
 <?php
 	//Load symfony
-	require_once __DIR__.'/../vendor/autoload.php';
-	require_once __DIR__.'/ClientQuery/PSQLDatabase.php';
+	require_once __DIR__.'/../../vendor/autoload.php';
+	require_once __DIR__.'/../ClientQuery/PSQLDatabase.php';
 
 	use Symfony\Component\Serializer\Serializer;
 	use Symfony\Component\Serializer\Encoder\XmlEncoder;

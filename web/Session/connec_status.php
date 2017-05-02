@@ -81,7 +81,7 @@
 				/*Récupération de la session dans la BD*/
 				$_SESSION['verified_user']=1;
 				$_SESSION['pseudal']=$pseudal;
-				$_SESSION['mailprof']=prompter->getMailProfFromEleve($pseudal)
+				$_SESSION['mailprof']=$prompter->getMailProfFromEleve($pseudal);
 				
 				if($_SESSION['verified_user']==1)
 					header('location: /Accueil/Accueil.php');
