@@ -82,7 +82,7 @@ switch($action)
 		
 		
 	/*Un joueur est ajouté à la partie, sauf s'il y appartient déjà, ou si la partie n'existe pas*/
-	/*nécessite le nom de la partie, le nom et l'id du joueur*/
+	/*nécessite le nom de la partie, le nom et l'id du joueur. Renvoie la phrase de la partie*/
 	case "newPlayer":
 		echo joinGame($file, $gameName, $idPlayer, $namePlayer);
 		break;
@@ -457,10 +457,10 @@ function joinGame($file, $gameName, $idPlayer, $namePlayer)
 		fputs($file, $lines[$i]);
 		if(strcmp(explode(":", $lines[$i])[0], "Game")==0 && strcmp(explode(":", $lines[$i])[1], $gameName."\n")==0)
 		{
-			$answer = "OK";
 			$i++;
 			fputs($file, "nbPlayers:".(string)((int)(explode(":", $lines[$i])[1])+1)."\n");
 			$i++;
+			$answer = explode(":", $lines[$i])[1];
 			while(strcmp($lines[$i], "+++\n")!=0)
 			{
 				fputs($file, $lines[$i]);

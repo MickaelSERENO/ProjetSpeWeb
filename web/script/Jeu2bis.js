@@ -219,47 +219,6 @@ myApp.controller("CanvasController", function($scope)
 	
 });
 
-/*function sendInfoClass(callback, data=null)
-{
-	var httpCtx = new XMLHttpRequest();
-	var name;
-	var session;
-	httpCtx.onreadystatechange = function()
-	{
-		if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
-		{
-			callback(data, httpCtx.responseText);
-		}
-	}
-	httpCtx.open("POST", "ClientQuery/handlingGame2.php", true);
-	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++)
-	{
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf("nomClasse=") == 0) name = c.substring(nameEQ.length,c.length);
-		if (c.indexOf("idSession=") == 0) session = c.substring(nameEQ.length,c.length);
-	}
-	if(name != null)
-		httpCtx.send("nomClasse="+ name +"&idSession=" + session );
-}
-
-function promptSentence(idPack, idSentence, callback)
-{
-	var httpCtx = new XMLHttpRequest();
-	httpCtx.onreadystatechange = function()
-	{
-		if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
-		{
-			callback(httpCtx.responseText);
-		}
-	}
-	httpCtx.open("POST", "ClientQuery/handlingGame2.php", true);
-	httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	httpCtx.send("idPack="+idPack+"&idSent="+idSentence);
-	currentSentenceID = idSentence;
-}*/
 
 // Exécute un appel AJAX POST
 // Prend en paramètres l'URL cible, la donnée à envoyer et la fonction callback appelée en cas de succès
@@ -337,7 +296,7 @@ window.onload = function()
 	
 }
 
-window.beforeunload = function()
+/*window.beforeunload = function()
 {
 
 	data = "action=exitPlayer&gameName=firstGame&idPlayer=moi@moi.com";
@@ -352,7 +311,7 @@ window.beforeunload = function()
 			console.log(response);
 		}, true);*/
 		
-}
+}*/
 
 window.onresize = function()
 {
