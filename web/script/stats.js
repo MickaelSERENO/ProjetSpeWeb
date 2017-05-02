@@ -15,6 +15,29 @@ myApp.controller("listStatsCtrl", function($scope)
 {
     $scope.onRowStudentClick = onRowStudentClick;
     $scope.onRowHistoricClick = onRowHistoricClick;
+	$scope.studentForm = {}
+	$scope.studentRow = []
+
+	$scope.addStudent = function()
+	{
+		console.log($scope.studentForm.firstName);
+		$scope.studentRow.push({'firstName':$scope.studentForm.firstName, 'name':$scope.studentForm.name});
+		/*
+		//Send student to the database
+		var httpCtx = new XMLHttpRequest();
+
+		httpCtx.onreadystatechange = function()
+		{
+			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
+			{
+				getSentencesFromServer(null, httpCtx.responseText);
+			}
+		}
+		httpCtx.open("POST", "/ClientQuery/addStudent.php", true);
+		httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpCtx.send("nameStudent="+"&surnameStudent="+"&password="+);
+		*/
+	}
 });
 
 myApp.directive("myStatsaccordion", function()

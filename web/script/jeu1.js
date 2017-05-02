@@ -521,7 +521,7 @@ function onMouseWheelDown($event)
 	}
 }
 
-var myApp = angular.module("AppGame1", []);
+var myApp = angular.module("AppGame", []);
 myApp.controller("CanvasCtrl", function($scope)
 {
 	$scope.onClickCanvas   = onClickCanvas;

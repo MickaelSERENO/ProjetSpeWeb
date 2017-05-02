@@ -1,4 +1,4 @@
-#canvasJeu1
+#divJeu
 {
 	/*margin: 3em;*/
 	margin-left: auto;
@@ -6,4 +6,18 @@
 	border: 8px solid var(--borderColor);
 	border-radius : 30px;
 	background-color: rgba(255, 255, 255, 0.6);
+}
+
+#divJeu div
+{
+	display:inline-block;
+}
+
+.radioJeu1
+{
+	display:block;
+}
+
+#formJeu1
+{
 }
