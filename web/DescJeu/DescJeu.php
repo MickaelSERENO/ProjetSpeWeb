@@ -26,9 +26,18 @@
 				<div class="jeuImage">
 					<img src="/res/Img/01.jpg" alt="Jeu 1" /> 
 				</div>
+
+				<?php if($_GET['jeu'] == 1):?>
 				<div class="description">
-					<p> Description du jeu. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
+					<p> Description du jeu 1. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
 				</div>
+				<?php endif;?>
+
+				<?php if($_GET['jeu'] == 2):?>
+				<div class="description">
+					<p> Description du jeu 2. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
+				</div>
+				<?php endif;?>
 				<div class="bouton">
 				<div><p> <?php echo "<a href=\"/Tutoriel/Tutoriel.php?jeu=$_GET[jeu]\">";?> Tutoriel </a></p></div>
 				<div><p> <?php echo "<a href=\"/Jeu/Jeu.php?jeu=$_GET[jeu]\">";?> Jouer </a></p></div>

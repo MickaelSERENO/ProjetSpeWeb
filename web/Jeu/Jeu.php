@@ -20,7 +20,6 @@ $_SESSION['userID'] = 1;
 		<br/>
 
 		<div class="backgroundBody">
-			<h1> Titre du jeu </h1>
 
 
 
@@ -28,6 +27,7 @@ $_SESSION['userID'] = 1;
 
 <?php if($_GET['jeu'] == 1):?>
 			<script src="/script/jeu1.js"></script>
+			<h1> Appariement de mots</h1>
 
 			<div ng-controller="CanvasCtrl" id="divJeu">
 				<div class="divCanvas">
@@ -38,12 +38,14 @@ $_SESSION['userID'] = 1;
 
 				<div id="formJeu1" ng-controller="form">
 					<form ng-submit="submit()">
-						<div ng-repeat="v in operations" ng-show="showValue">
-							<input type="radio" ng-value="v.value" ng-model="$parent.radio" class="radioJeu1" 
-							ng-change="changeRadio(v.value)"/>
-							<label>{{v.text}}</label>
+						<div ng-repeat="v in operations" ng-show="showValue" class="radioJeu1" ng-class="radioJeu1">
+							<input type="radio" ng-value="v.value" ng-model="radio.value" ng-change="changeRadio(v.value)"/>
+							<label class="radioLabelJ1">{{v.text}}</label>
 						</div>
-						<input type="submit" value="ok">
+						<br/>
+						<div class="okJeu1">
+							<input type="submit" value="ok">
+						</div>
 					</form>
 				</div>
 			</div>
@@ -53,6 +55,7 @@ $_SESSION['userID'] = 1;
 <?php if($_GET['jeu'] == 2):?>
 
 	<script src="../script/Jeu2.js"></script>
+	<h1> Jeu de reformulation </h1>
 	<link rel="stylesheet" href="CSS/jeu2.css" />
 	<div id="divJeu">
 		<div ng-controller="CanvasController">

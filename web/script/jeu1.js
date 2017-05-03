@@ -23,6 +23,7 @@ const Context =
 	PACK_SELECTOP:0,
 	INGAME:1,
 	END_GAME:2,
+	IN_CORRECTION:3,
 }
 
 var currentSentenceID;
@@ -42,8 +43,9 @@ function clearCanvas()
 	ctx.restore();
 }
 
-function drawSentence(ctx, sentence, px, py)
+function drawSentence(ctx, sentence, px, py, selectedWord)
 {
+	ctx.lineWidth = 3;
 	ctx.font="25px Arial";
 	ctx.strokeStyle = "Green";
 	var spaceMeasure = ctx.measureText("       ").width;
@@ -54,7 +56,17 @@ function drawSentence(ctx, sentence, px, py)
 	{
 		ctx.fillText(sentence.wordArray[i].groupText, px+currentX, py);
 		var measure = ctx.measureText(sentence.wordArray[i].groupText).width;
-		ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+
+		if(i == selectedWord)
+		{
+			ctx.strokeStyle = "Yellow";
+			ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+		}
+		else
+		{
+			ctx.strokeStyle = "Green";
+			ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+		}
 		currentX += measure+spaceMeasure;
 	}
 }
@@ -63,6 +75,7 @@ function drawArrow(fromx, fromy, tox, toy)
 {
     var headlen = 10;
     var angle = Math.atan2(toy-fromy,tox-fromx);
+	ctx.lineWidth = 3;
 	ctx.beginPath();
     ctx.moveTo(fromx, fromy);
     ctx.lineTo(tox, toy);
@@ -79,6 +92,16 @@ function getWordLinkRect(words)
 
 	var spaceMeasure = ctx.measureText("       ").width;
 	var currentX = spaceMeasure/3.0;
+
+	for(var i=0; i < words.length; i++)
+	{
+		var measure = ctx.measureText(words.groupText).width;
+		currentX += measure+spaceMeasure;
+	}
+
+	var measure = ctx.measureText(words[words.length-1].groupText).width;
+	currentX = (canvas.width-currentX-spaceMeasure/3.0)/2.0;
+
 	for(var i=0; i < words.length; i++)
 	{
 		var measure = ctx.measureText(words[i].groupText).width;
@@ -174,6 +197,7 @@ Pack.prototype._initRectArray = function()
 Pack.prototype.draw = function()
 {
 	clearCanvas();
+	ctx.lineWidth = 3;
 
 	//Draw packs text and rect
 	ctx.font="25px Arial";
@@ -228,6 +252,8 @@ function Sentence(sent1, sent2)
 	this._startY = 0;
 	this._endY   = 0;
 	this._mouseType = MouseType.NOTHING;
+
+	this._selectedText = -1;
 }
 
 Sentence.prototype.getResults     = function()
@@ -248,6 +274,7 @@ Sentence.prototype.draw           = function()
 Sentence.prototype._drawPartialLine = function()
 {
 	console.log("partialDraw");
+	ctx.lineWidth = 3;
 	ctx.strokeStyle = "Gray";
 	ctx.beginPath();
 	ctx.moveTo(this._startX, this._startY);
@@ -302,8 +329,9 @@ Sentence.prototype._drawLinks     = function()
 
 Sentence.prototype._drawSentences = function()
 {
-	drawSentence(ctx, this._sent1, 0, SENT1Y);
-	drawSentence(ctx, this._sent2, 0, SENT2Y);
+	console.log(this._selectedText);
+	drawSentence(ctx, this._sent1, this._word1LinksRect[0][0], SENT1Y, this._selectedText);
+	drawSentence(ctx, this._sent2, this._word2LinksRect[0][0], SENT2Y, this._selectedText-this._word1LinksRect.length);
 }
 
 Sentence.prototype.setMousePos = function(x, y)
@@ -321,10 +349,36 @@ Sentence.prototype.setStartPoint  = function(x, y)
 	this._endX   = x;
 	this._endY   = y;
 	this._mouseType = MouseType.STARTING;
+
+	this._selectedText = -1;
+
+	for(var i=0; i < this._word1LinksRect.length; i++)
+	{
+		if(isInRect(this._word1LinksRect[i], x, y))
+		{
+			this._selectedText = i;
+			break;
+		}
+	}
+
+	if(this._selectedText === -1)
+	{
+		for(var i=0; i < this._word2LinksRect.length; i++)
+		{
+			if(isInRect(this._word2LinksRect[i], x, y))
+			{
+				this._selectedText = this._word1LinksRect.length+i;
+				break;
+			}
+		}
+	}
+
+	this.draw();
 }
 
 Sentence.prototype.commitPoint    = function(x, y)
 {
+	this._selectedText = -1;
 	this._endX   = x;
 	this._endY   = y;
 
@@ -395,7 +449,10 @@ Sentence.prototype.commitPoint    = function(x, y)
 					this._links[i][1] = null;
 
 			this._links[idWordStart][1] = idWordEnd;
-			this._links[idWordStart][2] = currentType;
+			if(currentType == Type.PRECISE)
+				this._links[idWordStart][2] = Type.PRECISE;
+			else
+				this._links[idWordStart][2] = currentType;
 		}
 		else
 		{
@@ -404,7 +461,10 @@ Sentence.prototype.commitPoint    = function(x, y)
 					this._links[i][1] = null;
 
 			this._links[idWordEnd][1] = idWordStart;
-			this._links[idWordEnd][2] = currentType;
+			if(currentType == Type.PRECISE)
+				this._links[idWordEnd][2] = Type.GENERAL;
+			else
+				this._links[idWordEnd][2] = currentType;
 		}
 	}
 
@@ -458,7 +518,6 @@ function getSentencesFromServer(data, response)
 	}
 	else
 	{
-
 		var jsonData = JSON.parse(response);
 		sentences = new Sentence(jsonData.sent1, jsonData.sent2);
 		sentences.draw();
@@ -534,8 +593,8 @@ myApp.controller("form", function($scope)
 	$scope.operations =
 	[ 
 		{
-			"text"  : "Similitude",
-			"value" : Type.SAME
+			"text"  : "Specification",
+			"value" : Type.PRECISE
 		},
 
 		{
@@ -544,13 +603,8 @@ myApp.controller("form", function($scope)
 		},
 
 		{
-			"text"  : "Specification",
-			"value" : Type.PRECISE
-		},
-
-		{
-			"text"  : "Generalisation",
-			"value" : Type.GENERAL
+			"text"  : "Similitude",
+			"value" : Type.SAME
 		}
 	];
 
@@ -561,7 +615,8 @@ myApp.controller("form", function($scope)
 		currentType = value;
 	};
 
-	$scope.radio = currentType = Type.SAME;
+	$scope.radio = {value: ''+Type.SAME};
+	currentType = Type.SAME;
 
 	$scope.submit = function()
 	{
@@ -590,12 +645,14 @@ myApp.controller("form", function($scope)
 			{
 				gameCtx = Context.INGAME;
 				$scope.showValue = true;
+				$scope.radio.value = currentType = Type.SAME;
 				promptSentences(idPack, 0, getSentencesFromServer);
 			}
 		}
-		else
+		else if(gameCtx == Context.END_GAME)
 		{
-			//TODO Maybe we should do a thing here...
+			gameCtx=Context.PACK_SELECTION;
+			promptListPack();
 		}
 	};
 });
