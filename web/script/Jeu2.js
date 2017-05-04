@@ -13,12 +13,13 @@ var gameName;
 const SPACE_BLANK = 50;
 const START_MARGE = 10;
 var timeY =200;
-var playerArray = new Array();
 var phraseArray = new Array();
 var phrasePlayerArray = [];
 var selectedWords = [];
 var requestID =0;
 var mousePos;
+var winHeight;
+var playerSentences = [];
 
 /* Pour les animations du countdown */
 window.requestAnimFrame = function(){
@@ -140,13 +141,13 @@ class TextBlock
 		this.w(wgt);
 	}
 	
-	createSentence(abX,abY)
+	createWord(abX,abY)
 	{
 		ctx.font = "25px Arial";
 		ctx.lineWidth=1;
 		ctx.strokeStyle = "Green";
 		ctx.shadowBlur = 10;
-		ctx.shadowColor = "black";
+		//ctx.shadowColor = "black";
 		ctx.textAlign='center';
 		ctx.textBaseline="middle";
 		ctx.fillText(this.text,abX+2+this.w/2,abY+this.h/2);
@@ -186,9 +187,11 @@ function getCookie(sName) {
 
 function printGames()
 {
-	table = document.getElementById('table');	
-	while(table.childElementCount>1) {
-		table.deleteRow(1);
+	table = document.getElementById('table');
+	div = document.getElementById('divJeu');
+	lignes = table.rows;
+	while(lignes.length>1){
+		table.deleteRow(-1);
 	}
 	data = "action=getListGames";
 	ajaxPost("../ClientQuery/handlingGame2.php", data, function (response) {
@@ -225,6 +228,7 @@ function printGames()
 			c3.setAttribute("align", "center");
 			c3.innerHTML += num
 		}
+		div.style.height = winHeight + i*50 + "px";
 	}, true);
 }
 
@@ -328,6 +332,62 @@ function createNewWord(phraseBlock)
 	return wBlock;
 }
 
+function createInputWord(phraseBlock, borneMin, borneMax)
+{
+	input = document.getElementById('answer');
+	div = document.getElementById('divJeu');
+	input.style.display = 'initial'; 
+	
+	input.style.position = 'absolute';
+	input.style.left = phraseBlock.x+div.offsetLeft+7+'px';
+	input.style.top = phraseBlock.y+phraseBlock.h+div.offsetTop+10+'px';
+	input.size = 25;
+	input.focus();
+	input.select();
+	var cnw = createNewWord("New Text");
+	cnw.x = phraseBlock.x;
+	cnw.y = phraseBlock.y; 
+	phrasePlayerArray.push(cnw);
+	input.setAttribute("onkeydown", "enterWord(event, "+borneMin+", "+borneMax+")");
+	//input.onkeydown = enterWord;
+	//div.appendChild(input);
+	//input.focus();
+}
+
+function enterWord(evt, borneMin, borneMax)
+{
+	/* Si la touche Entree est appuyee */
+	input = document.getElementById('answer');
+	if(evt.keyCode === 13)
+	{
+		//phrasePlayerArray[phrasePlayerArray.length-1].text = this.value;
+		//phrasePlayerArray[phrasePlayerArray.length-1].createWord(phrasePlayerArray[phrasePlayerArray.length-1].x,/*phraseArray[i].y+100*/timeY);
+		
+		data = "action=addSent&gameName="+gameName+"&idPlayer=test@test.truc&sentence="+input.value+"&borneInf="+borneMin+"&borneSup="+borneMax;
+		ajaxPost("../ClientQuery/handlingGame2.php", data,
+			function (response) {
+				if(response != "errorBornes")
+				{
+					data = "action=getPlayerSents&gameName="+gameName+"&idPlayer=test@test.truc";
+					ajaxPost("../ClientQuery/handlingGame2.php", data,
+						function (response) {
+							if(response != "noSent" && response != "playerNotFound" && response != "gameNotFound")
+							{
+								console.log("THATSTHETEST:" + response + "\n");
+								clearCanvas();
+								playerSentences = response.split("\n");
+								printWords();
+							}
+							else
+							{
+								console.log(response);
+							}
+						}, true);
+				}
+			}, true);
+		input.style.display = 'none';
+	}
+}
 
 
 
@@ -394,7 +454,9 @@ function onMouseUpCanvas($event)
 		prec = phraseArray[i].w;
 		suiv = phraseArray[i].h;
 		if( (mousePos.x<=posX && mousePos.y<=posY && $event.offsetX>=posX+prec && $event.offsetY>=posY+suiv) ||
-			($event.offsetX<=posX && $event.offsetY<=posY && mousePos.x>=posX+prec && mousePos.y>=posY+suiv))
+			($event.offsetX<=posX && $event.offsetY<=posY && mousePos.x>=posX+prec && mousePos.y>=posY+suiv) ||
+			($event.offsetX<=posX && $event.offsetY>=posY+suiv && mousePos.y<=posY && mousePos.x>=posX+prec ) ||
+			(mousePos.x<=posX && $event.offsetY<=posY && $event.offsetX>=posX+prec && mousePos.y>=posY+suiv))
 		{
 			selectedWords.push(phraseArray[i]);
 			if(i<min) min=i;
@@ -411,15 +473,21 @@ function onMouseUpCanvas($event)
 			phrasePlayerArray.push(cnw);
 			console.log(phrasePlayerArray[phrasePlayerArray.length-1]);
 			console.log(phraseArray[i]);
-			phrasePlayerArray[phrasePlayerArray.length-1].createSentence(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
+			phrasePlayerArray[phrasePlayerArray.length-1].createWord(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
 			break;				
+		}
+		else
+		{
+			input = document.getElementById('answer');
+			input.style.display = 'none';
 		}
 	}
 	printWords(min, max);
 	
 	isClicked = 0;
 	if(selectedWords.length > 0)
-	{		;
+	{		
+		createInputWord(phraseArray[Math.floor((max+min)/2)], min+1, max+1);
 	}
 }
 
@@ -430,14 +498,30 @@ function printWords(min=-1, max=-1)
 	{
 		if(i<min || i>max)
 		{
-			ctx.fillStyle = "rgba(0,0,0,1)";
+			ctx.fillStyle = "rgba(255,0,0,1)";
 		}
 		else
 		{
-			ctx.fillStyle = "rgba(255,255,0,1)";
+			ctx.fillStyle = "rgba(255,180,0,1)";
 		}
-		phraseArray[i].createSentence(ms,160);
+		phraseArray[i].createWord(ms,15);
 		ms += phraseArray[i].w+SPACE_BLANK;
+	}
+	
+	for(i=0; i<playerSentences.length; i++)
+	{
+		words = [];
+		for(var j=0;j<playerSentences[i].split(" ").length;j++)
+		{
+			words.push(new TextBlock(playerSentences[i].split(" ")[j],20));
+		}
+		var ms = 10;
+		ctx.fillStyle = "rgba(0,0,255,1)";
+		for(j=0; j<words.length;j++)
+		{
+			words[j].createWord(ms,100+(i+1)*45);
+			ms += words[j].w+SPACE_BLANK;
+		}
 	}
 }
 
@@ -502,6 +586,7 @@ function gamePart1()
 	canvas   = document.getElementById('canvasJeu2');
 	ctx=canvas.getContext('2d');
 	ctx.font = "25px Arial";
+	ctx.fillStyle = "rgba(255,0,0,1)";
 	
 	phraseJeu = sentence.split(" ");
 	for(var i=0;i<phraseJeu.length;i++)
@@ -512,27 +597,31 @@ function gamePart1()
 	var ms =10;
 	for(var i=0;i<phraseArray.length;i++)
 	{
-		phraseArray[i].createSentence(ms,160);
+		phraseArray[i].createWord(ms,15);
 		ms += phraseArray[i].w+SPACE_BLANK;
 
 	}
 
-	var chr = new Chrono(100);
-	requestID = requestAnimFrame(chr.countdown());
+	//var chr = new Chrono(100);
+	//requestID = requestAnimFrame(chr.countdown());
 }
 
 window.onload = function()
 {
+	input = document.getElementById('answer');
+	input.style.display = 'none';
 	canvas   = document.getElementById('canvasJeu2');
 	div = document.getElementById('divJeu');
 	createGame = document.getElementById('chooseSent');
 	joinGame = document.getElementById('joinGame');
 	ctx=canvas.getContext('2d');
 	ctx.canvas.position = "absolute";
+	ctx.fillStyle = "rgba(255,0,0,1)";
 	canvas.left = div.style.left;
 	canvas.top = div.style.top;
 	canvas.width  = div.offsetWidth;
-	canvas.height = div.offsetHeight+500;
+	canvas.height = div.offsetHeight+400;
+	winHeight = div.offsetHeight;
 	
 	createGame.style.left = canvas.offsetLeft +10+  "px";
 	createGame.style.top = canvas.offsetTop +10+  "px";

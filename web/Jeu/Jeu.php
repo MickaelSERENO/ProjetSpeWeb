@@ -20,7 +20,7 @@ $_SESSION['userID'] = 1;
 		<br/>
 
 		<div class="backgroundBody">
-			<h1> Titre du jeu </h1>
+			
 
 
 
@@ -29,6 +29,7 @@ $_SESSION['userID'] = 1;
 <?php if($_GET['jeu'] == 1):?>
 			<script src="/script/jeu1.js"></script>
 
+			<h1> Jeu d'appariement </h1>
 			<div ng-controller="CanvasCtrl" id="divJeu">
 				<div class="divCanvas">
 					<canvas  ng-mousemove="onMouseMoveCanvas($event)" ng-mousedown="onClickCanvas($event)" ng-mouseup="onMouseUpCanvas($event)" id="canvasJeu1" width="1000px" height="400px">
@@ -51,9 +52,10 @@ $_SESSION['userID'] = 1;
 
 
 <?php if($_GET['jeu'] == 2):?>
-
+	
 	<script src="../script/Jeu2.js"></script>
-	<link rel="stylesheet" href="CSS/jeu2.css" />
+	<link rel="stylesheet" href="/CSS/jeu2.css" />
+	<h1> Jeu de reformulation </h1>
 	<div id="divJeu">
 		<div ng-controller="CanvasController">
 			<canvas ng-mousedown="onClickCanvas($event)" ng-mousemove="onMouseMove($event)" ng-mouseup="onMouseUpCanvas($event)", id="canvasJeu2" width="100%" height="100%">
@@ -72,7 +74,7 @@ $_SESSION['userID'] = 1;
 			<input type="submit" value="new Game" onClick="validForm('Jean-Christophe', 'test@test.truc')"/>
 			<text id="errMessage"> Error : Name already given</text>
 		</form>
-		
+		<input type="text" id="answer" size="30">
 		<div id="joinGame" style="position:absolute;">
 			<h1>Join a game</h1>
 			<input type="submit" value="refresh" onClick="printGames()">
