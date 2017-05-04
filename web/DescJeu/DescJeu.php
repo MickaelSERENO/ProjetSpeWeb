@@ -29,13 +29,13 @@
 
 				<?php if($_GET['jeu'] == 1):?>
 				<div class="description">
-					<p> Description du jeu 1. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
+					<p> Description du jeu 1. Un Jeu d'appariement. Description à compléter ... </p>
 				</div>
 				<?php endif;?>
 
 				<?php if($_GET['jeu'] == 2):?>
 				<div class="description">
-					<p> Description du jeu 2. Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
+					<p> Description du jeu 2. Un jeu de reformulation. Description à compléter ... </p>
 				</div>
 				<?php endif;?>
 				<div class="bouton">
