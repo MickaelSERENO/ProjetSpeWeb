@@ -50,25 +50,52 @@ class PSQLDatabase
 		if($idPaire != null)
 		{
 			//Scripts
-			$scriptSent1 = "SELECT GroupeMots.id, GroupeMots.texte FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase1 AND PairePhrases.idPaire = $idPaire;";
-			$scriptSent2 = "SELECT GroupeMots.id, GroupeMots.texte FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase2 AND PairePhrases.idPaire = $idPaire;";
+			$scriptSent1 = "SELECT GroupeMots.id, GroupeMots.texte, idPhrase1 FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase1 AND PairePhrases.idPaire = $idPaire;";
+			$scriptSent2 = "SELECT GroupeMots.id, GroupeMots.texte, idPhrase2 FROM GroupeMots, PairePhrases WHERE GroupeMots.idPhrase = PairePhrases.idPhrase2 AND PairePhrases.idPaire = $idPaire;";
 
 			$sent1Result   = pg_query($this->_conn, $scriptSent1);
 			$sent2Result   = pg_query($this->_conn, $scriptSent2);
+
+			$idSent1 = null;
+			$idSent2 = null;
 
 			$sent1         = array();
 			$sent2         = array();
 
 			while($row = pg_fetch_row($sent1Result))
+			{
+				$idSent1 =$row[2];
 				array_push($sent1, new WordGroup($row[0], trim($row[1])));
+			}
 
 			while($row = pg_fetch_row($sent2Result))
+			{
+				$idSent2 =$row[2];
 				array_push($sent2, new WordGroup($row[0], trim($row[1])));
+			}
 
-			return new PairSentences(new Sentence($sent1), new Sentence($sent2));
+			return new PairSentences(new Sentence($idSent1, $sent1), new Sentence($idSent2, $sent2));
 		}
 		
 		return null;
+	}
+
+	public function getResultFromPackSentences($idPack, $idSents)
+	{
+		$pairSentences = $this->getFromPackSentences($idPack, $idSents);
+		$idSent1 = $pairSentences->getSent1()->getId();
+		$idSent2 = $pairSentences->getSent2()->getId();
+
+		//TODO improve, don't need EVERY association
+		$script = "SELECT AssociationMots.idGroupeMots1, AssociationMots.idGroupeMots2, AssociationMots.relation FROM AssociationMots, GroupeMots as GM1, GroupeMots as GM2 WHERE AssociationMots.idGroupeMots1 = GM1.id AND AssociationMots.idGroupeMots2 = GM2.id  AND GM1.idPhrase = $idSent1 AND GM2.idPhrase = $idSent2 ORDER BY GM1.id ASC;";
+
+		$scriptResult = pg_query($this->_conn, $script);
+		$result = array();
+
+		while($row = pg_fetch_row($scriptResult))
+			array_push($result, new Mapping($row[0], $row[1], $row[2]));
+
+		return new ResultSentences($pairSentences->getSent1(), $pairSentences->getSent2(), new WordGroupMapping($result));
 	}
 
 	public function createHistoricGame1($results, $userID, $idPack)

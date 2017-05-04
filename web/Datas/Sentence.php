@@ -25,14 +25,22 @@ class WordGroup
 class Sentence
 {
 	private $_wordArray;
-	public function __construct($wordArray)
+	private $_id;
+	public function __construct($id, $wordArray)
 	{
 		$this->_wordArray = $wordArray;
+		$this->_id = $id;
 	}
 
 	public function getWordArray()
 	{
 		return $this->_wordArray;
+	}
+
+	public function getId()
+	{
+		return $this->_id;
+		
 	}
 }
 
@@ -102,6 +110,20 @@ class PairSentences
 	}
 }
 
+class ResultSentences
+{
+	public $sent1;
+	public $sent2;
+	public $mapping;
+
+	public function __construct($s1, $s2, $m)
+	{
+		$this->sent1=$s1;
+		$this->sent2=$s2;
+		$this->mapping=$m;
+	}
+}
+
 class Game1Result
 {
 	public $idPack;
@@ -113,6 +135,18 @@ class Game1Result
 		$this->idPack = $idPack_;
 		$this->idSents = $idSents_;
 		$this->results = $results_;
+	}
+}
+
+class ReturnNextSent
+{
+	public $nextSent;
+	public $resultOldSent;
+
+	public function __construct($ns, $r)
+	{
+		$this->nextSent = $ns;
+		$this->resultOldSent = $r;
 	}
 }
 

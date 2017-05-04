@@ -26,6 +26,7 @@ const Context =
 	IN_CORRECTION:3,
 }
 
+var nextSent;
 var currentSentenceID;
 var currentType;
 var sentences;
@@ -34,6 +35,7 @@ var ctx;
 var gameCtx=Context.PACK_SELECTION;
 var pack;
 var end;
+var formScope;
 
 function clearCanvas()
 {
@@ -254,6 +256,8 @@ function Sentence(sent1, sent2)
 	this._mouseType = MouseType.NOTHING;
 
 	this._selectedText = -1;
+
+	this._result = null;
 }
 
 Sentence.prototype.getResults     = function()
@@ -261,15 +265,197 @@ Sentence.prototype.getResults     = function()
 	return this._links;
 }
 
+Sentence.prototype.setResult      = function(res)
+{
+	this._result = res;
+}
+
 Sentence.prototype.draw           = function()
 {
 	clearCanvas();
 
-	this._drawSentences();
-	this._drawLinks();
-	if(this._mouseType === MouseType.MOVING)
-		this._drawPartialLine();
+	if(!this._result)
+	{
+		this._drawSentences();
+		this._drawLinks();
+		if(this._mouseType === MouseType.MOVING)
+			this._drawPartialLine();
+	}
+
+	else
+		this._drawResult();
 }
+
+Sentence.prototype._drawResult      = function()
+{
+	//Draw word groups
+	//
+	//Draw sentence 1
+	var px=this._word1LinksRect[0][0];
+	var py=SENT1Y;
+
+	ctx.lineWidth = 3;
+	ctx.font="25px Arial";
+	ctx.strokeStyle = "Green";
+	var spaceMeasure = ctx.measureText("       ").width;
+	px += spaceMeasure/3.0;
+	var currentX = 0;
+	var currentCorrection=0;
+
+	for(var i=0; i < this._sent1.wordArray.length; i++)
+	{
+		ctx.fillText(this._sent1.wordArray[i].groupText, px+currentX, py);
+		var measure = ctx.measureText(this._sent1.wordArray[i].groupText).width;
+
+		if(this._sent1.wordArray[i].iD == this._result.mapping.mappingArray[currentCorrection].wordGroup1)
+		{
+			if(this._links[i][1] != null && this._sent2.wordArray[this._links[i][1]].iD == this._result.mapping.mappingArray[currentCorrection].wordGroup2 && this._links[i][2] == this._result.mapping.mappingArray[currentCorrection].relation)
+			{
+				ctx.strokeStyle = "Green";
+				ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+			}
+			else
+			{
+				ctx.strokeStyle = "Red";
+				ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+			}
+			currentCorrection++;
+		}
+		else
+		{
+			ctx.strokeStyle = "Green";
+			ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+		}
+		currentX += measure+spaceMeasure;
+	}
+
+
+	//Draw sentence 2
+	px = this._word2LinksRect[0][0];;
+	py = SENT2Y;
+	currentX = 0;
+	
+	for(var i=0; i < this._sent2.wordArray.length; i++)
+	{
+		ctx.fillText(this._sent2.wordArray[i].groupText, px+currentX, py);
+		var measure = ctx.measureText(this._sent2.wordArray[i].groupText).width;
+
+		var incorrect = false;
+		var found = false;
+		for(var j=0; j < this._result.mapping.mappingArray.length; j++)
+		{
+			if(this._result.mapping.mappingArray[j].wordGroup2 == this._sent2.wordArray[i].iD)
+			{
+				found = true;
+				for(var k=0; k < this._links.length; k++)
+				{
+					if(this._sent1.wordArray[this._links[k][0]].iD == this._result.mapping.mappingArray[j].wordGroup1)
+					{
+						if(this._links[k][2] != this._result.mapping.mappingArray[j].relation)
+							incorrect = true;
+
+						else if(this._links[k][1] == null || this._links[k][1]!= null && this._sent2.wordArray[this._links[k][1]].iD != this._sent2.wordArray[i].iD)
+							incorrect = true;
+						break;
+					}
+				}
+
+				if(incorrect == true)
+					break;
+			}
+		}
+
+		if(!found)
+		{
+			for(var j=0; j < this._links.length; j++)
+				if(this._links[j][1] == this._sent2.wordArray[i].iD)
+				{
+					incorrect == true;
+					break;
+				}
+		}
+
+		if(incorrect)
+		{
+			currentCorrection++;
+			ctx.strokeStyle = "Red";
+			ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+		}
+		else
+		{
+			ctx.strokeStyle = "Green";
+			ctx.strokeRect(px+currentX-spaceMeasure/3.0, py-FONT_HEIGHT+5, measure+spaceMeasure - spaceMeasure/3.0, FONT_HEIGHT);
+		}
+		currentX += measure+spaceMeasure;
+	}
+
+	this._drawResultLine();
+}
+
+Sentence.prototype._drawResultLine = function()
+{
+	for(var i=0; i < this._result.mapping.mappingArray.length; i++)
+	{
+
+		var id1=0;
+		var id2=0;
+
+		for(var j=0; j < this._sent1.wordArray.length; j++)
+			if(this._sent1.wordArray[j].iD == this._result.mapping.mappingArray[i].wordGroup1)
+			{
+				id1 = j;
+				break;
+			}
+
+		for(var j=0; j < this._sent2.wordArray.length; j++)
+			if(this._sent2.wordArray[j].iD == this._result.mapping.mappingArray[i].wordGroup2)
+			{
+				id2 = j;
+				break;
+			}
+
+		var rect1 = this._word1LinksRect[id1];
+		var rect2 = this._word2LinksRect[id2];
+
+		switch(this._result.mapping.mappingArray[i].relation)
+		{
+			case Type.SAME:
+				ctx.strokeStyle = "Green";
+
+				ctx.beginPath();
+				ctx.moveTo(rect1[0] + rect1[2]/2.0, rect1[1]+rect1[3]);
+				ctx.lineTo(rect2[0] + rect2[2]/2.0, rect2[1]);
+				ctx.stroke();
+
+				break;
+			case Type.CONTRARY:
+				ctx.strokeStyle = "Red";
+
+				ctx.beginPath();
+				ctx.moveTo(rect1[0] + rect1[2]/2.0, rect1[1]+rect1[3]);
+				ctx.lineTo(rect2[0] + rect2[2]/2.0, rect2[1]);
+				ctx.stroke();
+				break;
+			case Type.PRECISE:
+				ctx.strokeStyle = "Blue";
+				drawArrow(rect1[0] + rect1[2]/2.0, rect1[1]+rect1[3],
+						  rect2[0] + rect2[2]/2.0, rect2[1]);
+				break;
+			case Type.GENERAL:
+				ctx.strokeStyle = "Cyan";
+				drawArrow(rect2[0] + rect2[2]/2.0, rect2[1],
+						  rect1[0] + rect1[2]/2.0, rect1[1]+rect1[3]);
+				break;
+			default:
+				break;
+		}
+	}
+
+
+
+
+}
+
 
 Sentence.prototype._drawPartialLine = function()
 {
@@ -508,19 +694,50 @@ function promptListPack()
 
 function getSentencesFromServer(data, response)
 {
-	if(response === "-1")
+	console.log(response);
+	var jsonData = JSON.parse(response);
+
+	//First sent ?
+	if(jsonData.resultOldSent == null)
 	{
-		sentences = null;
-		gameCtx = Context.END_GAME;
-		end = new End();
-		clearCanvas();
-		end.draw();
+		if(jsonData.nextSent == null)
+		{
+			sentences = null;
+			gameCtx = Context.END_GAME;
+			end = new End();
+			clearCanvas();
+			end.draw();
+		}
+		else
+		{
+			sentences = new Sentence(jsonData.nextSent.sent1, jsonData.nextSent.sent2);
+			sentences.draw();
+		}
 	}
+
+	//Or we show the result
 	else
 	{
-		var jsonData = JSON.parse(response);
-		sentences = new Sentence(jsonData.sent1, jsonData.sent2);
+		formScope.showValue = false;
+		formScope.$apply();
+		for(var i=0; i < jsonData.resultOldSent.mapping.mappingArray.length; i++)
+		{
+			if(jsonData.resultOldSent.mapping.mappingArray[i].relation == "synonyme")
+				jsonData.resultOldSent.mapping.mappingArray[i].relation = Type.SAME;
+
+			else if(jsonData.resultOldSent.mapping.mappingArray[i].relation == "antonyme")
+				jsonData.resultOldSent.mapping.mappingArray[i].relation = Type.CONTRARY;
+
+			else if(jsonData.resultOldSent.mapping.mappingArray[i].relation == "specialisation")
+				jsonData.resultOldSent.mapping.mappingArray[i].relation = Type.PRECISE;
+
+			else if(jsonData.resultOldSent.mapping.mappingArray[i].relation == "generalisation")
+				jsonData.resultOldSent.mapping.mappingArray[i].relation = Type.GENERAL;
+		}
+		sentences.setResult(jsonData.resultOldSent);
 		sentences.draw();
+		nextSent = jsonData.nextSent;
+		gameCtx = Context.IN_CORRECTION;
 	}
 }
 
@@ -590,6 +807,7 @@ myApp.controller("CanvasCtrl", function($scope)
 
 myApp.controller("form", function($scope)
 {
+	formScope = $scope;
 	$scope.operations =
 	[ 
 		{
@@ -607,6 +825,7 @@ myApp.controller("form", function($scope)
 			"value" : Type.SAME
 		}
 	];
+
 
 	$scope.showValue = false;
 
@@ -634,7 +853,7 @@ myApp.controller("form", function($scope)
 			}
 			httpCtx.open("POST", "/ClientQuery/handlingGame1.php", true);
 			httpCtx.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			httpCtx.send("idPrompt=2&idPack=1&results="+results);
+			httpCtx.send("idPrompt=2&results="+results);
 			currentSentenceID++;
 		}
 		else if(gameCtx == Context.PACK_SELECTION)
@@ -653,6 +872,26 @@ myApp.controller("form", function($scope)
 		{
 			gameCtx=Context.PACK_SELECTION;
 			promptListPack();
+		}
+
+		else if(gameCtx == Context.IN_CORRECTION)
+		{
+			if(nextSent)
+			{
+				$scope.showValue = true;
+				sentences = new Sentence(nextSent.sent1, nextSent.sent2);
+				sentences.draw();
+				gameCtx = Context.INGAME;
+			}
+
+			else
+			{
+				sentences = null;
+				gameCtx = Context.END_GAME;
+				end = new End();
+				clearCanvas();
+				end.draw();
+			}
 		}
 	};
 });
