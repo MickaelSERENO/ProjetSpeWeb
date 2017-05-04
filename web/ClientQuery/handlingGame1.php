@@ -23,6 +23,7 @@ $serializer  = new Serializer($normalizers, $encoders);
 
 //Select the action following the idPrompt
 $idPrompt    = (isset($_POST["idPrompt"])) ? $_POST["idPrompt"] : NULL;
+error_log($idPrompt);
 switch($idPrompt)
 {
 	//Asking list packs
@@ -42,19 +43,21 @@ switch($idPrompt)
 	//Asking for the sentences
 	case 1:
 		$_SESSION['idSent'] = 0;
+		$_SESSION['idPack'] = $_POST["idPack"];
 		$idPack   = $_POST["idPack"];
 		$prompter = new PSQLDatabase();
 		$sent     = $prompter->getFromPackSentences($idPack, $_SESSION['idSent']);
 
 		if(!$sent)
-			echo -1;
+			echo $serializer->serialize(new ReturnNextSent(null, null), 'json');
 		else
-			echo $serializer->serialize($sent, 'json');
+			echo $serializer->serialize(new ReturnNextSent($sent, null), 'json');
+
 		break;
 
-	//Give results from idPack, idSent and ask next pair of sentences
+	//Give results from idPack, idSent and ask next pair of sentences while getting the results of the current one.
 	case 2:
-		$idPack = $_POST["idPack"];
+		$idPack = $_SESSION["idPack"];
 		error_log($_POST['results']);
 		$results = json_decode($_POST["results"]);
 
@@ -69,10 +72,11 @@ switch($idPrompt)
 		{
 			$_SESSION['finishG1'] = true;
 			$prompter->createHistoricGame1($_SESSION['result'], $_SESSION['userID'], $idPack);
-			echo -1;
+			error_log("finish");
+			echo $serializer->serialize(new ReturnNextSent(null, $prompter->getResultFromPackSentences($idPack, $_SESSION['idSent']-1)), 'json');
 		}
 		else
-			echo $serializer->serialize($sent, 'json');
+			echo $serializer->serialize(new ReturnNextSent($sent, $prompter->getResultFromPackSentences($idPack, $_SESSION['idSent']-1)), 'json');
 		break;
 }
 ?>

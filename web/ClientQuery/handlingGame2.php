@@ -118,15 +118,19 @@ switch($action)
 		break;
 		
 	/*Renvoie les phrases proposées par le joueur*/
-	/*Nécessite le nom de la partie et le nom des joueurs*/
+	/*Nécessite le nom de la partie et l'id du joueur*/
 	case "getPlayerSents" :
 		$tab = getPlayerSentences($file, $gameName, $idPlayer);
 		if(count($tab) == 0)
 			echo "noSent";
+		/*else if(strcmp($tab, "playerNotFound") == 0 || strcmp($tab, "gameNotFound")==0)
+		{
+			echo $tab;
+		}*/
 		else{
 			for($i=0; $i<count($tab); $i++)
 			{
-				echo $tab[$i]."\n";
+				echo $tab[$i];
 			}
 		}
 		break;
@@ -152,7 +156,7 @@ switch($action)
 	Si un seul mot est remplacé, borneInf = borneSup*/
 	case "addSent" :
 		$firstSent = explode(" ", getFirstSentence($file, $gameName));
-		if($borneInf > $borneSup || $borneInf < 1 || $borneSup > count($firstSent))
+		if($borneInf > $borneSup || $borneInf < 1 || $borneSup <1 || $borneSup > count($firstSent) || $borneInf > count($firstSent))
 		{
 			echo "errorBornes";
 			break;
@@ -197,6 +201,7 @@ function getFirstSentence($file, $gameName)
 
 function getPlayerSentences($file, $gameName, $idPlayer)
 {
+	rewind($file);
 	$sents = array();
 	$line = "";
 	while(!feof($file)){
@@ -210,10 +215,11 @@ function getPlayerSentences($file, $gameName, $idPlayer)
 				if(strcmp($expl[0], "Player")==0 && strcmp($expl[1], $idPlayer)==0)
 				{
 					$line = fgets($file);
-					while(strcmp($line, "---\n") != 0)
+					$line = fgets($file);
+					while(strcmp($line, "---\n") != 0 && strcmp($line, "---") != 0)
 					{
-						$line=fgets($file);
 						array_push($sents, $line);
+						$line=fgets($file);
 					}
 					return $sents;
 				}
@@ -224,8 +230,9 @@ function getPlayerSentences($file, $gameName, $idPlayer)
 	return "gameNotFound";
 }
 
-function getOtherSentences($file, $gameName, $idPlayer){
-
+function getOtherSentences($file, $gameName, $idPlayer)
+{
+	rewind($file);
 	$sents = array();
 	$line = "";
 	while(!feof($file)){
@@ -238,12 +245,12 @@ function getOtherSentences($file, $gameName, $idPlayer){
 				$expl = explode(":", $line);
 				if(strcmp($expl[0], "Player")==0 && strcmp($expl[1], $idPlayer)!=0)
 				{
-					
+					$line=fgets($file);
 					$line=fgets($file);
 					while(strcmp($line, "---\n") != 0)
 					{
-						$line=fgets($file);
 						array_push($sents, $line);
+						$line=fgets($file);
 					}
 				}
 			}

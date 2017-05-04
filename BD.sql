@@ -167,9 +167,9 @@ INSERT INTO Phrase      VALUES (DEFAULT);
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'Un solide');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'a été cassé');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'par le maître');
-INSERT INTO AssociationMots VALUES (7, 10, 'synonyme');
+INSERT INTO AssociationMots VALUES (7, 12, 'synonyme');
+INSERT INTO AssociationMots VALUES (9, 10, 'specialisation');
 INSERT INTO AssociationMots VALUES (8, 11, 'synonyme');
-INSERT INTO AssociationMots VALUES (9, 12, 'synonyme');
 INSERT INTO PairePhrases VALUES (3, 4);
 
 /*On ajoute le paire de phrase dans le pack*/

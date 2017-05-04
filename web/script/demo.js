@@ -227,11 +227,11 @@ function detectBlock(evt)
 		prec = phraseArray[i].w;
 		suiv = phraseArray[i].h;
 		if( (mousePos.x>posX) && (mousePos.x<(posX+prec)) && (mousePos.y>posY) && (mousePos.y<(posY+suiv)) )
-			{
-				console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
-				createInputWord(phraseArray[i]);
-				break;				
-			}
+		{
+			console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
+			createInputWord(phraseArray[i]);
+			break;				
+		}
 	}
 }
 
