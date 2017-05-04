@@ -121,6 +121,7 @@ switch($action)
 	/*Nécessite le nom de la partie et l'id du joueur*/
 	case "getPlayerSents" :
 		$tab = getPlayerSentences($file, $gameName, $idPlayer);
+		//echo "LASTEST : ".count($tab);
 		if(count($tab) == 0)
 			echo "noSent";
 		/*else if(strcmp($tab, "playerNotFound") == 0 || strcmp($tab, "gameNotFound")==0)
@@ -218,7 +219,10 @@ function getPlayerSentences($file, $gameName, $idPlayer)
 					$line = fgets($file);
 					while(strcmp($line, "---\n") != 0 && strcmp($line, "---") != 0)
 					{
-						array_push($sents, $line);
+						if(strcmp($line, "\n") != 0)
+						{
+							array_push($sents, $line);
+						}
 						$line=fgets($file);
 					}
 					return $sents;

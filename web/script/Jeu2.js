@@ -469,11 +469,11 @@ function onMouseUpCanvas($event)
 			max=i;
 			selectedWords.push(phraseArray[i]);
 			console.log("done: "+phraseArray[i].text +" x: "+phraseArray[i].x+" y: "+phraseArray[i].y+" w: "+phraseArray[i].w+"  time: "+timeY);
-			var cnw = createNewWord(phraseArray[i]);
+			/*var cnw = createNewWord(phraseArray[i]);
 			phrasePlayerArray.push(cnw);
 			console.log(phrasePlayerArray[phrasePlayerArray.length-1]);
 			console.log(phraseArray[i]);
-			phrasePlayerArray[phrasePlayerArray.length-1].createWord(phraseArray[i].x,/*phraseArray[i].y+100*/timeY);
+			phrasePlayerArray[phrasePlayerArray.length-1].createWord(phraseArray[i].x,*//*phraseArray[i].y+100*//*timeY);*/
 			break;				
 		}
 		else
@@ -508,7 +508,7 @@ function printWords(min=-1, max=-1)
 		ms += phraseArray[i].w+SPACE_BLANK;
 	}
 	
-	for(i=0; i<playerSentences.length; i++)
+	for(i=0; i<playerSentences.length-1; i++)
 	{
 		words = [];
 		for(var j=0;j<playerSentences[i].split(" ").length;j++)
