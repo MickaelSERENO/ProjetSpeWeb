@@ -217,7 +217,7 @@ function printGames()
 			c1 = newLine.insertCell(-1);
 			button = document.createElement("input");
 			button.setAttribute("type", "submit");
-			button.setAttribute("value", "Join");
+			button.setAttribute("value", "rejoindre");
 			button.setAttribute("onClick", "rejoinGame('"+gameName+"')");
 			c1.setAttribute("align", "center");
 			c1.appendChild(button);
