@@ -113,6 +113,7 @@
     vertical-align:top;
 	display: inline-block;
 
+	padding-left:1em;
 	padding-top:  2em;
 	border: 8px solid var(--borderColor);
 	border-radius : 30px;
@@ -130,4 +131,20 @@
 	border-collapse: collapse;
 
 	margin-bottom:2em;
+}
+
+.add1_Student
+{
+	padding-left:2em;
+}
+
+.addStudentForm
+{
+	width:25%;
+	margin:auto;
+}
+
+.classNumber
+{
+	text-align:center;
 }

@@ -19,9 +19,11 @@ myApp.controller("listStatsCtrl", function($scope)
 	$scope.studentRow = []
 	$scope.issue = "";
 
+	console.log("controller !");
+
 	$scope.addStudent = function()
 	{
-		if($scope.studentRow.firstName == null || $scope.studentRow.name == null || $scope.studentRow.password == null)
+		if($scope.studentForm.firstName == null || $scope.studentForm.name == null || $scope.studentForm.password == null)
 			return;
 		//Send student to the database
 		var httpCtx = new XMLHttpRequest();
@@ -30,10 +32,11 @@ myApp.controller("listStatsCtrl", function($scope)
 		{
 			if(httpCtx.readyState == 4 && (httpCtx.status == 200 || httpCtx.status == 0))
 			{
+				console.log("appel on click");
 				console.log(httpCtx.responseText+"okep");
-				if(httpCtx.responseText == 1)
+				if(httpCtx.responseText > 0)
 				{
-					$scope.studentRow.push({'firstName':$scope.studentForm.firstName, 'name':$scope.studentForm.name});
+					$scope.studentRow.push({'firstName':$scope.studentForm.firstName, 'name':$scope.studentForm.name, 'id':httpCtx.responseText});
 					$scope.issue = "L'étudiant "+$scope.studentForm.firstName + " " + $scope.studentForm.name + " à été ajouté";
 					$scope.$apply();
 				}

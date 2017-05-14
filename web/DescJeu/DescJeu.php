@@ -21,7 +21,14 @@
 		</header>
 		<br/>
 		<div class="backgroundBody">
-			<h1> Titre du jeu </h1>
+			<?php if($_GET['jeu'] == 1):?>
+			<h1> Jeu d'appariement </h1>
+			<?php endif;?>
+
+			<?php if($_GET['jeu'] == 2):?>
+			<h1> Jeu de reformulation </h1>
+			<?php endif;?>
+
 			<div class="descJeu">
 				<div class="jeuImage">
 					<img src="/res/Img/01.jpg" alt="Jeu 1" /> 
