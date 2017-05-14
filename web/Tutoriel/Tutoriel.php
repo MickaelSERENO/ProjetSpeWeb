@@ -1,3 +1,4 @@
+<?php session_start()?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,10 +16,16 @@
 		<div class="backgroundBody">
 			<h1> Titre du jeu </h1>
 			<div class="tuto">
-				<img class="slide" src="/res/Img/slide01.jpg">
-				<img class="slide" src="/res/Img/slide02.jpg">
-				<img class="slide" src="/res/Img/slide03.jpg">
-				<img class="slide" src="/res/Img/slide04.jpg">
+				<?php if($_GET['jeu'] == 1):?>
+					<img class="slide" src="/res/Img/TutoJ1/slide01.jpg">
+					<img class="slide" src="/res/Img/TutoJ1/slide02.jpg">
+					<img class="slide" src="/res/Img/TutoJ1/slide03.jpg">
+				<?php endif;?>
+				<?php if($_GET['jeu'] == 2):?>
+					<img class="slide" src="/res/Img/TutoJ2/slide01.jpg">
+					<img class="slide" src="/res/Img/TutoJ2/slide02.jpg">
+					<img class="slide" src="/res/Img/TutoJ2/slide03.jpg">
+				<?php endif;?>
 				<div class="bouton">
 					<button class="display-left" onclick="plusDivs(-1)">&#10094;</button>
 					<button class="display-right" onclick="plusDivs(+1)">&#10095;</button>

@@ -155,7 +155,7 @@ INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'à l''aube');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 2, 'je mangeais');
 INSERT INTO AssociationMots VALUES (1, 4, 'synonyme'); 
 INSERT INTO AssociationMots VALUES (2, 5, 'synonyme');
-INSERT INTO AssociationMots VALUES (3, 6, 'synonyme');
+INSERT INTO AssociationMots VALUES (3, 6, 'specialisation');
 INSERT INTO PairePhrases VALUES (1, 2);
 
 /*Paire phrase 2*/
@@ -167,7 +167,7 @@ INSERT INTO Phrase      VALUES (DEFAULT);
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'Un solide');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'a été cassé');
 INSERT INTO GroupeMots  VALUES (DEFAULT, 4, 'par le maître');
-INSERT INTO AssociationMots VALUES (7, 12, 'synonyme');
+INSERT INTO AssociationMots VALUES (7, 12, 'specialisation');
 INSERT INTO AssociationMots VALUES (9, 10, 'specialisation');
 INSERT INTO AssociationMots VALUES (8, 11, 'synonyme');
 INSERT INTO PairePhrases VALUES (3, 4);
