@@ -1,33 +1,30 @@
-﻿
 
-
-Game:Premiere partie
+Game:test
 nbPlayers:1
-Sentence:Le temps file comme une flèche, les fruits comme des bananes.
+Sentence:test
 Player:test@test.truc:Jean-Christophe
+Score:0
+test25
+---
++++
+
+Game:Une Partie
+nbPlayers:2
+Sentence:Une phrase alacon
+Player:test@test.truc:Jean-Christophe
+Score:0
+---
+Player:machin@bidule.fr:Jeanne-Dark
 Score:0
 ---
 +++
 
-Game:Verite
-nbPlayers:2
-Sentence:Le chef de projet est le meilleur des programmeurs.
+Game:Anna
+nbPlayers:1
+Sentence:Je voudrais un bonhomme de neige
 Player:test@test.truc:Jean-Christophe
 Score:0
+Je voudrais une créature de neige
 
-
-Le chef de projet est le plus talentueux des programmeurs.
-
-Le chef de projet est le meilleur des codeurs.
-Le manager est le meilleur des programmeurs.
-
-Pierre-Antoine est le meilleur des programmeurs.
-
-Le chef de projet est le meilleur  programmeurs.
-
-Le chef de projet est le meilleur programmeur.
----
-Player:machin@bidule.fr:Jeanne-Dark
-Score:0
 ---
 +++
