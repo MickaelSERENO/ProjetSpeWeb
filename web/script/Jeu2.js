@@ -21,7 +21,7 @@ var mousePos;
 var winHeight;
 var playerSentences = [];
 
-/* Pour les animations du countdown */
+/* Pour les animations du Chrono.countdown() */
 window.requestAnimFrame = function(){
     return (
         window.requestAnimationFrame       || 
@@ -35,7 +35,7 @@ window.requestAnimFrame = function(){
     );
 }();
 
-
+/* Chronometre a afficher */
 class Chrono
 {
 	constructor(s)
@@ -43,7 +43,8 @@ class Chrono
 		this.sec = s;
 		this.cen = 0;
 	}
-
+	
+	/* Dessine le cercle jaune */
 	drawLine()
 	{
 	    ctx.strokeStyle= 'hsl(348, 100%, 40%)';
@@ -53,7 +54,8 @@ class Chrono
 	    ctx.stroke();
 	    ctx.restore();
 	}
-
+	
+	/* Dessine l'arc rouge en fonction du temps restant */
 	drawTimer()
 	{
 	    var nbDisplay = ((180 - this.sec)%180)/180;
@@ -67,6 +69,8 @@ class Chrono
 
 	}
 	
+	/* Decroit le temps restant grace a un timer 
+		et redessine le chronometre, actualise le temps restant */
 	countdown(timer)
 	{
 		this.cen--;
@@ -94,6 +98,8 @@ class Chrono
 	}
 };
 
+/* Classe representant un mot d'une phrase a afficher sur le canvas 
+   contient le text, ses dimensions et ses coordonnees */
 class TextBlock
 {
 	constructor(text,hgt)
@@ -141,6 +147,8 @@ class TextBlock
 		this.w(wgt);
 	}
 	
+	/* Permet d'afficher le terme sur le canvas selon les coordonnées 
+		souhaitees (le bloc conserve ces dernieres)*/
 	createWord(abX,abY)
 	{
 		ctx.font = "25px Arial";
@@ -325,6 +333,7 @@ function testGame2(gameName)
 
 }*/
 
+/* Ajout d'un nouveau TextBlock */
 function createNewWord(phraseBlock)
 {
 	let wBlock = new TextBlock(phraseBlock.text,phraseBlock.h);
@@ -332,6 +341,8 @@ function createNewWord(phraseBlock)
 	return wBlock;
 }
 
+/* Créer un input html par-dessus le canvas sous le block selectionne
+   (BorneMin)*/
 function createInputWord(phraseBlock, borneMin, borneMax)
 {
 	input = document.getElementById('answer');
@@ -354,6 +365,8 @@ function createInputWord(phraseBlock, borneMin, borneMax)
 	//input.focus();
 }
 
+/* Une fois appuiyée sur ENTREE, l'input envoie au serveur
+   la proposition du joueur à l'intérieur du input */
 function enterWord(evt, borneMin, borneMax)
 {
 	/* Si la touche Entree est appuyee */
@@ -398,6 +411,7 @@ function enterWord(evt, borneMin, borneMax)
 
 }*/
 
+/* Efface tout le canvas */
 function clearCanvas()
 {
 	ctx.save();
@@ -408,6 +422,7 @@ function clearCanvas()
 	ctx.restore();
 }
 
+/* Récupère les coordonnées du click */
 function onClickCanvas($event)
 {
 	clearCanvas();
@@ -463,6 +478,8 @@ function onMouseUpCanvas($event)
 			if(i>max) max = i;
 		}
 		
+		/* Si les coordonnees du bloc contient celles du clique, on y place un input
+			et ainsi placer le bloc comme étant un terme à modifier */
 		else if( (mousePos.x>posX) && (mousePos.x<(posX+prec)) && (mousePos.y>posY) && (mousePos.y<(posY+suiv)) )
 		{
 			min=i;
@@ -491,6 +508,7 @@ function onMouseUpCanvas($event)
 	}
 }
 
+/* Affiche la phrase initiale et les phrases des joueurs */
 function printWords(min=-1, max=-1)
 {
 	var ms =10;
@@ -525,6 +543,7 @@ function printWords(min=-1, max=-1)
 	}
 }
 
+/* Controleur pour gerer les evenements de la souris */
 var myApp = angular.module("AppGame", []);
 myApp.controller("CanvasController", function($scope)
 {
@@ -575,8 +594,6 @@ function getSentenceFromServer(response)
 
 function gamePart1()
 {
-
-
 	isClicked = 0;
 	jeuEnCours = false;
 	
@@ -602,8 +619,14 @@ function gamePart1()
 
 	}
 
-	//var chr = new Chrono(100);
-	//requestID = requestAnimFrame(chr.countdown());
+	var chr = new Chrono(100);
+	requestID = requestAnimFrame(chr.countdown());
+}
+
+function gamePart2()
+{
+	clearCanvas();
+	
 }
 
 window.onload = function()
