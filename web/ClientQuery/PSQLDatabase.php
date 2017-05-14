@@ -467,7 +467,7 @@ class PSQLDatabase
 		$script = "INSERT INTO EleveClasse(idEleve, mailClasse) VALUES ('$idEleve', '$mail');";
 		$resultScript = pg_query($this->_conn, $script);
 
-		return 1;
+		return $idEleve;
 	}
 }
 ?>

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="../CSS/Accueil.css" />
-		<link rel="SHORTCUT ICON" href="../Img/IcoBal.ico">
+		<link rel="SHORTCUT ICON" href="/res/Img/IcoBal.ico">
 		<title>Balignon Land!</title>
 	</head>
 	

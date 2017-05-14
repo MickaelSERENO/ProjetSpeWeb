@@ -23,7 +23,7 @@
 					<div class="JA_jeuPresentation">
 						<a href="/DescJeu/DescJeu.php?jeu=1"> <h2> Jeu 1 </h2> </a>
 						<div class="JA_presentationText">
-							<p>Petite description rapide du jeu.Et du blabla pour voir l'aligment de texte et la différence de taillec : bbb hjbzk éezrf vbrjq,s;qn rvekbf rdjfevgbs kzekbfkb kddjvb djvbq ffdjnv kfdbs; fdvs kedbfk dskqbk sjdbfkl</p>
+							<p>Description du jeu 1. Un Jeu d'appariement. Description à compléter ...</p>
 						</div>
 					</div>
 				</div>
@@ -34,7 +34,7 @@
 					<div class="JA_jeuPresentation">
 						<a href="/DescJeu/DescJeu.php?jeu=2"><h2>Jeu 2</h2></a>
 						<div class="JA_presentationText">
-							<p>Petite description rapide du jeu.</p>
+							<p>Description du jeu 2. Un jeu de reformulation. Description à compléter ...</p>
 						</div>
 					</div>
 				</div>
