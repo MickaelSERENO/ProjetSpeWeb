@@ -1,6 +1,13 @@
 <?php session_start();
 
-$_SESSION['userID'] = 1;
+?>
+
+<?php
+	if(!isset($_SESSION['verified_use']) || $_SESSION['verified_use'] != 1)
+	{
+		header('location: /Session/Connexion.php');
+		exit;
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +76,7 @@ $_SESSION['userID'] = 1;
 				<label for="sent">Phrase a reformuler :</label>
 				<input type="text" name="sent" id="sent" size="100">
 			</p>
-			<input type="submit" value="new Game" onClick="validForm('Jean-Christophe', 'test@test.truc')"/>
+			<input type="submit" value="new Game" onClick="validForm('<?php echo $_SESSION['pseudo']?>', '<?php echo $_SESSION['mail']?>')"/>
 			<text id="errMessage"> Erreur : nom deja donne</text>
 		</form>
 		<input type="text" id="answer" size="30">

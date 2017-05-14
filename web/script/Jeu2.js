@@ -226,7 +226,7 @@ function printGames()
 			button = document.createElement("input");
 			button.setAttribute("type", "submit");
 			button.setAttribute("value", "rejoindre");
-			button.setAttribute("onClick", "rejoinGame('"+gameName+"')");
+			button.setAttribute("onClick", "rejoinGame('"+gameName+"', '<?php echo $_SESSION['pseudo']?>', '<?php echo $_SESSION['mail']?>')");
 			c1.setAttribute("align", "center");
 			c1.appendChild(button);
 			c2 = newLine.insertCell(1);
@@ -241,10 +241,10 @@ function printGames()
 }
 
 
-function rejoinGame(gameName){
+function rejoinGame(gameName, pseudo, mail){
 	var form = document.getElementById('chooseSent');
 	var tab = document.getElementById('joinGame');
-	data = "action=newPlayer&gameName="+gameName+"&idPlayer=machin@bidule.fr&namePlayer=Jeanne-Dark";
+	data = "action=newPlayer&gameName="+gameName+"&idPlayer=" + mail + "&namePlayer=" + pseudo +"Jeanne-Dark";
 	ajaxPost("../ClientQuery/handlingGame2.php", data,
 		function (response) {
 			console.log(response);
